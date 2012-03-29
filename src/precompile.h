@@ -23,7 +23,7 @@
 
 #include <SDL_opengl.h>
 
-#include <gl/GLU.h>
+#include <GL/glu.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>

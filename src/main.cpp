@@ -1,8 +1,8 @@
-#include "engine/application.h"
+#include "myapp.h"
 
 int main()
 {
-	auto app = new Application();
+	Application* app = new MyApp();
 	int returnCode = app->run();
 	delete app;
 	return returnCode;

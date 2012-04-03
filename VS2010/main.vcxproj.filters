@@ -4,6 +4,12 @@
     <Filter Include="engine">
       <UniqueIdentifier>{d218fc36-5d72-4e13-ac99-58bdf3ec8471}</UniqueIdentifier>
     </Filter>
+    <Filter Include="engine\camera">
+      <UniqueIdentifier>{f6dab6b1-0196-4539-adec-cbdcebe3d8c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\transform">
+      <UniqueIdentifier>{dc7368cd-6906-4253-b827-671ad29099cd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\engine\frameeventargs.cpp">
@@ -15,6 +21,13 @@
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\utils.cpp" />
     <ClCompile Include="..\src\event.cpp" />
+    <ClCompile Include="..\src\myapp.cpp" />
+    <ClCompile Include="..\src\engine\camera\basecamera.cpp">
+      <Filter>engine\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\engine\component\transform.cpp">
+      <Filter>engine\transform</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\engine\frameeventargs.h">
@@ -25,5 +38,12 @@
     </ClInclude>
     <ClInclude Include="..\src\utils.h" />
     <ClInclude Include="..\src\event.h" />
+    <ClInclude Include="..\src\myapp.h" />
+    <ClInclude Include="..\src\engine\camera\basecamera.h">
+      <Filter>engine\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\engine\component\transform.h">
+      <Filter>engine\transform</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

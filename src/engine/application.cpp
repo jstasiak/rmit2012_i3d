@@ -86,16 +86,25 @@ void Application::setDrawFps( int value )
 	this->drawEverySeconds = 1.0f / this->drawFps;
 }
 
-void Application::update( FrameEventArgs* args )
+void Application::doUpdate( FrameEventArgs* args )
 {
 	assert(args);
 	printf("Update %f seconds\n", args->getSeconds());
+	this->update(args);
+}
+
+void Application::doDraw( FrameEventArgs* args )
+{
+	assert(args);
+	this->draw(args);
+}
+
+void Application::update( FrameEventArgs* args )
+{
+
 }
 
 void Application::draw( FrameEventArgs* args )
 {
-	assert(args);
-	glClearColor(0.0f, 0.0f, abs(sin(millisecondsNow() / 1000.0f)), 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
-	printf("Draw %f seconds\n", args->getSeconds());
+
 }

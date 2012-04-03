@@ -1,5 +1,7 @@
-#pragma once
-class FrameEventArgs;
+#ifndef APPLICATION_H
+#define APPLICATION_H
+
+#include "frameeventargs.h"
 
 class Application
 {
@@ -20,8 +22,13 @@ public:
 	virtual void applyCommandlineParameters(int argc, char** argv);
 	int run();
 
+private:
+	void doUpdate(FrameEventArgs* args);
+	void doDraw(FrameEventArgs* args);
+
 protected:
 	virtual void update(FrameEventArgs* args);
 	virtual void draw(FrameEventArgs* args);
 };
 
+#endif // APPLICATION_H

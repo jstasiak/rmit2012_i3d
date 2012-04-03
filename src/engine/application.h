@@ -4,14 +4,14 @@ class FrameEventArgs;
 class Application
 {
 private:
-    int updateFps;
-    int drawFps;
+	int updateFps;
+	int drawFps;
 
-    float updateEverySeconds;
-    float drawEverySeconds;
+	float updateEverySeconds;
+	float drawEverySeconds;
 
-    void setUpdateFps(int value);
-    void setDrawFps(int value);
+	void setUpdateFps(int value);
+	void setDrawFps(int value);
 
 public:
 	Application();
@@ -21,7 +21,7 @@ public:
 	int run();
 
 protected:
-    virtual void update(FrameEventArgs* args);
-    virtual void draw(FrameEventArgs* args);
+	virtual void update(FrameEventArgs* args);
+	virtual void draw(FrameEventArgs* args);
 };
 

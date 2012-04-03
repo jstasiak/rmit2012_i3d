@@ -3,21 +3,21 @@
 
 class EventArgs {
 private:
-    static const EventArgs* const empty;
+	static const EventArgs* const empty;
 public:
-    virtual ~EventArgs() {}
-    static const EventArgs* const getEmpty() {
-        return EventArgs::empty;
-    }
+	virtual ~EventArgs() {}
+	static const EventArgs* const getEmpty() {
+		return EventArgs::empty;
+	}
 };
 
 class FrameEventArgs : public EventArgs {
 private:
-    float seconds;
-    FrameEventArgs(float seconds);
+	float seconds;
+	FrameEventArgs(float seconds);
 public:
-    float getSeconds() const;
-    static FrameEventArgs* createFromSeconds(float seconds);
+	float getSeconds() const;
+	static FrameEventArgs* createFromSeconds(float seconds);
 };
 
 #endif //FRAMEEVENTARGS_H

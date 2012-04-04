@@ -1,7 +1,10 @@
 Requirements
 ============
 
-* SDL 1.2 (preferably installed global in the OS)
+You must have these libraries installed in your system globally:
+
+* SDL 1.2
+* Boost (any recent version should be ok)
 
 Compilation
 ===========

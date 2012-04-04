@@ -7,7 +7,7 @@
     <Filter Include="engine\camera">
       <UniqueIdentifier>{f6dab6b1-0196-4539-adec-cbdcebe3d8c4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="engine\transform">
+    <Filter Include="engine\component">
       <UniqueIdentifier>{dc7368cd-6906-4253-b827-671ad29099cd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -24,7 +24,7 @@
       <Filter>engine\camera</Filter>
     </ClCompile>
     <ClCompile Include="..\src\engine\component\transform.cpp">
-      <Filter>engine\transform</Filter>
+      <Filter>engine\component</Filter>
     </ClCompile>
     <ClCompile Include="..\src\engine\event.cpp">
       <Filter>engine</Filter>
@@ -45,7 +45,7 @@
       <Filter>engine\camera</Filter>
     </ClInclude>
     <ClInclude Include="..\src\engine\component\transform.h">
-      <Filter>engine\transform</Filter>
+      <Filter>engine\component</Filter>
     </ClInclude>
     <ClInclude Include="..\src\engine\utils.h">
       <Filter>engine</Filter>

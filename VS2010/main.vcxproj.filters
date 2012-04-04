@@ -19,14 +19,18 @@
       <Filter>engine</Filter>
     </ClCompile>
     <ClCompile Include="..\src\main.cpp" />
-    <ClCompile Include="..\src\utils.cpp" />
-    <ClCompile Include="..\src\event.cpp" />
     <ClCompile Include="..\src\myapp.cpp" />
     <ClCompile Include="..\src\engine\camera\basecamera.cpp">
       <Filter>engine\camera</Filter>
     </ClCompile>
     <ClCompile Include="..\src\engine\component\transform.cpp">
       <Filter>engine\transform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\engine\event.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\engine\utils.cpp">
+      <Filter>engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -36,14 +40,18 @@
     <ClInclude Include="..\src\engine\application.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\utils.h" />
-    <ClInclude Include="..\src\event.h" />
     <ClInclude Include="..\src\myapp.h" />
     <ClInclude Include="..\src\engine\camera\basecamera.h">
       <Filter>engine\camera</Filter>
     </ClInclude>
     <ClInclude Include="..\src\engine\component\transform.h">
       <Filter>engine\transform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\engine\utils.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\engine\event.h">
+      <Filter>engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

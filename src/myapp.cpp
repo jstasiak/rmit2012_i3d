@@ -4,7 +4,7 @@
 #include <cstdio>
 #include <SDL_opengl.h>
 
-#include "utils.h"
+#include "engine/utils.h"
 
 void MyApp::update( FrameEventArgs* args ) {
 }

@@ -7,7 +7,7 @@
 #include <SDL.h>
 
 #include "frameeventargs.h"
-#include "../utils.h"
+#include "utils.h"
 
 Application::Application() {
 	setUpdateFps(77);

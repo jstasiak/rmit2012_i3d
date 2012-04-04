@@ -14,20 +14,20 @@
     <ClCompile Include="..\src\engine\application.cpp" />
     <ClCompile Include="..\src\engine\camera\basecamera.cpp" />
     <ClCompile Include="..\src\engine\component\transform.cpp" />
+    <ClCompile Include="..\src\engine\event.cpp" />
     <ClCompile Include="..\src\engine\frameeventargs.cpp" />
-    <ClCompile Include="..\src\event.cpp" />
+    <ClCompile Include="..\src\engine\utils.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\myapp.cpp" />
-    <ClCompile Include="..\src\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\engine\application.h" />
     <ClInclude Include="..\src\engine\camera\basecamera.h" />
     <ClInclude Include="..\src\engine\component\transform.h" />
+    <ClInclude Include="..\src\engine\event.h" />
     <ClInclude Include="..\src\engine\frameeventargs.h" />
-    <ClInclude Include="..\src\event.h" />
+    <ClInclude Include="..\src\engine\utils.h" />
     <ClInclude Include="..\src\myapp.h" />
-    <ClInclude Include="..\src\utils.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D0ED82E5-3A91-4E9F-9D28-375997A7BB83}</ProjectGuid>

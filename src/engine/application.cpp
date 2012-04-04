@@ -3,8 +3,10 @@
 #include <cassert>
 #include <cmath>
 
+
 #include <SDL_opengl.h>
 #include <SDL.h>
+#include <gl/GLU.h>
 
 #include "frameeventargs.h"
 #include "utils.h"
@@ -60,12 +62,11 @@ int Application::run() {
 
 		while(updateDt >= this->updateEverySeconds) {
 			updateDt -= this->updateEverySeconds;
-			this->update(FrameEventArgs::createFromSecondsAndTotalSeconds(this->updateEverySeconds, now));
+			this->doUpdate(FrameEventArgs::createFromSecondsAndTotalSeconds(this->updateEverySeconds, now));
 		}
 
 		if(drawDt >= this->drawEverySeconds) {
-			this->draw(FrameEventArgs::createFromSecondsAndTotalSeconds(drawDt, now));
-			SDL_GL_SwapBuffers();
+			this->doDraw(FrameEventArgs::createFromSecondsAndTotalSeconds(drawDt, now));
 			drawDt = 0.0;
 		}
 	}
@@ -86,17 +87,16 @@ void Application::setDrawFps( int value )
 	this->drawEverySeconds = 1.0f / this->drawFps;
 }
 
-void Application::doUpdate( FrameEventArgs* args )
-{
+void Application::doUpdate(FrameEventArgs* args) {
 	assert(args);
-	printf("Update %f seconds\n", args->getSeconds());
 	this->update(args);
 }
 
-void Application::doDraw( FrameEventArgs* args )
-{
+void Application::doDraw(FrameEventArgs* args) {
 	assert(args);
+
 	this->draw(args);
+	SDL_GL_SwapBuffers();
 }
 
 void Application::update( FrameEventArgs* args )

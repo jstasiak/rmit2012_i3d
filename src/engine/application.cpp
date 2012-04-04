@@ -60,11 +60,11 @@ int Application::run() {
 
 		while(updateDt >= this->updateEverySeconds) {
 			updateDt -= this->updateEverySeconds;
-			this->update(FrameEventArgs::createFromSeconds(this->updateEverySeconds));
+			this->update(FrameEventArgs::createFromSecondsAndTotalSeconds(this->updateEverySeconds, now));
 		}
 
 		if(drawDt >= this->drawEverySeconds) {
-			this->draw(FrameEventArgs::createFromSeconds(drawDt));
+			this->draw(FrameEventArgs::createFromSecondsAndTotalSeconds(drawDt, now));
 			SDL_GL_SwapBuffers();
 			drawDt = 0.0;
 		}

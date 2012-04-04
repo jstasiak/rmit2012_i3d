@@ -14,10 +14,12 @@ public:
 class FrameEventArgs : public EventArgs {
 private:
 	float seconds;
-	FrameEventArgs(float seconds);
+	float totalSeconds;
+	FrameEventArgs(float seconds, float totalSeconds);
 public:
 	float getSeconds() const;
-	static FrameEventArgs* createFromSeconds(float seconds);
+	float getTotalSeconds() const;
+	static FrameEventArgs* createFromSecondsAndTotalSeconds(float seconds, float totalSeconds);
 };
 
 #endif //FRAMEEVENTARGS_H

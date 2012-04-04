@@ -4,6 +4,8 @@
 #include "engine/application.h"
 
 class MyApp : public Application {
+public:
+	MyApp();
 protected:
 	virtual void update(FrameEventArgs* args);
 	virtual void draw(FrameEventArgs* args);

@@ -1,7 +1,7 @@
 #include "precompile.h"
 #include "frameeventargs.h"
 
-const EventArgs* const EventArgs::empty = new EventArgs();
+const boost::shared_ptr<const EventArgs> EventArgs::empty(new EventArgs());
 
 float FrameEventArgs::getSeconds() const {
 	return this->seconds;

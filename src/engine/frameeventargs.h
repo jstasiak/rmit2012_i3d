@@ -1,12 +1,14 @@
+#include "precompile.h"
+
 #ifndef FRAMEEVENTARGS_H
 #define FRAMEEVENTARGS_H
 
 class EventArgs {
 private:
-	static const EventArgs* const empty;
+	static const boost::shared_ptr<const EventArgs> empty;
 public:
 	virtual ~EventArgs() {}
-	static const EventArgs* const getEmpty() {
+	static const boost::shared_ptr<const EventArgs> getEmpty() {
 		return EventArgs::empty;
 	}
 };

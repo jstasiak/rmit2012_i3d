@@ -1,9 +1,14 @@
 #ifndef MYAPP_H
 #define MYAPP_H
 
-#include "engine/application.h"
+#include "../engine/application.h"
+
+class Water;
 
 class MyApp : public Application {
+private:
+	Water* water;
+
 public:
 	MyApp();
 protected:

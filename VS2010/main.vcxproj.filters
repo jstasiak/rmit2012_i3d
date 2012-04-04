@@ -10,6 +10,9 @@
     <Filter Include="engine\component">
       <UniqueIdentifier>{dc7368cd-6906-4253-b827-671ad29099cd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="app">
+      <UniqueIdentifier>{379241dc-3e2c-4454-9474-e11264ca4e5b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\engine\frameeventargs.cpp">
@@ -19,7 +22,6 @@
       <Filter>engine</Filter>
     </ClCompile>
     <ClCompile Include="..\src\main.cpp" />
-    <ClCompile Include="..\src\myapp.cpp" />
     <ClCompile Include="..\src\engine\camera\basecamera.cpp">
       <Filter>engine\camera</Filter>
     </ClCompile>
@@ -32,6 +34,12 @@
     <ClCompile Include="..\src\engine\utils.cpp">
       <Filter>engine</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\app\myapp.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\app\water.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\engine\frameeventargs.h">
@@ -40,7 +48,6 @@
     <ClInclude Include="..\src\engine\application.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\myapp.h" />
     <ClInclude Include="..\src\engine\camera\basecamera.h">
       <Filter>engine\camera</Filter>
     </ClInclude>
@@ -52,6 +59,12 @@
     </ClInclude>
     <ClInclude Include="..\src\engine\event.h">
       <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\app\myapp.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\app\water.h">
+      <Filter>app</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

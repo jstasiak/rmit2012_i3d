@@ -1,25 +1,20 @@
+#include "precompile.h"
 #include "app/myapp.h"
 
-#include <cstdio>
-#include <exception>
 using namespace std;
 
-int main()
-{
+int main(int argc, char** argv) {
 	int returnCode = 0;
-	Application* app = 0;
 	try {
-		app = new MyApp();
-		int returnCode = app->run();
+		boost::scoped_ptr<Application> application(new MyApp());
+		int returnCode = application->run();
 	}
 	catch(exception* e) {
 		printf("Exception occured: %s\n\n", e->what());
 		returnCode = -1;
 	}
-	
-	if(app) {
-		delete app;
-	}
 
 	return returnCode;
 }
+
+#define main	SDL_main

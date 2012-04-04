@@ -1,3 +1,4 @@
+#include "precompile.h"
 #include "myapp.h"
 
 #include <cmath>

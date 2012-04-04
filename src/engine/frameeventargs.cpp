@@ -1,3 +1,4 @@
+#include "precompile.h"
 #include "frameeventargs.h"
 
 const EventArgs* const EventArgs::empty = new EventArgs();

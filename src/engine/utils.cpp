@@ -1,13 +1,10 @@
+#include "precompile.h"
 #include "utils.h"
-
-#ifdef WIN32
-#include <Windows.h>
-#endif
 
 long long millisecondsNow() {
 	long long milliseconds = 0;
-#ifdef WIN32
-	milliseconds = GetTickCount64();
-#endif
+	auto time = boost::posix_time::microsec_clock::local_time();
+	auto d = boost::posix_time::time_duration(time.time_of_day());
+	milliseconds = d.total_milliseconds();
 	return milliseconds;
 }

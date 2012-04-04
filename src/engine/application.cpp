@@ -1,12 +1,5 @@
+#include "precompile.h"
 #include "application.h"
-
-#include <cassert>
-#include <cmath>
-
-
-#include <SDL_opengl.h>
-#include <SDL.h>
-#include <gl/GLU.h>
 
 #include "frameeventargs.h"
 #include "utils.h"

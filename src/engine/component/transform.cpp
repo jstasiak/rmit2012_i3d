@@ -1,3 +1,4 @@
+#include "precompile.h"
 #include "transform.h"
 
 Transform::Transform() : position(new glm::vec3(0, 0, 0)) {

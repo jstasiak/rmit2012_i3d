@@ -1,3 +1,4 @@
+#include "precompile.h"
 #include "event.h"
 
 using namespace std;

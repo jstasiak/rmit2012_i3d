@@ -1,8 +1,5 @@
+#include "precompile.h"
 #include "water.h"
-
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtx/multiple.hpp>
-#include <SDL_opengl.h>
 
 Water::Water()
 	: size(new glm::vec2(20, 20)),

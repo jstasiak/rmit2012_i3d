@@ -28,9 +28,6 @@
     <ClCompile Include="..\src\engine\component\transform.cpp">
       <Filter>engine\component</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\engine\event.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\engine\utils.cpp">
       <Filter>engine</Filter>
     </ClCompile>
@@ -56,9 +53,6 @@
       <Filter>engine\component</Filter>
     </ClInclude>
     <ClInclude Include="..\src\engine\utils.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\event.h">
       <Filter>engine</Filter>
     </ClInclude>
     <ClInclude Include="..\src\app\myapp.h">

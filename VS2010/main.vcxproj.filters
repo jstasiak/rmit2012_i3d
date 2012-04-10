@@ -38,6 +38,9 @@
       <Filter>app</Filter>
     </ClCompile>
     <ClCompile Include="..\src\precompile.cpp" />
+    <ClCompile Include="..\src\app\wave.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\engine\frameeventargs.h">
@@ -62,5 +65,8 @@
       <Filter>app</Filter>
     </ClInclude>
     <ClInclude Include="..\src\precompile.h" />
+    <ClInclude Include="..\src\app\wave.h">
+      <Filter>app</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

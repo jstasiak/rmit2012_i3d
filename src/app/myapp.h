@@ -14,6 +14,7 @@ public:
 	MyApp();
 	virtual ~MyApp();
 protected:
+	virtual void initialize();
 	virtual void update(FrameEventArgs* args);
 	virtual void draw(FrameEventArgs* args);
 };

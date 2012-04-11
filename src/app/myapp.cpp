@@ -30,3 +30,7 @@ void MyApp::draw(FrameEventArgs* args) {
 MyApp::MyApp() : water(new Water()) {
 	
 }
+
+MyApp::~MyApp() {
+
+}

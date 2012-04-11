@@ -7,10 +7,10 @@ class Water;
 
 class MyApp : public Application {
 private:
-	Water* water;
-
+	boost::scoped_ptr<Water> water;
 public:
 	MyApp();
+	virtual ~MyApp();
 protected:
 	virtual void update(FrameEventArgs* args);
 	virtual void draw(FrameEventArgs* args);

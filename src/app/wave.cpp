@@ -62,6 +62,6 @@ float Wave::getRadiansPerSecond() const {
 }
 
 Wave::Wave()
-	: length(1), frequency(1), amplitude(1) {
+	: length(1), frequency(1), amplitude(1), phase(0) {
 
 }

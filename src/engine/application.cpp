@@ -40,6 +40,8 @@ int Application::run() {
 
 	SDL_Event event;
 
+	this->doInitialize();
+
 	while(running) {
 		while(SDL_PollEvent(&event)) {
 			if(event.type == SDL_QUIT || event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_ESCAPE) {
@@ -80,6 +82,10 @@ void Application::setDrawFps( int value )
 	this->drawEverySeconds = 1.0f / this->drawFps;
 }
 
+void Application::doInitialize() {
+	this->initialize();
+}
+
 void Application::doUpdate(FrameEventArgs* args) {
 	assert(args);
 	this->update(args);
@@ -92,12 +98,14 @@ void Application::doDraw(FrameEventArgs* args) {
 	SDL_GL_SwapBuffers();
 }
 
-void Application::update( FrameEventArgs* args )
-{
+void Application::initialize() {
 
 }
 
-void Application::draw( FrameEventArgs* args )
-{
+void Application::update( FrameEventArgs* args ) {
+
+}
+
+void Application::draw( FrameEventArgs* args ) {
 
 }

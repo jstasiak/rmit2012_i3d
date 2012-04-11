@@ -23,10 +23,12 @@ public:
 	int run();
 
 private:
+	void doInitialize();
 	void doUpdate(FrameEventArgs* args);
 	void doDraw(FrameEventArgs* args);
 
 protected:
+	virtual void initialize();
 	virtual void update(FrameEventArgs* args);
 	virtual void draw(FrameEventArgs* args);
 };

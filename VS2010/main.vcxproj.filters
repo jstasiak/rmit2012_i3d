@@ -41,6 +41,9 @@
     <ClCompile Include="..\src\app\wave.cpp">
       <Filter>app</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\app\obj.c">
+      <Filter>app</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\engine\frameeventargs.h">
@@ -66,6 +69,12 @@
     </ClInclude>
     <ClInclude Include="..\src\precompile.h" />
     <ClInclude Include="..\src\app\wave.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\app\obj.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\app\uthash.h">
       <Filter>app</Filter>
     </ClInclude>
   </ItemGroup>

@@ -12,6 +12,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\app\myapp.cpp" />
+    <ClCompile Include="..\src\app\obj.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\src\app\water.cpp" />
     <ClCompile Include="..\src\app\wave.cpp" />
     <ClCompile Include="..\src\engine\application.cpp" />
@@ -27,6 +33,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\app\myapp.h" />
+    <ClInclude Include="..\src\app\obj.h" />
+    <ClInclude Include="..\src\app\uthash.h" />
     <ClInclude Include="..\src\app\water.h" />
     <ClInclude Include="..\src\app\wave.h" />
     <ClInclude Include="..\src\engine\application.h" />

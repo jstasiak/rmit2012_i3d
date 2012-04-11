@@ -5,8 +5,8 @@
 
 Water::Water()
 	: size(300, 300), segments(100, 100),
-	waveX((new Wave())->setAmplitude(4)->setLength(33)->setFrequency(0.7f)),
-	waveZ((new Wave())->setAmplitude(4)->setLength(20)->setFrequency(0.5f))
+	waveX((new Wave())->setAmplitude(4)->setLength(73)->setFrequency(0.7f)),
+	waveZ((new Wave())->setAmplitude(4)->setLength(44)->setFrequency(0.5f)->setPhase(0.3f))
 {
 
 }
@@ -18,8 +18,7 @@ void Water::draw() {
 	float time = millisecondsNow() / 1000.0f;
 	auto center = glm::vec3(0, 0, 0);
 
-	glColor3f(1.0f, 1.0f, 1.0f);
-	glNormal3f(0, 1, 0);
+	glColor3f(0.0f, 0.2f, 1.0f);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	glm::vec2 segmentSize(this->size.x / this->segments.x,
@@ -27,6 +26,7 @@ void Water::draw() {
 	
 	glm::vec3 p1, p2, p3, p4;
 	auto start = center - glm::vec3(this->size.x * 0.5f, 0, -this->size.y * 0.5f);
+	auto up = glm::vec3(0, 1, 0);
 
 	glBegin(GL_TRIANGLES);
 	for(int xsegment = 0; xsegment < this->segments.x - 1; ++xsegment) {
@@ -41,12 +41,24 @@ void Water::draw() {
 			p3.y = this->heightAtPositionAndTime(&p3, time);
 			p4.y = this->heightAtPositionAndTime(&p4, time);
 
+			// These normals are here only to show lighting effect, they're not proper normals
+			glNormal3fv(glm::value_ptr(up * p1.y));
 			glVertex3fv(glm::value_ptr(p1));
+
+			glNormal3fv(glm::value_ptr(up * p2.y));
 			glVertex3fv(glm::value_ptr(p2));
+
+			glNormal3fv(glm::value_ptr(up * p4.y));
 			glVertex3fv(glm::value_ptr(p4));
 
+
+			glNormal3fv(glm::value_ptr(up * p2.y));
 			glVertex3fv(glm::value_ptr(p2));
+
+			glNormal3fv(glm::value_ptr(up * p3.y));
 			glVertex3fv(glm::value_ptr(p3));
+
+			glNormal3fv(glm::value_ptr(up * p4.y));
 			glVertex3fv(glm::value_ptr(p4));
 		}
 	}

@@ -26,14 +26,16 @@ void Water::draw() {
 	
 	glm::vec3 p1, p2, p3, p4;
 	auto start = center - glm::vec3(this->size.x * 0.5f, 0, -this->size.y * 0.5f);
+	printf("start: %f %f %f\n", start.x, start.y, start.z);
 
 	glBegin(GL_TRIANGLES);
 	for(int xsegment = 0; xsegment < this->segments.x - 1; ++xsegment) {
 		for(int zsegment = 0; zsegment < this->segments.y - 1; ++zsegment) {
-			p1 = start + glm::vec3(segmentSize.x * (xsegment + 0), 0.0f, segmentSize.y * (zsegment + 0));
-			p2 = start + glm::vec3(segmentSize.x * (xsegment + 1), 0.0f, segmentSize.y * (zsegment + 0));
-			p3 = start + glm::vec3(segmentSize.x * (xsegment + 1), 0.0f, segmentSize.y * (zsegment + 1));
-			p4 = start + glm::vec3(segmentSize.x * (xsegment + 0), 0.0f, segmentSize.y * (zsegment + 1));
+			p1 = start + glm::vec3(segmentSize.x * (xsegment + 0), 0.0f, -segmentSize.y * (zsegment + 0));
+			p2 = start + glm::vec3(segmentSize.x * (xsegment + 1), 0.0f, -segmentSize.y * (zsegment + 0));
+			p3 = start + glm::vec3(segmentSize.x * (xsegment + 1), 0.0f, -segmentSize.y * (zsegment + 1));
+			p4 = start + glm::vec3(segmentSize.x * (xsegment + 0), 0.0f, -segmentSize.y * (zsegment + 1));
+
 			p1.y = this->heightAtPositionAndTime(&p1, time);
 			p2.y = this->heightAtPositionAndTime(&p2, time);
 			p3.y = this->heightAtPositionAndTime(&p3, time);

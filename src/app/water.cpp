@@ -4,9 +4,9 @@
 #include "../engine/utils.h"
 
 Water::Water()
-	: size(30, 30),	segments(40, 40),
-	waveX((new Wave())->setAmplitude(1)->setLength(11)->setFrequency(0.7f)),
-	waveZ((new Wave())->setAmplitude(1)->setLength(7)->setFrequency(0.5f))
+	: size(300, 300), segments(100, 100),
+	waveX((new Wave())->setAmplitude(4)->setLength(33)->setFrequency(0.7f)),
+	waveZ((new Wave())->setAmplitude(4)->setLength(20)->setFrequency(0.5f))
 {
 
 }
@@ -25,11 +25,11 @@ void Water::draw() {
 		this->size.y / this->segments.y);
 	
 	glm::vec3 p1, p2, p3, p4;
+	auto start = center - glm::vec3(this->size.x * 0.5f, 0, -this->size.y * 0.5f);
 
 	glBegin(GL_TRIANGLES);
 	for(int xsegment = 0; xsegment < this->segments.x - 1; ++xsegment) {
 		for(int zsegment = 0; zsegment < this->segments.y - 1; ++zsegment) {
-			auto start = center - glm::vec3(this->size * 0.5f, 0);
 			p1 = start + glm::vec3(segmentSize.x * (xsegment + 0), 0.0f, segmentSize.y * (zsegment + 0));
 			p2 = start + glm::vec3(segmentSize.x * (xsegment + 1), 0.0f, segmentSize.y * (zsegment + 0));
 			p3 = start + glm::vec3(segmentSize.x * (xsegment + 1), 0.0f, segmentSize.y * (zsegment + 1));

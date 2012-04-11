@@ -19,6 +19,7 @@ void Water::draw() {
 	auto center = glm::vec3(0, 0, 0);
 
 	glColor3f(1.0f, 1.0f, 1.0f);
+	glNormal3f(0, 1, 0);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	glm::vec2 segmentSize(this->size.x / this->segments.x,

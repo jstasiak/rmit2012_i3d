@@ -8,3 +8,23 @@ long long millisecondsNow() {
 	milliseconds = d.total_milliseconds();
 	return milliseconds;
 }
+
+void drawAxes(float length) {
+	glDisable(GL_LIGHTING);
+	glBegin(GL_LINES);
+		glColor3f(1, 0, 0);
+
+		glVertex3f(0, 0, 0);
+		glVertex3f(length, 0, 0);
+
+		glColor3f(0, 1, 0);
+
+		glVertex3f(0, 0, 0);
+		glVertex3f(0, length, 0);
+
+		glColor3f(0, 0, 1);
+
+		glVertex3f(0, 0, 0);
+		glVertex3f(0, 0, length);
+	glEnd();
+}

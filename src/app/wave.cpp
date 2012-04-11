@@ -2,28 +2,34 @@
 #include "wave.h"
 
 float Wave::getLength() const {
+	assert(this->length > 0);
 	return this->length;
 }
 
-Wave* Wave::setLength(float value){
+Wave* Wave::setLength(float value) {
+	assert(value > 0);
 	this->length = value;
 	return this;
 }
 
 float Wave::getFrequency() const {
+	assert(this->frequency > 0);
 	return this->frequency;
 }
 
 Wave* Wave::setFrequency(float value) {
+	assert(value > 0);
 	this->frequency = value;
 	return this;
 }
 
 float Wave::getAmplitude() const {
+	assert(this->amplitude > 0);
 	return this->amplitude;
 }
 
 Wave* Wave::setAmplitude(float value) {
+	assert(value > 0);
 	this->amplitude = value;
 	return this;
 }

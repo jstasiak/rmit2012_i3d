@@ -28,11 +28,20 @@ Wave* Wave::setAmplitude(float value) {
 	return this;
 }
 
+float Wave::getPhase() const {
+	return this->phase;
+}
+
+Wave* Wave::setPhase(float value) {
+	this->phase = value;
+	return this;
+}
+
 /**
  * Calculates A * sin(kx - wt) value for given position (x) and time (t)
  */
 float Wave::valueForPositionAndTime(float position, float time) const {
-	float sineParameters = this->getK() * position - this->getRadiansPerSecond() * time;
+	float sineParameters = this->getK() * position - this->getRadiansPerSecond() * time + this->phase;
 	float value = this->amplitude * sin(sineParameters);
 	return value;
 }

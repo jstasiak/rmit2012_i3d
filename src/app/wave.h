@@ -6,6 +6,7 @@ private:
 	float amplitude;
 	float length;
 	float frequency;
+	float phase;
 public:
 	Wave();
 
@@ -17,6 +18,9 @@ public:
 
 	float getFrequency() const;
 	Wave* setFrequency(float value);
+
+	float getPhase() const;
+	Wave* setPhase(float value);
 
 	float valueForPositionAndTime(float position, float time) const;
 

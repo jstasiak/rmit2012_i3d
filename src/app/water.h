@@ -11,12 +11,15 @@ private:
 	glm::ivec2 segments;
 
 	boost::scoped_ptr<Wave> waveX;
-	boost::scoped_ptr<Wave> waveY;
+	boost::scoped_ptr<Wave> waveZ;
 
 public:
 	Water();
 	virtual ~Water();
 	void draw();
+
+private:
+	float heightAtPositionAndTime(const glm::vec3* position, float time) const;
 };
 
 #endif // WATER_H

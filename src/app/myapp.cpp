@@ -19,11 +19,11 @@ void MyApp::draw(FrameEventArgs* args) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	glRotatef(-35.0f, 1.0f, 0.0f, 0.0f);
-	glTranslatef(0, 15.0f, -15.0f);
+	gluLookAt(0, 20, 40, 0, 0, 0, 0, 1, 0);
 
 	glClearColor(0, 0, 0.5f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
+
 	this->water->draw();
 }
 

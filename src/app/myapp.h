@@ -9,14 +9,20 @@ class Ship;
 class MyApp : public Application {
 private:
 	boost::scoped_ptr<Water> water;
+private:
 	boost::scoped_ptr<Ship> ship;
 public:
 	MyApp();
+public:
 	virtual ~MyApp();
 protected:
 	virtual void initialize();
+protected:
 	virtual void update(FrameEventArgs* args);
+protected:
 	virtual void draw(FrameEventArgs* args);
+protected:
+	void applyCameraTransform() const;
 };
 
 #endif // MYAPP_H

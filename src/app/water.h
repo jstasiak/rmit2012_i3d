@@ -16,7 +16,7 @@ public:
 	virtual ~Water();
 	void draw();
 
-private:
+public:
 	float heightAtPositionAndTime(const glm::vec3* position, float time) const;
 };
 

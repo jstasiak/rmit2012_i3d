@@ -36,12 +36,22 @@ void MyApp::draw(FrameEventArgs* args) {
 	glEnable(GL_LIGHTING);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-
-	gluLookAt(0, 100, 230, 0, 0, 0, 0, 1, 0);
-
+	this->applyCameraTransform();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	auto zero = glm::vec3(0, 0, 0);
 	this->water->draw();
+
+	float height = this->water->heightAtPositionAndTime(&zero, args->getTotalSeconds());
+	glPushMatrix();
+	glTranslatef(0, height, 0);
+	glScalef(0.3f, 0.4f, 0.4f);
 	this->ship->draw();
+	glPopMatrix();
+
 	drawAxes(50);
+}
+
+void MyApp::applyCameraTransform() const {
+	gluLookAt(0, 100, 230, 0, 0, 0, 0, 1, 0);
 }

@@ -42,16 +42,17 @@ void MyApp::draw(FrameEventArgs* args) {
 	auto zero = glm::vec3(0, 0, 0);
 	this->water->draw();
 
-	float height = this->water->heightAtPositionAndTime(&zero, args->getTotalSeconds());
-	glPushMatrix();
-	glTranslatef(0, height, 0);
-	glScalef(0.3f, 0.4f, 0.4f);
+	auto shipPosition = this->ship->getPosition();
+	float height = this->water->heightAtPositionAndTime(shipPosition, args->getTotalSeconds());
+	shipPosition->y = height;
 	this->ship->draw();
-	glPopMatrix();
 
 	drawAxes(50);
 }
 
 void MyApp::applyCameraTransform() const {
-	gluLookAt(0, 100, 230, 0, 0, 0, 0, 1, 0);
+	auto position = this->ship->getPosition();
+	gluLookAt(0, 100, 130,
+		position->x, position->y, 0,
+		0, 1, 0);
 }

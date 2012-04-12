@@ -57,6 +57,6 @@ void MyApp::draw(FrameEventArgs* args) {
 void MyApp::applyCameraTransform() const {
 	auto position = this->ship->getPosition();
 	gluLookAt(0, 100, 130,
-		position->x, position->y, 0,
+		position->x, 0, position->z,
 		0, 1, 0);
 }

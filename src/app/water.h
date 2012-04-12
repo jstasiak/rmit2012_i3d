@@ -18,6 +18,8 @@ public:
 
 public:
 	float heightAtPositionAndTime(const glm::vec3* position, float time) const;
+public:
+	glm::vec3 normalAtPositionAndTime(const glm::vec3* position, float time) const;
 };
 
 #endif // WATER_H

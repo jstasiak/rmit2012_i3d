@@ -24,7 +24,6 @@ public:
 
 	float valueForPositionAndTime(float position, float time) const;
 
-private:
 	float getK() const;
 	float getRadiansPerSecond() const;
 };

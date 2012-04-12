@@ -4,9 +4,9 @@
 #include "../engine/utils.h"
 
 Water::Water()
-	: size(300, 300), segments(100, 100),
+	: size(300, 300), segments(50, 50),
 	waveX((new Wave())->setAmplitude(4)->setLength(73)->setFrequency(0.7f)),
-	waveZ((new Wave())->setAmplitude(4)->setLength(44)->setFrequency(0.5f)->setPhase(0.3f))
+	waveZ((new Wave())->setAmplitude(4)->setLength(44)->setFrequency(0.5f))
 {
 
 }
@@ -25,6 +25,8 @@ void Water::draw() {
 		this->size.y / this->segments.y);
 	
 	glm::vec3 p1, p2, p3, p4;
+	glm::vec3 n1, n2, n3, n4;
+
 	auto start = center - glm::vec3(this->size.x * 0.5f, 0, -this->size.y * 0.5f);
 	auto up = glm::vec3(0, 1, 0);
 
@@ -41,24 +43,29 @@ void Water::draw() {
 			p3.y = this->heightAtPositionAndTime(&p3, time);
 			p4.y = this->heightAtPositionAndTime(&p4, time);
 
+			n1 = this->normalAtPositionAndTime(&p1, time);
+			n2 = this->normalAtPositionAndTime(&p2, time);
+			n3 = this->normalAtPositionAndTime(&p3, time);
+			n4 = this->normalAtPositionAndTime(&p4, time);
+
 			// These normals are here only to show lighting effect, they're not proper normals
-			glNormal3fv(glm::value_ptr(up * p1.y));
+			glNormal3fv(glm::value_ptr(n1));
 			glVertex3fv(glm::value_ptr(p1));
 
-			glNormal3fv(glm::value_ptr(up * p2.y));
+			glNormal3fv(glm::value_ptr(n2));
 			glVertex3fv(glm::value_ptr(p2));
 
-			glNormal3fv(glm::value_ptr(up * p4.y));
+			glNormal3fv(glm::value_ptr(n4));
 			glVertex3fv(glm::value_ptr(p4));
 
 
-			glNormal3fv(glm::value_ptr(up * p2.y));
+			glNormal3fv(glm::value_ptr(n2));
 			glVertex3fv(glm::value_ptr(p2));
 
-			glNormal3fv(glm::value_ptr(up * p3.y));
+			glNormal3fv(glm::value_ptr(n3));
 			glVertex3fv(glm::value_ptr(p3));
 
-			glNormal3fv(glm::value_ptr(up * p4.y));
+			glNormal3fv(glm::value_ptr(n4));
 			glVertex3fv(glm::value_ptr(p4));
 		}
 	}
@@ -69,4 +76,28 @@ void Water::draw() {
 float Water::heightAtPositionAndTime(const glm::vec3* position, float time) const {
 	return this->waveX->valueForPositionAndTime(position->x, time)
 		+ this->waveZ->valueForPositionAndTime(position->z, time);
+}
+
+glm::vec3 Water::normalAtPositionAndTime(const glm::vec3* position, float time) const {
+	// Add PI/2 phase difference so we get cos() instead of sin()
+	float phase = M_PI / 2.0f;
+	this->waveX->setPhase(this->waveX->getPhase() + phase);
+	this->waveZ->setPhase(this->waveZ->getPhase() + phase);
+
+	// Compute derivatives
+	float valx = this->waveX->valueForPositionAndTime(position->x, time) * this->waveX->getK();
+	float valz = this->waveZ->valueForPositionAndTime(position->z, time) * this->waveZ->getK();
+
+	// Set wave phase to original state
+	this->waveX->setPhase(this->waveX->getPhase() - phase);
+	this->waveZ->setPhase(this->waveZ->getPhase() - phase);
+
+	// Calculate normals for both waves
+	auto vecx = glm::vec3(-valx, 1, 0);
+	auto vecz = glm::vec3(0, 1, -valz);
+
+	// Combine normal vectors
+	auto result = glm::normalize(vecx + vecz);
+
+	return result;
 }

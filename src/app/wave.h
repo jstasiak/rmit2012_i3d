@@ -23,6 +23,7 @@ public:
 	Wave* setPhase(float value);
 
 	float valueForPositionAndTime(float position, float time) const;
+	float derivativeForPositionAndTime(float position, float time);
 
 	float getK() const;
 	float getRadiansPerSecond() const;

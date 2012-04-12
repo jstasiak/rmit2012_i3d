@@ -52,6 +52,19 @@ float Wave::valueForPositionAndTime(float position, float time) const {
 	return value;
 }
 
+float Wave::derivativeForPositionAndTime(float position, float time) {
+	// Add PI/2 phase difference so we get cos() instead of sin()
+	float phase = M_PI / 2.0f;
+	this->phase += phase;
+
+	float derivative = this->getK() * this->valueForPositionAndTime(position, time);
+
+	// Return to original state
+	this->phase -= phase;
+
+	return derivative;
+}
+
 /**
  * Gets wavenumber for current wavelength.
  */

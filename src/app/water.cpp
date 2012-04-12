@@ -79,22 +79,13 @@ float Water::heightAtPositionAndTime(const glm::vec3* position, float time) cons
 }
 
 glm::vec3 Water::normalAtPositionAndTime(const glm::vec3* position, float time) const {
-	// Add PI/2 phase difference so we get cos() instead of sin()
-	float phase = M_PI / 2.0f;
-	this->waveX->setPhase(this->waveX->getPhase() + phase);
-	this->waveZ->setPhase(this->waveZ->getPhase() + phase);
+	float dydx = this->waveX->derivativeForPositionAndTime(position->x, time);
+	float dydz = this->waveZ->derivativeForPositionAndTime(position->z, time);
 
-	// Compute derivatives
-	float valx = this->waveX->valueForPositionAndTime(position->x, time) * this->waveX->getK();
-	float valz = this->waveZ->valueForPositionAndTime(position->z, time) * this->waveZ->getK();
-
-	// Set wave phase to original state
-	this->waveX->setPhase(this->waveX->getPhase() - phase);
-	this->waveZ->setPhase(this->waveZ->getPhase() - phase);
-
-	// Calculate normals for both waves
-	auto vecx = glm::vec3(-valx, 1, 0);
-	auto vecz = glm::vec3(0, 1, -valz);
+	// Calculate normals for both waves using method found on
+	// http://goanna.cs.rmit.edu.au/~gl/teaching/i3d/2012/tutorial5.html
+	auto vecx = glm::vec3(-dydx, 1, 0);
+	auto vecz = glm::vec3(0, 1, -dydz);
 
 	// Combine normal vectors
 	auto result = glm::normalize(vecx + vecz);

@@ -27,6 +27,10 @@ void MyApp::initialize() {
 	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHT0);
+
+	this->commandSystem->registerCommand("quit", [this]() {
+		this->quit();
+	});
 }
 
 void MyApp::update(FrameEventArgs* args) {

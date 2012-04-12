@@ -4,7 +4,8 @@
 #include "frameeventargs.h"
 #include "utils.h"
 
-Application::Application() {
+Application::Application()
+	: commandSystem(new CommandSystem()) {
 	setUpdateFps(77);
 	setDrawFps(60);
 }
@@ -44,8 +45,14 @@ int Application::run() {
 
 	while(running) {
 		while(SDL_PollEvent(&event)) {
-			if(event.type == SDL_QUIT || event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_ESCAPE) {
+			if(event.type == SDL_QUIT) {
 				running = false;
+			}
+
+			if(event.type == SDL_KEYDOWN) {
+				if(event.key.keysym.sym == SDLK_q || event.key.keysym.sym == SDLK_ESCAPE) {
+					this->commandSystem->safeExecuteCommand("quit");
+				}
 			}
 		}
 
@@ -108,4 +115,13 @@ void Application::update( FrameEventArgs* args ) {
 
 void Application::draw( FrameEventArgs* args ) {
 
+}
+
+/**
+ * Send SDL_QUIT event to message loop
+ */
+void Application::quit() {
+	SDL_Event event;
+	event.type = SDL_QUIT;
+	SDL_PushEvent(&event);
 }

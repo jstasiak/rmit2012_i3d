@@ -1,10 +1,15 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
+#include <boost/scoped_ptr.hpp>
+
+#include "command.h"
 #include "frameeventargs.h"
 
 class Application
 {
+protected:
+	boost::scoped_ptr<CommandSystem> commandSystem;
 private:
 	int updateFps;
 	int drawFps;
@@ -31,6 +36,9 @@ protected:
 	virtual void initialize();
 	virtual void update(FrameEventArgs* args);
 	virtual void draw(FrameEventArgs* args);
+
+protected:
+	void quit();
 };
 
 #endif // APPLICATION_H

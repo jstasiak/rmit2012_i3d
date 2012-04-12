@@ -5,7 +5,7 @@
 #include "utils.h"
 
 Application::Application()
-	: commandSystem(new CommandSystem()) {
+	: commandSystem(new CommandSystem()), bindings() {
 	setUpdateFps(77);
 	setDrawFps(60);
 }
@@ -45,14 +45,16 @@ int Application::run() {
 
 	while(running) {
 		while(SDL_PollEvent(&event)) {
-			if(event.type == SDL_QUIT) {
+			switch(event.type) {
+			case SDL_QUIT:
 				running = false;
-			}
-
-			if(event.type == SDL_KEYDOWN) {
-				if(event.key.keysym.sym == SDLK_q || event.key.keysym.sym == SDLK_ESCAPE) {
-					this->commandSystem->safeExecuteCommand("quit");
-				}
+				break;
+			case SDL_KEYDOWN:
+				this->onKeyDown(&event.key);
+				break;
+			case SDL_KEYUP:
+				this->onKeyUp(&event.key);
+				break;
 			}
 		}
 
@@ -90,6 +92,13 @@ void Application::setDrawFps( int value )
 }
 
 void Application::doInitialize() {
+	this->bindings[SDLK_q] = "quit";
+	this->bindings[SDLK_ESCAPE] = "quit";
+
+	this->commandSystem->registerCommand("quit", [this]() {
+		this->quit();
+	});
+
 	this->initialize();
 }
 
@@ -107,6 +116,25 @@ void Application::doDraw(FrameEventArgs* args) {
 
 void Application::initialize() {
 
+}
+
+void Application::onKeyDown(const SDL_KeyboardEvent* event) {
+	auto iterator = this->bindings.find(event->keysym.sym);
+	if(iterator != this->bindings.end()) {
+		auto commandName = (*iterator).second;
+		this->commandSystem->safeExecuteCommand(commandName);
+	}
+}
+
+void Application::onKeyUp(const SDL_KeyboardEvent* event) {
+	auto iterator = this->bindings.find(event->keysym.sym);
+	if(iterator != this->bindings.end()) {
+		std::string commandName = (*iterator).second;
+		if(commandName.at(0) == '+') {
+			commandName.at(0) = '-';
+			this->commandSystem->safeExecuteCommand(commandName);
+		}
+	}
 }
 
 void Application::update( FrameEventArgs* args ) {

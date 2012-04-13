@@ -7,6 +7,7 @@ class Water;
 class Ship;
 
 class MyApp : public Application {
+private: bool wireframe;
 private: boost::scoped_ptr<Water> water;
 private: boost::scoped_ptr<Ship> ship;
 
@@ -23,6 +24,8 @@ protected: virtual void update(FrameEventArgs* args);
 protected: virtual void draw(FrameEventArgs* args);
 
 protected: void applyCameraTransform() const;
+
+public: void toggleWireframe();
 };
 
 #endif // MYAPP_H

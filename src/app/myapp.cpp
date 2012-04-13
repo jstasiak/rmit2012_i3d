@@ -9,7 +9,11 @@
 #include "ship.h"
 #include "water.h"
 
-MyApp::MyApp() : water(new Water()), ship(new Ship()) {
+MyApp::MyApp()
+	: water(new Water()),
+	ship(new Ship()),
+	wireframe(false)
+{
 }
 
 MyApp::~MyApp() {
@@ -81,6 +85,11 @@ void MyApp::initializeCommands() {
 	cs->registerCommand("-right", [this]() {
 		this->ship->stopTurningRight();
 	});
+
+
+	cs->registerCommand("toggle_wireframe", [this]() {
+		this->toggleWireframe();
+	});
 }
 
 void MyApp::initializeKeyBindings() {
@@ -88,6 +97,7 @@ void MyApp::initializeKeyBindings() {
 	this->bindings[SDLK_EQUALS] = "increase_water_tesselation";
 	this->bindings[SDLK_MINUS] = "decrease_water_tesselation";
 	this->bindings[SDLK_n] = "toggle_water_normals";
+	this->bindings[SDLK_w] = "toggle_wireframe";
 	this->bindings[SDLK_UP] = "+accel";
 	this->bindings[SDLK_DOWN] = "+deccel";
 	this->bindings[SDLK_LEFT] = "+left";
@@ -100,6 +110,8 @@ void MyApp::update(FrameEventArgs* args) {
 }
 
 void MyApp::draw(FrameEventArgs* args) {
+	glPolygonMode(GL_FRONT, this->wireframe ? GL_LINE : GL_FILL);
+
 	glEnable(GL_LIGHTING);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -122,4 +134,8 @@ void MyApp::applyCameraTransform() const {
 	gluLookAt(0, 100, 130,
 		position->x, 0, position->z,
 		0, 1, 0);
+}
+
+void MyApp::toggleWireframe() {
+	this->wireframe = !this->wireframe;
 }

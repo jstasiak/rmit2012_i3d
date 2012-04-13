@@ -61,7 +61,8 @@ int Application::run() {
 		drawDt += dt;
 
 		while(updateDt >= this->updateEverySeconds) {
-			updateDt -= this->updateEverySeconds;
+			//FIXME: HACK: develop smarter system of update managing
+			updateDt = 0;
 			this->doUpdate(FrameEventArgs::createFromSecondsAndTotalSeconds(this->updateEverySeconds, now));
 		}
 

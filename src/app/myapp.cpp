@@ -12,7 +12,8 @@
 MyApp::MyApp()
 	: water(new Water()),
 	ship(new Ship(&(*this->water))),
-	wireframe(false)
+	wireframe(false),
+	axes(MyApp::WorldOrigin)
 {
 }
 
@@ -90,6 +91,10 @@ void MyApp::initializeCommands() {
 	cs->registerCommand("toggle_wireframe", [this]() {
 		this->toggleWireframe();
 	});
+
+	cs->registerCommand("toggle_axes", [this]() {
+		this->toggleAxes();
+	});
 }
 
 void MyApp::initializeKeyBindings() {
@@ -115,6 +120,9 @@ void MyApp::draw(FrameEventArgs* args) {
 	glEnable(GL_LIGHTING);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	if(this->axes == MyApp::WorldOrigin) {
+		drawAxes(50.0f);
+	}
 	this->applyCameraTransform();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -126,7 +134,9 @@ void MyApp::draw(FrameEventArgs* args) {
 	shipPosition->y = height;
 	this->ship->draw(args);
 
-	drawAxes(50);
+	if(this->axes == MyApp::WaterOrigin) {
+		drawAxes(50);
+	}
 }
 
 void MyApp::applyCameraTransform() const {
@@ -138,4 +148,22 @@ void MyApp::applyCameraTransform() const {
 
 void MyApp::toggleWireframe() {
 	this->wireframe = !this->wireframe;
+}
+
+void MyApp::toggleAxes() {
+	if(this->axes == MyApp::WorldOrigin) {
+		this->axes = MyApp::WaterOrigin;
+	}
+	else if(this->axes == MyApp::WaterOrigin) {
+		this->axes = MyApp::ShipOrigin;
+		this->ship->setAxes(Ship::Draw);
+	}
+	else if(this->axes == MyApp::ShipOrigin) {
+		this->axes = MyApp::ShipOriginWithRotation;
+		this->ship->setAxes(Ship::DrawWithRotation);
+	}
+	else if(this->axes == MyApp::ShipOriginWithRotation) {
+		this->axes = MyApp::WorldOrigin;
+		this->ship->setAxes(Ship::DontDraw);
+	}
 }

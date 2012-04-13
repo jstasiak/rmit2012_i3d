@@ -9,10 +9,16 @@
 class Water;
 
 class Ship : public BaseGameObject {
+public: enum ShipDrawAxes {
+	DontDraw,
+	Draw,
+	DrawWithRotation
+};
 private: OBJMesh* mesh;
 private: glm::vec3 position;
 private: float yaw;
 private: Water* water;
+private: ShipDrawAxes axes;
 
 private: static const float MIN_VELOCITY;
 private: static const float MAX_VELOCITY;
@@ -48,6 +54,7 @@ public: virtual void draw(FrameEventArgs* args);
 public: glm::vec3* getPosition();
 public: Ship* setPosition(const glm::vec3* value);
 
+public: void setAxes(ShipDrawAxes axes);
 };
 
 #endif // SHIP_H

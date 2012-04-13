@@ -1,6 +1,7 @@
 #include "precompile.h"
 #include "ship.h"
 
+#include "../engine/utils.h"
 #include "water.h"
 
 const float Ship::MIN_VELOCITY = 0.0f;
@@ -88,11 +89,18 @@ void Ship::draw(FrameEventArgs* args) {
 	glPushMatrix();
 	glTranslatef(this->position.x, this->position.y, this->position.z);
 
+	// Models is too big so I need to scale it
 	float scale = 0.4f;
 	glScalef(scale, scale, scale);
 
+	// Apply current yaw
 	glRotatef(this->yaw, 0, 1, 0);
 
+	if(this->axes == Ship::Draw) {
+		drawAxes(150.0f);
+	}
+
+	// Calculate normal in ship position and roll/pitch according to this normal
 	auto normal = this->water->normalAtPositionAndTime(&this->position, args->getTotalSeconds());
 
 	auto vxy = glm::normalize(glm::vec3(normal.x, normal.y, 0));
@@ -104,6 +112,16 @@ void Ship::draw(FrameEventArgs* args) {
 	glRotatef(glm::degrees(rollRadians), 0, 0, -1);
 	glRotatef(glm::degrees(pitchRadians), 1, 0, 0);
 
+
+	if(this->axes == DrawWithRotation) {
+		drawAxes(150.0f);
+	}
+
+
+	glColor3f(0.7f, 1.0f, 0.7f);
+
+	// OBJMesh rendering
+	//TODO: refactor
 	glBegin(GL_TRIANGLES);
 	for (int i = 0; i < mesh->numIndices; ++i) {
 		unsigned int index = mesh->indices[i];
@@ -134,4 +152,8 @@ glm::vec3* Ship::getPosition() {
 Ship* Ship::setPosition(const glm::vec3* value) {
 	this->position = *value;
 	return this;
+}
+
+void Ship::setAxes(Ship::ShipDrawAxes axes) {
+	this->axes = axes;
 }

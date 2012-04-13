@@ -15,6 +15,9 @@ public: static const int MAX_SEGMENTS = 128;
 private: boost::scoped_ptr<Wave> waveX;
 private: boost::scoped_ptr<Wave> waveZ;
 
+private: float time;
+public: void setTime(float value);
+
 public: Water();
 
 public: void draw();

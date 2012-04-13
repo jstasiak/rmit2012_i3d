@@ -6,13 +6,18 @@
 Water::Water()
 	: size(300, 300), segments(32),
 	waveX((new Wave())->setAmplitude(4)->setLength(73)->setFrequency(0.7f)),
-	waveZ((new Wave())->setAmplitude(4)->setLength(44)->setFrequency(0.5f))
+	waveZ((new Wave())->setAmplitude(4)->setLength(44)->setFrequency(0.5f)),
+	time(0)
 {
 
 }
 
+void Water::setTime(float value) {
+	this->time = value;
+}
+
 void Water::draw() {
-	float time = millisecondsNow() / 1000.0f;
+	float time = this->time;
 	auto center = glm::vec3(0, 0, 0);
 
 	glColor3f(0.0f, 0.2f, 1.0f);

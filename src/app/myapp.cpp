@@ -10,7 +10,6 @@
 #include "water.h"
 
 MyApp::MyApp() : water(new Water()), ship(new Ship()) {
-
 }
 
 MyApp::~MyApp() {
@@ -51,7 +50,6 @@ void MyApp::initializeCommands() {
 	});
 }
 
-
 void MyApp::initializeKeyBindings() {
 	this->bindings[SDLK_a] = "toggle_axes";
 	this->bindings[SDLK_EQUALS] = "increase_water_tesselation";
@@ -64,6 +62,7 @@ void MyApp::initializeKeyBindings() {
 }
 
 void MyApp::update(FrameEventArgs* args) {
+	this->water->setTime(args->getTotalSeconds());
 }
 
 void MyApp::draw(FrameEventArgs* args) {

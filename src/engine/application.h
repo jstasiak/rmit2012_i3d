@@ -20,8 +20,8 @@ private:
 	float updateEverySeconds;
 	float drawEverySeconds;
 
-	void setUpdateFps(int value);
-	void setDrawFps(int value);
+public: void setUpdateFps(int value);
+public: void setDrawFps(int value);
 
 public:
 	Application();

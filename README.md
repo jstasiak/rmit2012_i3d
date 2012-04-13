@@ -36,3 +36,13 @@ Linux/Mac OS X
 1. In project directory create subdirectory called `build`.
 1. Go to subdirectory `build` and execute `cmake ../unix/ && make`.
 1. If previous step succeeded, go to subdirectory `data` in project directory and execute `../build/main`
+
+Key bindings
+============
+* `ESC` and `q` - quit
+* `w` - wireframe mode
+* `a` - toggle axes (world origin, water origin, ship origin, ship origin with roll/pitch applied)
+* `n` - toggle normals
+* `UP` and `DOWN` - increase and decrease speed (ship does not slow by itself!)
+* `LEFT` and `RIGHT` - turn the ship, works only when ship is moving forward
+* `-` and `+` - halve/double water tesselation level

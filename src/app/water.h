@@ -3,7 +3,9 @@
 
 #include "wave.h"
 
-class Water {
+#include "../engine/basegameobject.h"
+
+class Water : public BaseGameObject {
 private: bool normalsVisible;
 private: glm::vec2 size;
 
@@ -16,11 +18,13 @@ private: boost::scoped_ptr<Wave> waveX;
 private: boost::scoped_ptr<Wave> waveZ;
 
 private: float time;
-public: void setTime(float value);
 
 public: Water();
 
-public: void draw();
+// BaseGameObject overrides
+public: virtual void update(FrameEventArgs* args);
+public: virtual void draw(FrameEventArgs* args);
+
 
 public: float heightAtPositionAndTime(const glm::vec3* position, float time) const;
 public: glm::vec3 normalAtPositionAndTime(const glm::vec3* position, float time) const;

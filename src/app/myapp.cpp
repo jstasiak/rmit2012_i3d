@@ -48,6 +48,19 @@ void MyApp::initializeCommands() {
 	cs->registerCommand("toggle_water_normals", [this]() {
 		this->water->toggleNormals();
 	});
+
+	auto stopAcceleration = [this]() {
+		this->ship->stopAcceleration();
+	};
+	cs->registerCommand("+accel", [this]() {
+		this->ship->startAcceleration();
+	});
+	cs->registerCommand("-accel", stopAcceleration);
+
+	cs->registerCommand("+deccel", [this]() {
+		this->ship->startDecceleration();
+	});
+	cs->registerCommand("-deccel", stopAcceleration);
 }
 
 void MyApp::initializeKeyBindings() {
@@ -62,7 +75,8 @@ void MyApp::initializeKeyBindings() {
 }
 
 void MyApp::update(FrameEventArgs* args) {
-	this->water->setTime(args->getTotalSeconds());
+	this->water->update(args);
+	this->ship->update(args);
 }
 
 void MyApp::draw(FrameEventArgs* args) {
@@ -73,12 +87,12 @@ void MyApp::draw(FrameEventArgs* args) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	auto zero = glm::vec3(0, 0, 0);
-	this->water->draw();
+	this->water->draw(args);
 
 	auto shipPosition = this->ship->getPosition();
 	float height = this->water->heightAtPositionAndTime(shipPosition, args->getTotalSeconds());
 	shipPosition->y = height;
-	this->ship->draw();
+	this->ship->draw(args);
 
 	drawAxes(50);
 }

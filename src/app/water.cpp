@@ -12,11 +12,11 @@ Water::Water()
 
 }
 
-void Water::setTime(float value) {
-	this->time = value;
+void Water::update(FrameEventArgs* args) {
+	this->time = args->getTotalSeconds();
 }
 
-void Water::draw() {
+void Water::draw(FrameEventArgs* args) {
 	float time = this->time;
 	auto center = glm::vec3(0, 0, 0);
 

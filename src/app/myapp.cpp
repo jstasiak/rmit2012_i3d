@@ -49,18 +49,38 @@ void MyApp::initializeCommands() {
 		this->water->toggleNormals();
 	});
 
+	// Acceleration commands
 	auto stopAcceleration = [this]() {
 		this->ship->stopAcceleration();
 	};
 	cs->registerCommand("+accel", [this]() {
 		this->ship->startAcceleration();
 	});
+
 	cs->registerCommand("-accel", stopAcceleration);
 
 	cs->registerCommand("+deccel", [this]() {
 		this->ship->startDecceleration();
 	});
+
 	cs->registerCommand("-deccel", stopAcceleration);
+
+	// Turning commands
+	cs->registerCommand("+left", [this]() {
+		this->ship->startTurningLeft();
+	});
+
+	cs->registerCommand("-left", [this]() {
+		this->ship->stopTurningLeft();
+	});
+
+	cs->registerCommand("+right", [this]() {
+		this->ship->startTurningRight();
+	});
+
+	cs->registerCommand("-right", [this]() {
+		this->ship->stopTurningRight();
+	});
 }
 
 void MyApp::initializeKeyBindings() {

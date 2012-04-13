@@ -19,6 +19,11 @@ private: float currentAcceleration;
 private: float velocity;
 
 
+private: static const float TURNING_SPEED_DEGREES_PER_SECOND;
+
+private: float currentTurningSpeedDegreesPerSecond;
+
+
 
 public: Ship();
 public: virtual ~Ship();
@@ -26,6 +31,12 @@ public: virtual ~Ship();
 public: void startAcceleration();
 public: void startDecceleration();
 public: void stopAcceleration();
+
+public: void startTurningLeft();
+public: void stopTurningLeft();
+
+public: void startTurningRight();
+public: void stopTurningRight();
 
 // BaseGameObject overrides
 public: virtual void update(FrameEventArgs* args);

@@ -26,7 +26,9 @@ Compilation and run
 Windows + Visual Studio 2010
 ----------------------------
 
-Open `VS2010/rmit2012_i3d.sln` solution file and hit `Debug->Start Debugging` menu entry.
+1. Open `VS2010/rmit2012_i3d.sln` solution file
+2. In project Configuration Properties/Debugging set Working Directory (for All Configurations) to `$(ProjectDir)../data`
+3. Hit `Debug->Start Debugging` menu entry.
 
 Linux/Mac OS X
 --------------

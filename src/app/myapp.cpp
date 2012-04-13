@@ -36,16 +36,19 @@ void MyApp::initializeGraphics() {
 }
 
 void MyApp::initializeCommands() {
-	//auto cs = this->commandSystem;
+	auto& cs = this->commandSystem;
 
-	this->commandSystem->registerCommand("increase_water_tesselation",[this]() {
+	cs->registerCommand("increase_water_tesselation", [this]() {
 		this->water->doubleTesselationSafe();
 	});
 
-	this->commandSystem->registerCommand("decrease_water_tesselation",[this]() {
+	cs->registerCommand("decrease_water_tesselation", [this]() {
 		this->water->halveTesselationSafe();
 	});
 
+	cs->registerCommand("toggle_water_normals", [this]() {
+		this->water->toggleNormals();
+	});
 }
 
 
@@ -53,7 +56,7 @@ void MyApp::initializeKeyBindings() {
 	this->bindings[SDLK_a] = "toggle_axes";
 	this->bindings[SDLK_EQUALS] = "increase_water_tesselation";
 	this->bindings[SDLK_MINUS] = "decrease_water_tesselation";
-	this->bindings[SDLK_n] = "toggle_normals";
+	this->bindings[SDLK_n] = "toggle_water_normals";
 	this->bindings[SDLK_UP] = "+accel";
 	this->bindings[SDLK_DOWN] = "+deccel";
 	this->bindings[SDLK_LEFT] = "+left";

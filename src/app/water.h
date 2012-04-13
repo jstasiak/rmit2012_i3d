@@ -22,8 +22,7 @@ public: void draw();
 public: float heightAtPositionAndTime(const glm::vec3* position, float time) const;
 public: glm::vec3 normalAtPositionAndTime(const glm::vec3* position, float time) const;
 
-public: bool getNormalsVisible() const;
-public: Water* setNormalsVisible(bool value);
+public: void toggleNormals();
 
 public: Water* doubleTesselationSafe();
 public: Water* halveTesselationSafe();

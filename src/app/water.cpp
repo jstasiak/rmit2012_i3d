@@ -91,13 +91,9 @@ glm::vec3 Water::normalAtPositionAndTime(const glm::vec3* position, float time) 
 	return result;
 }
 
-bool Water::getNormalsVisible() const {
-	return this->normalsVisible;
-}
-
-Water* Water::setNormalsVisible(bool value) {
-	this->normalsVisible = value;
-	return this;
+void Water::toggleNormals() {
+	this->normalsVisible = !this->normalsVisible;
+	printf("[Water] Normals visible: %d\n", this->normalsVisible);
 }
 
 Water* Water::doubleTesselationSafe() {

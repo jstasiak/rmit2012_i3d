@@ -89,5 +89,8 @@
     <ClInclude Include="..\src\engine\command.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\engine\basegameobject.h">
+      <Filter>engine</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

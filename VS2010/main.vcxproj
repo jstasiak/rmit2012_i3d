@@ -45,6 +45,7 @@
     <ClInclude Include="..\src\engine\command.h" />
     <ClInclude Include="..\src\engine\component\transform.h" />
     <ClInclude Include="..\src\engine\frameeventargs.h" />
+    <ClInclude Include="..\src\engine\basegameobject.h" />
     <ClInclude Include="..\src\engine\utils.h" />
     <ClInclude Include="..\src\precompile.h" />
   </ItemGroup>

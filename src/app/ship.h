@@ -6,10 +6,13 @@
 
 #include "../engine/basegameobject.h"
 
+class Water;
+
 class Ship : public BaseGameObject {
 private: OBJMesh* mesh;
 private: glm::vec3 position;
 private: float yaw;
+private: Water* water;
 
 private: static const float MIN_VELOCITY;
 private: static const float MAX_VELOCITY;
@@ -25,7 +28,7 @@ private: float currentTurningSpeedDegreesPerSecond;
 
 
 
-public: Ship();
+public: Ship(Water* water);
 public: virtual ~Ship();
 
 public: void startAcceleration();

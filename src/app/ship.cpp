@@ -1,16 +1,19 @@
 #include "precompile.h"
 #include "ship.h"
 
+#include "water.h"
+
 const float Ship::MIN_VELOCITY = 0.0f;
 const float Ship::MAX_VELOCITY = 45.0f;
 const float Ship::ACCELERATION = 30.0f;
 const float Ship::TURNING_SPEED_DEGREES_PER_SECOND = 30.0f;
 
-Ship::Ship()
+Ship::Ship(Water* water)
 	: position(0, 0, 0),
 	currentAcceleration(0),
 	currentTurningSpeedDegreesPerSecond(0),
-	yaw(0)
+	yaw(0),
+	water(water)
 {
 	this->mesh = objMeshLoad("models/galleon.obj");
 }
@@ -90,13 +93,25 @@ void Ship::draw(FrameEventArgs* args) {
 
 	glRotatef(this->yaw, 0, 1, 0);
 
+	auto normal = this->water->normalAtPositionAndTime(&this->position, args->getTotalSeconds());
+
+	auto vxy = glm::normalize(glm::vec3(normal.x, normal.y, 0));
+	auto vzy = glm::normalize(glm::vec3(0, normal.y, normal.z));
+
+	float rollRadians = std::asin(vxy.x);
+	float pitchRadians = std::asin(vzy.z);
+
+	glRotatef(glm::degrees(rollRadians), 0, 0, -1);
+	glRotatef(glm::degrees(pitchRadians), 1, 0, 0);
+
 	glBegin(GL_TRIANGLES);
 	for (int i = 0; i < mesh->numIndices; ++i) {
 		unsigned int index = mesh->indices[i];
 		float* vertex = (float*)((char*)mesh->vertices + index * mesh->stride);
 		float* normal = (float*)((char*)vertex + mesh->normalOffset);
-		if (mesh->hasNormals)
+		if (mesh->hasNormals) {
 			glNormal3fv(normal);
+		}
 
 		glVertex3fv(vertex);
 	}

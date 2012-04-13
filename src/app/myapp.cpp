@@ -11,7 +11,7 @@
 
 MyApp::MyApp()
 	: water(new Water()),
-	ship(new Ship()),
+	ship(new Ship(&(*this->water))),
 	wireframe(false)
 {
 }

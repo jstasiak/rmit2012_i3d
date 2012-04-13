@@ -18,6 +18,12 @@ MyApp::~MyApp() {
 }
 
 void MyApp::initialize() {
+	this->initializeGraphics();
+	this->initializeCommands();
+	this->initializeKeyBindings();
+}
+
+void MyApp::initializeGraphics() {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(90.0f, 1.33f, 0.01f, 500.0f);
@@ -27,7 +33,23 @@ void MyApp::initialize() {
 	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHT0);
+}
 
+void MyApp::initializeCommands() {
+	//auto cs = this->commandSystem;
+
+	this->commandSystem->registerCommand("increase_water_tesselation",[this]() {
+		this->water->doubleTesselationSafe();
+	});
+
+	this->commandSystem->registerCommand("decrease_water_tesselation",[this]() {
+		this->water->halveTesselationSafe();
+	});
+
+}
+
+
+void MyApp::initializeKeyBindings() {
 	this->bindings[SDLK_a] = "toggle_axes";
 	this->bindings[SDLK_EQUALS] = "increase_water_tesselation";
 	this->bindings[SDLK_MINUS] = "decrease_water_tesselation";

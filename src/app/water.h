@@ -4,22 +4,29 @@
 #include "wave.h"
 
 class Water {
-private:
-	glm::vec2 size;
-	glm::ivec2 segments;
+private: bool normalsVisible;
+private: glm::vec2 size;
 
-	boost::scoped_ptr<Wave> waveX;
-	boost::scoped_ptr<Wave> waveZ;
+private: int segments;
 
-public:
-	Water();
-	virtual ~Water();
-	void draw();
+public: static const int MIN_SEGMENTS = 1;
+public: static const int MAX_SEGMENTS = 128;
 
-public:
-	float heightAtPositionAndTime(const glm::vec3* position, float time) const;
-public:
-	glm::vec3 normalAtPositionAndTime(const glm::vec3* position, float time) const;
+private: boost::scoped_ptr<Wave> waveX;
+private: boost::scoped_ptr<Wave> waveZ;
+
+public: Water();
+
+public: void draw();
+
+public: float heightAtPositionAndTime(const glm::vec3* position, float time) const;
+public: glm::vec3 normalAtPositionAndTime(const glm::vec3* position, float time) const;
+
+public: bool getNormalsVisible() const;
+public: Water* setNormalsVisible(bool value);
+
+public: Water* doubleTesselationSafe();
+public: Water* halveTesselationSafe();
 };
 
 #endif // WATER_H

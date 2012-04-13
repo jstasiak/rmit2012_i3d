@@ -4,14 +4,11 @@
 #include "../engine/utils.h"
 
 Water::Water()
-	: size(300, 300), segments(50, 50),
+	: size(300, 300), segments(32),
 	waveX((new Wave())->setAmplitude(4)->setLength(73)->setFrequency(0.7f)),
 	waveZ((new Wave())->setAmplitude(4)->setLength(44)->setFrequency(0.5f))
 {
 
-}
-
-Water::~Water() {
 }
 
 void Water::draw() {
@@ -21,8 +18,9 @@ void Water::draw() {
 	glColor3f(0.0f, 0.2f, 1.0f);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	glm::vec2 segmentSize(this->size.x / this->segments.x,
-		this->size.y / this->segments.y);
+	glm::vec2 segmentSize(this->size.x / this->segments,
+		this->size.y / this->segments);
+
 	
 	glm::vec3 p1, p2, p3, p4;
 	glm::vec3 n1, n2, n3, n4;
@@ -31,8 +29,8 @@ void Water::draw() {
 	auto up = glm::vec3(0, 1, 0);
 
 	glBegin(GL_TRIANGLES);
-	for(int xsegment = 0; xsegment < this->segments.x - 1; ++xsegment) {
-		for(int zsegment = 0; zsegment < this->segments.y - 1; ++zsegment) {
+	for(int xsegment = 0; xsegment < this->segments; ++xsegment) {
+		for(int zsegment = 0; zsegment < this->segments; ++zsegment) {
 			p1 = start + glm::vec3(segmentSize.x * (xsegment + 0), 0.0f, -segmentSize.y * (zsegment + 0));
 			p2 = start + glm::vec3(segmentSize.x * (xsegment + 1), 0.0f, -segmentSize.y * (zsegment + 0));
 			p3 = start + glm::vec3(segmentSize.x * (xsegment + 1), 0.0f, -segmentSize.y * (zsegment + 1));
@@ -91,4 +89,33 @@ glm::vec3 Water::normalAtPositionAndTime(const glm::vec3* position, float time) 
 	auto result = glm::normalize(vecx + vecz);
 
 	return result;
+}
+
+bool Water::getNormalsVisible() const {
+	return this->normalsVisible;
+}
+
+Water* Water::setNormalsVisible(bool value) {
+	this->normalsVisible = value;
+	return this;
+}
+
+Water* Water::doubleTesselationSafe() {
+	if(this->segments * 2 <= Water::MAX_SEGMENTS) {
+		this->segments *= 2;
+	}
+
+	printf("[Water] Current tesselation: %d\n", this->segments);
+
+	return this;
+}
+
+Water* Water::halveTesselationSafe() {
+	if(this->segments / 2 >= Water::MIN_SEGMENTS) {
+		this->segments /= 2;
+	}
+
+	printf("[Water] Current tesselation: %d\n", this->segments);
+
+	return this;
 }

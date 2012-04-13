@@ -9,6 +9,7 @@
 #include <cstdio>
 #include <exception>
 
+#include <boost/bind.hpp>
 #include <boost/date_time/posix_time/posix_time_types.hpp>
 #include <boost/signal.hpp>
 #include <boost/smart_ptr/scoped_ptr.hpp>

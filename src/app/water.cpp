@@ -7,74 +7,104 @@ Water::Water()
 	: size(300, 300), segments(32),
 	waveX((new Wave())->setAmplitude(4)->setLength(73)->setFrequency(0.7f)),
 	waveZ((new Wave())->setAmplitude(4)->setLength(44)->setFrequency(0.5f)),
-	time(0)
+	time(0),
+	vertices(0)
 {
+	this->resetData();
 
 }
 
-void Water::update(FrameEventArgs* args) {
-	this->time = args->getTotalSeconds();
+void Water::resetData() {
+	this->vertices.reset(new Vertex[this->verticesCount()]);
+	this->recalculate();
 }
 
-void Water::draw(FrameEventArgs* args) {
+int Water::verticesCount() {
+	return (this->segments + 1) * (this->segments + 1);
+}
+
+int Water::vertexIndex(int x, int z) {
+	return x * (this->segments + 1) + z;
+}
+
+void Water::recalculate() {
 	float time = this->time;
 	auto center = glm::vec3(0, 0, 0);
-
-	glColor3f(0.0f, 0.2f, 1.0f);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	glm::vec2 segmentSize(this->size.x / this->segments,
 		this->size.y / this->segments);
 
-	
-	glm::vec3 p1, p2, p3, p4;
-	glm::vec3 n1, n2, n3, n4;
-
 	auto start = center - glm::vec3(this->size.x * 0.5f, 0, -this->size.y * 0.5f);
-	auto up = glm::vec3(0, 1, 0);
+
+	Vertex* allVertices = this->vertices.get();
+	Vertex* p = 0;
+
+	glm::vec3 position;
+	glm::vec3 normal;
+
+	for(int xpoint = 0; xpoint <= this->segments; ++xpoint) {
+		for(int zpoint = 0; zpoint <= this->segments; ++zpoint) {
+			p = allVertices + this->vertexIndex(xpoint, zpoint);
+			position = start + glm::vec3(xpoint * segmentSize.x, 0, -zpoint * segmentSize.y);
+			position.y = this->heightAtPositionAndTime(&position, time);
+			normal = this->normalAtPositionAndTime(&position, time);
+
+			memcpy(p->position, glm::value_ptr(position), 3 * sizeof(float));
+			memcpy(p->normal, glm::value_ptr(normal), 3 * sizeof(float));
+		}
+	}
+}
+
+void Water::update(FrameEventArgs* args) {
+	this->time = args->getTotalSeconds();
+	this->recalculate();
+}
+
+
+
+void Water::draw(FrameEventArgs* args) {
+	glColor3f(0.0f, 0.2f, 1.0f);
+
+	Vertex* base = this->vertices.get();
+	Vertex* v1 = 0;
+	Vertex* v2 = 0;
+	Vertex* v3 = 0;
+	Vertex* v4 = 0;
 
 	glBegin(GL_TRIANGLES);
+
 	for(int xsegment = 0; xsegment < this->segments; ++xsegment) {
 		for(int zsegment = 0; zsegment < this->segments; ++zsegment) {
-			p1 = start + glm::vec3(segmentSize.x * (xsegment + 0), 0.0f, -segmentSize.y * (zsegment + 0));
-			p2 = start + glm::vec3(segmentSize.x * (xsegment + 1), 0.0f, -segmentSize.y * (zsegment + 0));
-			p3 = start + glm::vec3(segmentSize.x * (xsegment + 1), 0.0f, -segmentSize.y * (zsegment + 1));
-			p4 = start + glm::vec3(segmentSize.x * (xsegment + 0), 0.0f, -segmentSize.y * (zsegment + 1));
-
-			p1.y = this->heightAtPositionAndTime(&p1, time);
-			p2.y = this->heightAtPositionAndTime(&p2, time);
-			p3.y = this->heightAtPositionAndTime(&p3, time);
-			p4.y = this->heightAtPositionAndTime(&p4, time);
-
-			n1 = this->normalAtPositionAndTime(&p1, time);
-			n2 = this->normalAtPositionAndTime(&p2, time);
-			n3 = this->normalAtPositionAndTime(&p3, time);
-			n4 = this->normalAtPositionAndTime(&p4, time);
+			v1 = base + this->vertexIndex(xsegment, zsegment);
+			v2 = base + this->vertexIndex(xsegment + 1, zsegment);
+			v3 = base + this->vertexIndex(xsegment + 1, zsegment + 1);
+			v4 = base + this->vertexIndex(xsegment, zsegment + 1);
 
 			// These normals are here only to show lighting effect, they're not proper normals
-			glNormal3fv(glm::value_ptr(n1));
-			glVertex3fv(glm::value_ptr(p1));
+			glNormal3fv(v1->normal);
+			glVertex3fv(v1->position);
 
-			glNormal3fv(glm::value_ptr(n2));
-			glVertex3fv(glm::value_ptr(p2));
+			glNormal3fv(v2->normal);
+			glVertex3fv(v2->position);
 
-			glNormal3fv(glm::value_ptr(n4));
-			glVertex3fv(glm::value_ptr(p4));
+			glNormal3fv(v4->normal);
+			glVertex3fv(v4->position);
 
 
-			glNormal3fv(glm::value_ptr(n2));
-			glVertex3fv(glm::value_ptr(p2));
+			glNormal3fv(v2->normal);
+			glVertex3fv(v2->position);
 
-			glNormal3fv(glm::value_ptr(n3));
-			glVertex3fv(glm::value_ptr(p3));
+			glNormal3fv(v3->normal);
+			glVertex3fv(v3->position);
 
-			glNormal3fv(glm::value_ptr(n4));
-			glVertex3fv(glm::value_ptr(p4));
+			glNormal3fv(v4->normal);
+			glVertex3fv(v4->position);
 		}
 	}
 		
 	glEnd();
 }
+
 
 float Water::heightAtPositionAndTime(const glm::vec3* position, float time) const {
 	return this->waveX->valueForPositionAndTime(position->x, time)
@@ -106,6 +136,7 @@ Water* Water::doubleTesselationSafe() {
 		this->segments *= 2;
 	}
 
+	this->resetData();
 	printf("[Water] Current tesselation: %d\n", this->segments);
 
 	return this;
@@ -116,6 +147,7 @@ Water* Water::halveTesselationSafe() {
 		this->segments /= 2;
 	}
 
+	this->resetData();
 	printf("[Water] Current tesselation: %d\n", this->segments);
 
 	return this;

@@ -2,8 +2,8 @@
 #include "ship.h"
 
 const float Ship::MIN_VELOCITY = 0.0f;
-const float Ship::MAX_VELOCITY = 30.0f;
-const float Ship::ACCELERATION = 15.0f;
+const float Ship::MAX_VELOCITY = 45.0f;
+const float Ship::ACCELERATION = 30.0f;
 const float Ship::TURNING_SPEED_DEGREES_PER_SECOND = 30.0f;
 
 Ship::Ship()
@@ -48,31 +48,37 @@ void Ship::stopTurningRight() {
 	}
 }
 
+
 void Ship::update(FrameEventArgs* args) {
 	float dt = args->getSeconds();
 
 	// If acceleration has non-zero value, change velocity
 	if(this->currentAcceleration != 0) {
 		auto dv = this->currentAcceleration * dt;
-		this->velocity = std::min(Ship::MAX_VELOCITY,
-			std::max(Ship::MIN_VELOCITY,
-				this->velocity + dv
-			)
-		);
+		this->velocity = glm::clamp(this->velocity + dv, Ship::MIN_VELOCITY, Ship::MAX_VELOCITY);
 	}
 
-	// If velocity has non-zero value, move ship
+	// If velocity has greater-than-zero value, move or rotate ship
 	if(this->velocity > 0) {
-		auto dx = glm::vec3(0, 0, 1) * this->velocity * dt;
-		printf("Ship dx: %f %f %f\n", dx.x, dx.y, dx.z);
+		// If angular speed is non-zero, rotate ship a little
+		if(this->currentTurningSpeedDegreesPerSecond != 0) {
+			auto dyaw = this->currentTurningSpeedDegreesPerSecond * dt;
+			this->yaw = std::fmod(this->yaw + dyaw, 360.0f);
+		}
+
+		// Calculate forward vector based on current yaw
+		auto yawInRadians = glm::radians(this->yaw);
+		auto unit = glm::vec3(
+			std::cos(yawInRadians),
+			0,
+			-std::sin(yawInRadians));
+
+		// Move ship using forward vector
+		auto dx = unit * this->velocity * dt;
 		this->position += dx;
 	}
 
-	// If angular speed is non-zero, rotate ship
-	if(this->currentTurningSpeedDegreesPerSecond != 0) {
-		auto dyaw = this->currentTurningSpeedDegreesPerSecond * dt;
-		this->yaw += dyaw;
-	}
+
 }
 
 void Ship::draw(FrameEventArgs* args) {

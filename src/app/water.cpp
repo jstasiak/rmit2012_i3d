@@ -4,11 +4,13 @@
 #include "../engine/utils.h"
 
 Water::Water()
-	: size(300, 300), segments(32),
+	: size(300, 300),
+	segments(32),
 	waveX((new Wave())->setAmplitude(4)->setLength(73)->setFrequency(0.7f)),
 	waveZ((new Wave())->setAmplitude(4)->setLength(44)->setFrequency(0.5f)),
 	time(0),
-	vertices(0)
+	vertices(0),
+	normalsVisible(false)
 {
 	this->resetData();
 
@@ -103,8 +105,11 @@ void Water::draw(FrameEventArgs* args) {
 	}
 		
 	glEnd();
-}
 
+	if(this->normalsVisible) {
+		this->drawNormals();
+	}
+}
 
 float Water::heightAtPositionAndTime(const glm::vec3* position, float time) const {
 	return this->waveX->valueForPositionAndTime(position->x, time)
@@ -125,6 +130,35 @@ glm::vec3 Water::normalAtPositionAndTime(const glm::vec3* position, float time) 
 
 	return result;
 }
+
+void Water::drawNormals() {
+	Vertex* base = this->vertices.get();
+	Vertex* v = 0;
+
+	glColor3f(1.0f, 1.0f, 0.0f);
+	glDisable(GL_LIGHTING);
+
+	glBegin(GL_LINES);
+		glVertex3f(0, 0, 0);
+		glVertex3f(1, 1, 1);
+
+		glVertex3f(30, 0, 30);
+		glVertex3f(30, 10, 30);
+
+		for(int xpoint = 0; xpoint <= this->segments; ++xpoint) {
+			for(int zpoint = 0; zpoint <= this->segments; ++zpoint) {
+				v = base + this->vertexIndex(xpoint, zpoint);
+				glVertex3fv(v->position);
+				glVertex3f(v->position[0] + v->normal[0] * 10,
+					v->position[1] + v->normal[1] * 10,
+					v->position[2] + v->normal[2] * 10);
+			}
+		}
+	glEnd();
+
+	glEnable(GL_LIGHTING);
+}
+
 
 void Water::toggleNormals() {
 	this->normalsVisible = !this->normalsVisible;

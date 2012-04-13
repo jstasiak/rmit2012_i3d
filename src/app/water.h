@@ -44,6 +44,8 @@ public: virtual void draw(FrameEventArgs* args);
 public: float heightAtPositionAndTime(const glm::vec3* position, float time) const;
 public: glm::vec3 normalAtPositionAndTime(const glm::vec3* position, float time) const;
 
+public: void drawNormals();
+
 public: void toggleNormals();
 
 public: Water* doubleTesselationSafe();

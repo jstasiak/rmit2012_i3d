@@ -22,14 +22,10 @@ int Application::run() {
 	int result;
 
 	result = SDL_Init(SDL_INIT_EVERYTHING);
-	if(result != 0) {
-		throw 0;
-	}
+	assert(result == 0);
 
 	auto surface = SDL_SetVideoMode(800, 600, 32, SDL_DOUBLEBUF | SDL_OPENGL | SDL_HWSURFACE);
-	if(!surface) {
-		throw 0;
-	}
+	assert(surface);
 
 	double last = millisecondsNow() / 1000.0f;
 	float updateDt = 0.0f;

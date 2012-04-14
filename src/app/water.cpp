@@ -25,6 +25,8 @@ int Water::verticesCount() {
 	return (this->segments + 1) * (this->segments + 1);
 }
 
+// Function to map x and z coordinate of water point
+// to one-dimensional array coordinate
 int Water::vertexIndex(int x, int z) {
 	return x * (this->segments + 1) + z;
 }
@@ -36,21 +38,28 @@ void Water::recalculate() {
 	glm::vec2 segmentSize(this->size.x / this->segments,
 		this->size.y / this->segments);
 
+	// Minimal coordinates water corner
 	auto start = center - glm::vec3(this->size.x * 0.5f, 0, -this->size.y * 0.5f);
 
+	// Variables to provide access to vertices array
 	Vertex* allVertices = this->vertices.get();
 	Vertex* p = 0;
 
+	// Variables to store temporary vertex data
 	glm::vec3 position;
 	glm::vec3 normal;
 
 	for(int xpoint = 0; xpoint <= this->segments; ++xpoint) {
 		for(int zpoint = 0; zpoint <= this->segments; ++zpoint) {
+			// Get vertex pointer within the array
 			p = allVertices + this->vertexIndex(xpoint, zpoint);
+
+			// Calculate vertex position and normal
 			position = start + glm::vec3(xpoint * segmentSize.x, 0, -zpoint * segmentSize.y);
 			position.y = this->heightAtPositionAndTime(&position, time);
 			normal = this->normalAtPositionAndTime(&position, time);
 
+			// Copy to buffer
 			memcpy(p->position, glm::value_ptr(position), 3 * sizeof(float));
 			memcpy(p->normal, glm::value_ptr(normal), 3 * sizeof(float));
 		}
@@ -58,13 +67,14 @@ void Water::recalculate() {
 }
 
 void Water::update(FrameEventArgs* args) {
-	this->time = args->getTotalSeconds();
 }
 
 
-
 void Water::draw(FrameEventArgs* args) {
+	// Every frame we want to recalculate waves
+	this->time = args->getTotalSeconds();
 	this->recalculate();
+
 
 	glColor3f(0.0f, 0.2f, 1.0f);
 
@@ -113,6 +123,7 @@ void Water::draw(FrameEventArgs* args) {
 }
 
 float Water::heightAtPositionAndTime(const glm::vec3* position, float time) const {
+	// Sum two waves - one on XY and another on ZY plane
 	return this->waveX->valueForPositionAndTime(position->x, time)
 		+ this->waveZ->valueForPositionAndTime(position->z, time);
 }

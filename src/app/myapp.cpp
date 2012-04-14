@@ -29,9 +29,16 @@ void MyApp::initializeGraphics() {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(90.0f, 1.33f, 0.01f, 500.0f);
+	glMatrixMode(GL_MODELVIEW);
+
 	glClearColor(0, 0, 0, 1.0f);
+
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 	glEnable(GL_COLOR_MATERIAL);
+
+	float white[] = {1.0f, 1.0f, 1.0f, 1.0f};
+	glMaterialfv(GL_FRONT, GL_SPECULAR, white);
+	
 	glEnable(GL_DEPTH_TEST);
 	glShadeModel(GL_SMOOTH);
 }
@@ -112,6 +119,7 @@ void MyApp::update(FrameEventArgs* args) {
 }
 
 void MyApp::draw(FrameEventArgs* args) {
+	// Switch between wireframe and fill mode
 	glPolygonMode(GL_FRONT, this->wireframe ? GL_LINE : GL_FILL);
 
 	glMatrixMode(GL_MODELVIEW);
@@ -119,22 +127,25 @@ void MyApp::draw(FrameEventArgs* args) {
 	if(this->axes == MyApp::WorldOrigin) {
 		drawAxes(50.0f);
 	}
+
 	this->applyCameraTransform();
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	// Enable lights in camera space only so light position is ok
 	this->enableLights();
 
-	auto zero = glm::vec3(0, 0, 0);
+	if(this->axes == MyApp::WaterOrigin) {
+		drawAxes(50);
+	}
 	this->water->draw(args);
 
+	// Modify ship y coordinate to match water height
 	auto shipPosition = this->ship->getPosition();
 	float height = this->water->heightAtPositionAndTime(shipPosition, args->getTotalSeconds());
 	shipPosition->y = height;
 	this->ship->draw(args);
 
-	if(this->axes == MyApp::WaterOrigin) {
-		drawAxes(50);
-	}
 }
 
 void MyApp::applyCameraTransform() const {

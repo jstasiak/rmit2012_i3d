@@ -62,7 +62,7 @@ int Application::run() {
 
 		while(updateDt >= this->updateEverySeconds) {
 			//FIXME: HACK: develop smarter system of update managing
-			updateDt = 0;
+			updateDt -= this->updateEverySeconds;
 			this->doUpdate(FrameEventArgs::createFromSecondsAndTotalSeconds(this->updateEverySeconds, now));
 		}
 

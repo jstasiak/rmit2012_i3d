@@ -59,12 +59,13 @@ void Water::recalculate() {
 
 void Water::update(FrameEventArgs* args) {
 	this->time = args->getTotalSeconds();
-	this->recalculate();
 }
 
 
 
 void Water::draw(FrameEventArgs* args) {
+	this->recalculate();
+
 	glColor3f(0.0f, 0.2f, 1.0f);
 
 	Vertex* base = this->vertices.get();

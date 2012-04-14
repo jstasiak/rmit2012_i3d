@@ -9,8 +9,8 @@ int main(int argc, char** argv) {
 		boost::scoped_ptr<Application> application(new MyApp());
 		returnCode = application->run();
 	}
-	catch(exception* e) {
-		printf("Exception occured: %s\n\n", e->what());
+	catch(const exception& e) {
+		printf("Exception occured: %s\n\n", e.what());
 		returnCode = -1;
 	}
 

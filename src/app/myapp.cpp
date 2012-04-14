@@ -1,8 +1,6 @@
 #include "precompile.h"
 #include "myapp.h"
 
-#include <cmath>
-#include <cstdio>
 #include <SDL_opengl.h>
 
 #include "../engine/utils.h"
@@ -32,11 +30,10 @@ void MyApp::initializeGraphics() {
 	glLoadIdentity();
 	gluPerspective(90.0f, 1.33f, 0.01f, 500.0f);
 	glClearColor(0, 0, 0, 1.0f);
-	glEnable(GL_LIGHTING);
-	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_LIGHT0);
+	glShadeModel(GL_SMOOTH);
 }
 
 void MyApp::initializeCommands() {
@@ -117,7 +114,6 @@ void MyApp::update(FrameEventArgs* args) {
 void MyApp::draw(FrameEventArgs* args) {
 	glPolygonMode(GL_FRONT, this->wireframe ? GL_LINE : GL_FILL);
 
-	glEnable(GL_LIGHTING);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	if(this->axes == MyApp::WorldOrigin) {
@@ -125,6 +121,8 @@ void MyApp::draw(FrameEventArgs* args) {
 	}
 	this->applyCameraTransform();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	this->enableLights();
 
 	auto zero = glm::vec3(0, 0, 0);
 	this->water->draw(args);
@@ -141,9 +139,31 @@ void MyApp::draw(FrameEventArgs* args) {
 
 void MyApp::applyCameraTransform() const {
 	auto position = this->ship->getPosition();
-	gluLookAt(0, 100, 130,
+	gluLookAt(0, 100, 100,
 		position->x, 0, position->z,
 		0, 1, 0);
+}
+
+void MyApp::enableLights() {
+	glEnable(GL_LIGHTING);
+
+	float white[] = {1.0f, 1.0f, 1.0f, 1.0f};
+	float black[] = {0.0f, 0.0f, 0.0f, 1.0f};
+	float position[] = {0.0f, 30.0f, -100.0f, 1.0f};
+
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, black);
+
+	float shininess[] = { 64.0f };
+
+	glMaterialfv(GL_FRONT, GL_SPECULAR, white);
+	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
+
+	glLightfv(GL_LIGHT0, GL_POSITION, position);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, black);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, white);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, white);
+
+	glEnable(GL_LIGHT0);
 }
 
 void MyApp::toggleWireframe() {

@@ -31,6 +31,8 @@ private: void initializeKeyBindings();
 protected: virtual void update(FrameEventArgs* args);
 protected: virtual void draw(FrameEventArgs* args);
 
+protected: void enableLights();
+
 protected: void applyCameraTransform() const;
 
 public: void toggleWireframe();

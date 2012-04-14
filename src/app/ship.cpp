@@ -90,7 +90,7 @@ void Ship::draw(FrameEventArgs* args) {
 	glTranslatef(this->position.x, this->position.y, this->position.z);
 
 	// Models is too big so I need to scale it
-	float scale = 0.4f;
+	float scale = 0.2f;
 	glScalef(scale, scale, scale);
 
 	// Apply current yaw

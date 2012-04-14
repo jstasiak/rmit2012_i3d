@@ -7,7 +7,7 @@ int main(int argc, char** argv) {
 	int returnCode = 0;
 	try {
 		boost::scoped_ptr<Application> application(new MyApp());
-		int returnCode = application->run();
+		returnCode = application->run();
 	}
 	catch(exception* e) {
 		printf("Exception occured: %s\n\n", e->what());
@@ -16,5 +16,3 @@ int main(int argc, char** argv) {
 
 	return returnCode;
 }
-
-#define main	SDL_main

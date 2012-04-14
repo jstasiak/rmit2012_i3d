@@ -7,9 +7,6 @@
     <Filter Include="engine\camera">
       <UniqueIdentifier>{f6dab6b1-0196-4539-adec-cbdcebe3d8c4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="engine\component">
-      <UniqueIdentifier>{dc7368cd-6906-4253-b827-671ad29099cd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="app">
       <UniqueIdentifier>{379241dc-3e2c-4454-9474-e11264ca4e5b}</UniqueIdentifier>
     </Filter>
@@ -24,9 +21,6 @@
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\engine\camera\basecamera.cpp">
       <Filter>engine\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\engine\component\transform.cpp">
-      <Filter>engine\component</Filter>
     </ClCompile>
     <ClCompile Include="..\src\engine\utils.cpp">
       <Filter>engine</Filter>
@@ -60,9 +54,6 @@
     </ClInclude>
     <ClInclude Include="..\src\engine\camera\basecamera.h">
       <Filter>engine\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\engine\component\transform.h">
-      <Filter>engine\component</Filter>
     </ClInclude>
     <ClInclude Include="..\src\engine\utils.h">
       <Filter>engine</Filter>

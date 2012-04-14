@@ -24,7 +24,6 @@
     <ClCompile Include="..\src\engine\application.cpp" />
     <ClCompile Include="..\src\engine\camera\basecamera.cpp" />
     <ClCompile Include="..\src\engine\command.cpp" />
-    <ClCompile Include="..\src\engine\component\transform.cpp" />
     <ClCompile Include="..\src\engine\frameeventargs.cpp" />
     <ClCompile Include="..\src\engine\utils.cpp" />
     <ClCompile Include="..\src\main.cpp" />
@@ -43,7 +42,6 @@
     <ClInclude Include="..\src\engine\application.h" />
     <ClInclude Include="..\src\engine\camera\basecamera.h" />
     <ClInclude Include="..\src\engine\command.h" />
-    <ClInclude Include="..\src\engine\component\transform.h" />
     <ClInclude Include="..\src\engine\frameeventargs.h" />
     <ClInclude Include="..\src\engine\basegameobject.h" />
     <ClInclude Include="..\src\engine\utils.h" />

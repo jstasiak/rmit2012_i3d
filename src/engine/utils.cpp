@@ -10,6 +10,7 @@ long long millisecondsNow() {
 }
 
 void drawAxes(float length) {
+	glDisable(GL_LIGHTING);
 	glBegin(GL_LINES);
 		glColor3f(1, 0, 0);
 
@@ -26,4 +27,5 @@ void drawAxes(float length) {
 		glVertex3f(0, 0, 0);
 		glVertex3f(0, 0, length);
 	glEnd();
+	glEnable(GL_LIGHTING);
 }

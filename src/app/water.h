@@ -3,7 +3,7 @@
 
 #include "wave.h"
 
-#include "../engine/basegameobject.h"
+#include "../engine/gameobject/basegameobject.h"
 
 struct Vertex {
 	float position[3];
@@ -37,8 +37,8 @@ private: int vertexIndex(int x, int z);
 public: void recalculate();
 
 // BaseGameObject overrides
-public: virtual void update(FrameEventArgs* args);
-public: virtual void draw(FrameEventArgs* args);
+public: virtual void update(boost::shared_ptr<FrameEventArgs> args);
+public: virtual void draw(boost::shared_ptr<FrameEventArgs> args);
 
 
 public: float heightAtPositionAndTime(const glm::vec3* position, float time) const;

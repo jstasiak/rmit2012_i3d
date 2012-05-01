@@ -1,7 +1,7 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#include <boost/scoped_ptr.hpp>
+#include <boost/smart_ptr.hpp>
 #include <SDL.h>
 
 #include "command.h"
@@ -32,13 +32,13 @@ public:
 
 private:
 	void doInitialize();
-	void doUpdate(FrameEventArgs* args);
-	void doDraw(FrameEventArgs* args);
+	void doUpdate(boost::shared_ptr<FrameEventArgs> args);
+	void doDraw(boost::shared_ptr<FrameEventArgs> args);
 
 protected:
 	virtual void initialize();
-	virtual void update(FrameEventArgs* args);
-	virtual void draw(FrameEventArgs* args);
+	virtual void update(boost::shared_ptr<FrameEventArgs> args);
+	virtual void draw(boost::shared_ptr<FrameEventArgs> args);
 	virtual void onKeyDown(const SDL_KeyboardEvent* event);
 	virtual void onKeyUp(const SDL_KeyboardEvent* event);
 

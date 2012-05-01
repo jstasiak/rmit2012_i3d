@@ -4,16 +4,19 @@
 #include "glm/glm.hpp"
 #include "obj.h"
 
-#include "../engine/basegameobject.h"
+#include "../engine/gameobject/basegameobject.h"
 
 class Water;
 
+
 class Ship : public BaseGameObject {
+
 public: enum ShipDrawAxes {
 	DontDraw,
 	Draw,
 	DrawWithRotation
 };
+
 private: OBJMesh* mesh;
 private: glm::vec3 position;
 private: float yaw;
@@ -48,8 +51,8 @@ public: void startTurningRight();
 public: void stopTurningRight();
 
 // BaseGameObject overrides
-public: virtual void update(FrameEventArgs* args);
-public: virtual void draw(FrameEventArgs* args);
+public: virtual void update(boost::shared_ptr<FrameEventArgs> args);
+public: virtual void draw(boost::shared_ptr<FrameEventArgs> args);
 
 public: glm::vec3* getPosition();
 public: Ship* setPosition(const glm::vec3* value);

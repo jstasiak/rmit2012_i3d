@@ -53,7 +53,9 @@ void Ship::stopTurningRight() {
 }
 
 
-void Ship::update(FrameEventArgs* args) {
+void Ship::update(boost::shared_ptr<FrameEventArgs> args) {
+	BaseGameObject::update(args);
+
 	float dt = args->getSeconds();
 
 	// If acceleration has non-zero value, change velocity
@@ -85,7 +87,7 @@ void Ship::update(FrameEventArgs* args) {
 
 }
 
-void Ship::draw(FrameEventArgs* args) {
+void Ship::draw(boost::shared_ptr<FrameEventArgs> args) {
 	glPushMatrix();
 	glTranslatef(this->position.x, this->position.y, this->position.z);
 

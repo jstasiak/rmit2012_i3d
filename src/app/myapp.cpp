@@ -113,12 +113,12 @@ void MyApp::initializeKeyBindings() {
 	this->bindings[SDLK_RIGHT] = "+right";
 }
 
-void MyApp::update(FrameEventArgs* args) {
+void MyApp::update(boost::shared_ptr<FrameEventArgs> args) {
 	this->water->update(args);
 	this->ship->update(args);
 }
 
-void MyApp::draw(FrameEventArgs* args) {
+void MyApp::draw(boost::shared_ptr<FrameEventArgs> args) {
 	// Switch between wireframe and fill mode
 	glPolygonMode(GL_FRONT, this->wireframe ? GL_LINE : GL_FILL);
 

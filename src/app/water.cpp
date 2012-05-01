@@ -66,11 +66,12 @@ void Water::recalculate() {
 	}
 }
 
-void Water::update(FrameEventArgs* args) {
+void Water::update(boost::shared_ptr<FrameEventArgs> args) {
+	BaseGameObject::update(args);
 }
 
 
-void Water::draw(FrameEventArgs* args) {
+void Water::draw(boost::shared_ptr<FrameEventArgs> args) {
 	// Every frame we want to recalculate waves
 	this->time = args->getTotalSeconds();
 	this->recalculate();

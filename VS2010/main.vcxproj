@@ -25,6 +25,7 @@
     <ClCompile Include="..\src\engine\camera\basecamera.cpp" />
     <ClCompile Include="..\src\engine\command.cpp" />
     <ClCompile Include="..\src\engine\frameeventargs.cpp" />
+    <ClCompile Include="..\src\engine\gameobject\componentset.cpp" />
     <ClCompile Include="..\src\engine\utils.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\precompile.cpp">
@@ -43,7 +44,10 @@
     <ClInclude Include="..\src\engine\camera\basecamera.h" />
     <ClInclude Include="..\src\engine\command.h" />
     <ClInclude Include="..\src\engine\frameeventargs.h" />
-    <ClInclude Include="..\src\engine\basegameobject.h" />
+    <ClInclude Include="..\src\engine\gameobject\basecomponent.h" />
+    <ClInclude Include="..\src\engine\gameobject\basegameobject.h" />
+    <ClInclude Include="..\src\engine\gameobject\componentset.h" />
+    <ClInclude Include="..\src\engine\object.h" />
     <ClInclude Include="..\src\engine\utils.h" />
     <ClInclude Include="..\src\precompile.h" />
   </ItemGroup>

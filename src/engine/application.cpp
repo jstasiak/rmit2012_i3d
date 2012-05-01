@@ -63,11 +63,15 @@ int Application::run() {
 		while(updateDt >= this->updateEverySeconds) {
 			//FIXME: HACK: develop smarter system of update managing
 			updateDt -= this->updateEverySeconds;
-			this->doUpdate(FrameEventArgs::createFromSecondsAndTotalSeconds(this->updateEverySeconds, now));
+			auto args = boost::shared_ptr<FrameEventArgs>(
+				FrameEventArgs::createFromSecondsAndTotalSeconds(this->updateEverySeconds, now));
+			this->doUpdate(args);
 		}
 
 		if(drawDt >= this->drawEverySeconds) {
-			this->doDraw(FrameEventArgs::createFromSecondsAndTotalSeconds(drawDt, now));
+			auto args = boost::shared_ptr<FrameEventArgs>(
+				FrameEventArgs::createFromSecondsAndTotalSeconds(drawDt, now));
+			this->doDraw(args);
 			drawDt = 0.0;
 		}
 	}
@@ -99,12 +103,13 @@ void Application::doInitialize() {
 	this->initialize();
 }
 
-void Application::doUpdate(FrameEventArgs* args) {
+void Application::doUpdate(boost::shared_ptr<FrameEventArgs> args) {
+	boost::shared_ptr<FrameEventArgs> sa(args);
 	assert(args);
-	this->update(args);
+	this->update(sa);
 }
 
-void Application::doDraw(FrameEventArgs* args) {
+void Application::doDraw(boost::shared_ptr<FrameEventArgs> args) {
 	assert(args);
 
 	this->draw(args);
@@ -134,11 +139,11 @@ void Application::onKeyUp(const SDL_KeyboardEvent* event) {
 	}
 }
 
-void Application::update( FrameEventArgs* args ) {
+void Application::update(boost::shared_ptr<FrameEventArgs> args) {
 
 }
 
-void Application::draw( FrameEventArgs* args ) {
+void Application::draw(boost::shared_ptr<FrameEventArgs> args) {
 
 }
 

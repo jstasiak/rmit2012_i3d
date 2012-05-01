@@ -10,6 +10,9 @@
     <Filter Include="app">
       <UniqueIdentifier>{379241dc-3e2c-4454-9474-e11264ca4e5b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="engine\gameobject">
+      <UniqueIdentifier>{c2fe6552-5548-4c17-82e2-fe15d2b47a39}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\engine\frameeventargs.cpp">
@@ -43,6 +46,9 @@
     </ClCompile>
     <ClCompile Include="..\src\engine\command.cpp">
       <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\engine\gameobject\componentset.cpp">
+      <Filter>engine\gameobject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -80,7 +86,16 @@
     <ClInclude Include="..\src\engine\command.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\engine\basegameobject.h">
+    <ClInclude Include="..\src\engine\gameobject\basegameobject.h">
+      <Filter>engine\gameobject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\engine\gameobject\componentset.h">
+      <Filter>engine\gameobject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\engine\gameobject\basecomponent.h">
+      <Filter>engine\gameobject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\engine\object.h">
       <Filter>engine</Filter>
     </ClInclude>
   </ItemGroup>

@@ -51,8 +51,8 @@ public: void startTurningRight();
 public: void stopTurningRight();
 
 // BaseGameObject overrides
-public: virtual void update(boost::shared_ptr<FrameEventArgs> args);
-public: virtual void draw(boost::shared_ptr<FrameEventArgs> args);
+public: virtual void update(std::shared_ptr<FrameEventArgs> args);
+public: virtual void draw(std::shared_ptr<FrameEventArgs> args);
 
 public: glm::vec3* getPosition();
 public: Ship* setPosition(const glm::vec3* value);

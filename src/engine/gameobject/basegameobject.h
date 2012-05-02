@@ -10,11 +10,11 @@ protected: ComponentSet components;
 
 public: BaseGameObject() : components() {}
 
-public: void update(boost::shared_ptr<FrameEventArgs> args) {
+public: void update(std::shared_ptr<FrameEventArgs> args) {
 	this->updateComponents(args);
 }
 
-private: void updateComponents(boost::shared_ptr<FrameEventArgs> args) {
+private: void updateComponents(std::shared_ptr<FrameEventArgs> args) {
 	auto l = this->components.getList();
 
 	for(auto i = l.begin(); i != l.end(); ++i) {
@@ -23,7 +23,7 @@ private: void updateComponents(boost::shared_ptr<FrameEventArgs> args) {
 	}
 }
 
-public: void draw(boost::shared_ptr<FrameEventArgs> args) {}
+public: void draw(std::shared_ptr<FrameEventArgs> args) {}
 
 public: ComponentSet& GetComponents() {
 		return this->components;

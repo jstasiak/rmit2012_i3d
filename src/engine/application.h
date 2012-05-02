@@ -32,13 +32,13 @@ public:
 
 private:
 	void doInitialize();
-	void doUpdate(boost::shared_ptr<FrameEventArgs> args);
-	void doDraw(boost::shared_ptr<FrameEventArgs> args);
+	void doUpdate(std::shared_ptr<FrameEventArgs> args);
+	void doDraw(std::shared_ptr<FrameEventArgs> args);
 
 protected:
 	virtual void initialize();
-	virtual void update(boost::shared_ptr<FrameEventArgs> args);
-	virtual void draw(boost::shared_ptr<FrameEventArgs> args);
+	virtual void update(std::shared_ptr<FrameEventArgs> args);
+	virtual void draw(std::shared_ptr<FrameEventArgs> args);
 	virtual void onKeyDown(const SDL_KeyboardEvent* event);
 	virtual void onKeyUp(const SDL_KeyboardEvent* event);
 

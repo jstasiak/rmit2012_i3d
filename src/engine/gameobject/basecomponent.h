@@ -10,20 +10,20 @@ class FrameEventArgs;
 class BaseComponent : Object {
 CLASS_NAME(BaseComponent);
 
-private: boost::shared_ptr<BaseGameObject> gameObject;
+private: std::shared_ptr<BaseGameObject> gameObject;
 
 public: BaseComponent() : gameObject() {}
 
-public: boost::shared_ptr<BaseGameObject> GetGameObject() {
+public: std::shared_ptr<BaseGameObject> GetGameObject() {
 		return this->gameObject;
 	}
 
-public: void SetGameObject(boost::shared_ptr<BaseGameObject> gameObject) {
+public: void SetGameObject(std::shared_ptr<BaseGameObject> gameObject) {
 		this->gameObject = gameObject;
 	}
 
 public: virtual void start() {}
-public: virtual void update(boost::shared_ptr<FrameEventArgs> args) {}
+public: virtual void update(std::shared_ptr<FrameEventArgs> args) {}
 
 public: ~BaseComponent() {}
 

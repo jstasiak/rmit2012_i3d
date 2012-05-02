@@ -5,10 +5,10 @@
 
 class EventArgs {
 private:
-	static const boost::shared_ptr<const EventArgs> empty;
+	static const std::shared_ptr<const EventArgs> empty;
 public:
 	virtual ~EventArgs() {}
-	static const boost::shared_ptr<const EventArgs> getEmpty() {
+	static const std::shared_ptr<const EventArgs> getEmpty() {
 		return EventArgs::empty;
 	}
 };

@@ -16,8 +16,8 @@ MyApp::MyApp()
 	wireframe(false),
 	axes(MyApp::WorldOrigin)
 {
-	this->water = boost::make_shared<Water>();
-	this->ship = boost::make_shared<Ship>(&(*this->water));
+	this->water = std::make_shared<Water>();
+	this->ship = std::make_shared<Ship>(&(*this->water));
 }
 
 MyApp::~MyApp() {
@@ -118,12 +118,12 @@ void MyApp::initializeKeyBindings() {
 	this->bindings[SDLK_RIGHT] = "+right";
 }
 
-void MyApp::update(boost::shared_ptr<FrameEventArgs> args) {
+void MyApp::update(std::shared_ptr<FrameEventArgs> args) {
 	this->water->update(args);
 	this->ship->update(args);
 }
 
-void MyApp::draw(boost::shared_ptr<FrameEventArgs> args) {
+void MyApp::draw(std::shared_ptr<FrameEventArgs> args) {
 	// Switch between wireframe and fill mode
 	glPolygonMode(GL_FRONT, this->wireframe ? GL_LINE : GL_FILL);
 

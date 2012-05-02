@@ -53,7 +53,7 @@ void Ship::stopTurningRight() {
 }
 
 
-void Ship::update(boost::shared_ptr<FrameEventArgs> args) {
+void Ship::update(std::shared_ptr<FrameEventArgs> args) {
 	BaseGameObject::update(args);
 
 	float dt = args->getSeconds();
@@ -87,7 +87,7 @@ void Ship::update(boost::shared_ptr<FrameEventArgs> args) {
 
 }
 
-void Ship::draw(boost::shared_ptr<FrameEventArgs> args) {
+void Ship::draw(std::shared_ptr<FrameEventArgs> args) {
 	glPushMatrix();
 	glTranslatef(this->position.x, this->position.y, this->position.z);
 

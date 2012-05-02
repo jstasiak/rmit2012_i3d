@@ -6,12 +6,12 @@ ComponentSet::ComponentSet() : gameObject()
 {
 }
 
-ComponentSet::ComponentSet(boost::shared_ptr<BaseGameObject> gameObject)
+ComponentSet::ComponentSet(std::shared_ptr<BaseGameObject> gameObject)
 	: gameObject(gameObject)
 {
 }
 
-boost::shared_ptr<BaseGameObject> ComponentSet::getGameObject() {
+std::shared_ptr<BaseGameObject> ComponentSet::getGameObject() {
 	return this->gameObject;
 }
 

@@ -15,8 +15,8 @@ public: enum DrawAxes {
 	};
 
 private: bool wireframe;
-private: boost::shared_ptr<Water> water;
-private: boost::shared_ptr<Ship> ship;
+private: std::shared_ptr<Water> water;
+private: std::shared_ptr<Ship> ship;
 private: DrawAxes axes;
 
 public: MyApp();
@@ -28,8 +28,8 @@ private: void initializeGraphics();
 private: void initializeCommands();
 private: void initializeKeyBindings();
 
-protected: virtual void update(boost::shared_ptr<FrameEventArgs> args);
-protected: virtual void draw(boost::shared_ptr<FrameEventArgs> args);
+protected: virtual void update(std::shared_ptr<FrameEventArgs> args);
+protected: virtual void draw(std::shared_ptr<FrameEventArgs> args);
 
 protected: void enableLights();
 

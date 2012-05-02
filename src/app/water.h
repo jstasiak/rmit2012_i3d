@@ -37,8 +37,8 @@ private: int vertexIndex(int x, int z);
 public: void recalculate();
 
 // BaseGameObject overrides
-public: virtual void update(boost::shared_ptr<FrameEventArgs> args);
-public: virtual void draw(boost::shared_ptr<FrameEventArgs> args);
+public: virtual void update(std::shared_ptr<FrameEventArgs> args);
+public: virtual void draw(std::shared_ptr<FrameEventArgs> args);
 
 
 public: float heightAtPositionAndTime(const glm::vec3* position, float time) const;

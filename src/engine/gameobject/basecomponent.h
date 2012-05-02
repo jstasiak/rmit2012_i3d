@@ -7,18 +7,18 @@
 class BaseGameObject;
 class FrameEventArgs;
 
-class BaseComponent : Object {
+class BaseComponent : public Object {
 CLASS_NAME(BaseComponent);
 
 private: std::shared_ptr<BaseGameObject> gameObject;
 
 public: BaseComponent() : gameObject() {}
 
-public: std::shared_ptr<BaseGameObject> GetGameObject() {
+public: std::shared_ptr<BaseGameObject> getGameObject() {
 		return this->gameObject;
 	}
 
-public: void SetGameObject(std::shared_ptr<BaseGameObject> gameObject) {
+public: void setGameObject(std::shared_ptr<BaseGameObject> gameObject) {
 		this->gameObject = gameObject;
 	}
 

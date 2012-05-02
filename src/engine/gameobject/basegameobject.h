@@ -5,12 +5,14 @@
 #include "componentset.h"
 #include "basecomponent.h"
 
-class BaseGameObject {
+#include "../object.h"
+
+class BaseGameObject : public Object {
 protected: ComponentSet components;
 
-public: BaseGameObject() : components() {}
+public: BaseGameObject() : components(this) {}
 
-public: void update(std::shared_ptr<FrameEventArgs> args) {
+public: virtual void update(std::shared_ptr<FrameEventArgs> args) {
 	this->updateComponents(args);
 }
 
@@ -23,7 +25,7 @@ private: void updateComponents(std::shared_ptr<FrameEventArgs> args) {
 	}
 }
 
-public: void draw(std::shared_ptr<FrameEventArgs> args) {}
+public: virtual void draw(std::shared_ptr<FrameEventArgs> args) {}
 
 public: ComponentSet& GetComponents() {
 		return this->components;

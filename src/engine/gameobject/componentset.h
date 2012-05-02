@@ -16,18 +16,14 @@ struct string_comparator {
 class ComponentSet {
 private: typedef std::list < std::shared_ptr <BaseComponent> > int_components_t;
 
-private: std::shared_ptr<BaseGameObject> gameObject;
+private: BaseGameObject* gameObject;
 
 private: int_components_t components;
 
-public: ComponentSet();
-public: ComponentSet(std::shared_ptr<BaseGameObject> gameObject);
-
-public: template <class T> void add(T* component) {
-	this->add(std::shared_ptr<T>(component));
-}
+public: ComponentSet(BaseGameObject* gameObject);
 
 public: template <class T> void add(std::shared_ptr<T> component) {
+	component->setGameObject(this->gameObject->getSharedPointer<BaseGameObject>());
 	this->components.push_back(component);
 }
 

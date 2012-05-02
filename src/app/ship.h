@@ -8,7 +8,6 @@
 
 class Water;
 
-
 class Ship : public BaseGameObject {
 
 public: enum ShipDrawAxes {
@@ -20,7 +19,7 @@ public: enum ShipDrawAxes {
 private: OBJMesh* mesh;
 private: glm::vec3 position;
 private: float yaw;
-private: Water* water;
+private: std::shared_ptr<Water> water;
 private: ShipDrawAxes axes;
 
 private: static const float MIN_VELOCITY;
@@ -37,7 +36,7 @@ private: float currentTurningSpeedDegreesPerSecond;
 
 
 
-public: Ship(Water* water);
+public: Ship(std::shared_ptr<Water> water);
 public: virtual ~Ship();
 
 public: void startAcceleration();

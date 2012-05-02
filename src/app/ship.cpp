@@ -4,12 +4,14 @@
 #include "../engine/utils.h"
 #include "water.h"
 
+using namespace std;
+
 const float Ship::MIN_VELOCITY = 0.0f;
 const float Ship::MAX_VELOCITY = 45.0f;
 const float Ship::ACCELERATION = 30.0f;
 const float Ship::TURNING_SPEED_DEGREES_PER_SECOND = 30.0f;
 
-Ship::Ship(Water* water)
+Ship::Ship(std::shared_ptr<Water> water)
 	: position(0, 0, 0),
 	currentAcceleration(0),
 	currentTurningSpeedDegreesPerSecond(0),

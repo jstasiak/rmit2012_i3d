@@ -1,18 +1,15 @@
 #include "precompile.h"
 
 #include "componentset.h"
+#include "basegameobject.h"
 
-ComponentSet::ComponentSet() : gameObject()
-{
-}
-
-ComponentSet::ComponentSet(std::shared_ptr<BaseGameObject> gameObject)
+ComponentSet::ComponentSet(BaseGameObject* gameObject)
 	: gameObject(gameObject)
 {
 }
 
 std::shared_ptr<BaseGameObject> ComponentSet::getGameObject() {
-	return this->gameObject;
+	return this->gameObject->getSharedPointer<BaseGameObject>();
 }
 
 ComponentSet::components_t ComponentSet::getList() {

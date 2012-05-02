@@ -11,10 +11,10 @@ ComponentSet::ComponentSet(boost::shared_ptr<BaseGameObject> gameObject)
 {
 }
 
-ComponentSet::iterator ComponentSet::begin() {
-	return this->components.begin();
+boost::shared_ptr<BaseGameObject> ComponentSet::getGameObject() {
+	return this->gameObject;
 }
 
-ComponentSet::iterator ComponentSet::end() {
-	return this->components.end();
+ComponentSet::components_t ComponentSet::getList() {
+	return this->components;
 }

@@ -7,7 +7,7 @@ class Water;
 class Ship;
 
 class MyApp : public Application {
-	enum DrawAxes {
+public: enum DrawAxes {
 		WorldOrigin,
 		WaterOrigin,
 		ShipOrigin,
@@ -15,8 +15,8 @@ class MyApp : public Application {
 	};
 
 private: bool wireframe;
-private: boost::scoped_ptr<Water> water;
-private: boost::scoped_ptr<Ship> ship;
+private: boost::shared_ptr<Water> water;
+private: boost::shared_ptr<Ship> ship;
 private: DrawAxes axes;
 
 public: MyApp();

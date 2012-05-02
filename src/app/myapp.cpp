@@ -7,12 +7,17 @@
 #include "ship.h"
 #include "water.h"
 
+using namespace boost;
+using namespace std;
+
+
 MyApp::MyApp()
-	: water(new Water()),
-	ship(new Ship(&(*this->water))),
+	:
 	wireframe(false),
 	axes(MyApp::WorldOrigin)
 {
+	this->water = boost::make_shared<Water>();
+	this->ship = boost::make_shared<Ship>(&(*this->water));
 }
 
 MyApp::~MyApp() {

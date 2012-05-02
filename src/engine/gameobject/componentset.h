@@ -14,12 +14,11 @@ struct string_comparator {
 };
 
 class ComponentSet {
-public: typedef std::list < boost::shared_ptr <BaseComponent> > components_t;
-public: typedef components_t::iterator iterator;
+private: typedef std::list < boost::shared_ptr <BaseComponent> > int_components_t;
 
 private: boost::shared_ptr<BaseGameObject> gameObject;
 
-private: components_t components;
+private: int_components_t components;
 
 public: ComponentSet();
 public: ComponentSet(boost::shared_ptr<BaseGameObject> gameObject);
@@ -32,11 +31,10 @@ public: template <class T> void add(boost::shared_ptr<T> component) {
 	this->components.push_back(component);
 }
 
-public: components_t::iterator begin();
-public: components_t::iterator end();
-
 public: boost::shared_ptr<BaseGameObject> getGameObject();
-public: void setGameObject(boost::shared_ptr<BaseGameObject> gameObject);
+
+public: typedef int_components_t components_t;
+public: components_t getList();
 };
 
 #endif // COMPONENTSET_H

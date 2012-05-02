@@ -15,13 +15,11 @@ public: void update(boost::shared_ptr<FrameEventArgs> args) {
 }
 
 private: void updateComponents(boost::shared_ptr<FrameEventArgs> args) {
-	auto begin = this->components.begin();
-	auto end = this->components.end();
+	auto l = this->components.getList();
 
-	auto sa = boost::shared_ptr<FrameEventArgs>(args);
-	for(auto i = begin; i != end; ++i) {
+	for(auto i = l.begin(); i != l.end(); ++i) {
 		auto component = *i;
-		component->update(sa);
+		component->update(args);
 	}
 }
 

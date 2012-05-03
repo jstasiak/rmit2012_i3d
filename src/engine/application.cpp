@@ -96,7 +96,7 @@ void Application::doInitialize() {
 	this->bindings[SDLK_q] = "quit";
 	this->bindings[SDLK_ESCAPE] = "quit";
 
-	this->commandSystem->registerCommand("quit", [this]() {
+	this->commandSystem->registerCommand("quit", [this](command_parameters parameters) {
 		this->quit();
 	});
 

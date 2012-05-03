@@ -51,57 +51,57 @@ void MyApp::initializeGraphics() {
 void MyApp::initializeCommands() {
 	auto& cs = this->commandSystem;
 
-	cs->registerCommand("increase_water_tesselation", [this]() {
+	cs->registerCommand("increase_water_tesselation", [this](command_parameters parameters) {
 		this->water->doubleTesselationSafe();
 	});
 
-	cs->registerCommand("decrease_water_tesselation", [this]() {
+	cs->registerCommand("decrease_water_tesselation", [this](command_parameters parameters) {
 		this->water->halveTesselationSafe();
 	});
 
-	cs->registerCommand("toggle_water_normals", [this]() {
+	cs->registerCommand("toggle_water_normals", [this](command_parameters parameters) {
 		this->water->toggleNormals();
 	});
 
 	// Acceleration commands
-	auto stopAcceleration = [this]() {
+	auto stopAcceleration = [this](command_parameters parameters) {
 		this->ship->stopAcceleration();
 	};
-	cs->registerCommand("+accel", [this]() {
+	cs->registerCommand("+accel", [this](command_parameters parameters) {
 		this->ship->startAcceleration();
 	});
 
 	cs->registerCommand("-accel", stopAcceleration);
 
-	cs->registerCommand("+deccel", [this]() {
+	cs->registerCommand("+deccel", [this](command_parameters parameters) {
 		this->ship->startDecceleration();
 	});
 
 	cs->registerCommand("-deccel", stopAcceleration);
 
 	// Turning commands
-	cs->registerCommand("+left", [this]() {
+	cs->registerCommand("+left", [this](command_parameters parameters) {
 		this->ship->startTurningLeft();
 	});
 
-	cs->registerCommand("-left", [this]() {
+	cs->registerCommand("-left", [this](command_parameters parameters) {
 		this->ship->stopTurningLeft();
 	});
 
-	cs->registerCommand("+right", [this]() {
+	cs->registerCommand("+right", [this](command_parameters parameters) {
 		this->ship->startTurningRight();
 	});
 
-	cs->registerCommand("-right", [this]() {
+	cs->registerCommand("-right", [this](command_parameters parameters) {
 		this->ship->stopTurningRight();
 	});
 
 
-	cs->registerCommand("toggle_wireframe", [this]() {
+	cs->registerCommand("toggle_wireframe", [this](command_parameters parameters) {
 		this->toggleWireframe();
 	});
 
-	cs->registerCommand("toggle_axes", [this]() {
+	cs->registerCommand("toggle_axes", [this](command_parameters parameters) {
 		this->toggleAxes();
 	});
 }

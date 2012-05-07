@@ -168,7 +168,7 @@ namespace glm
 		T const & bottom, 
 		T const & top, 
 		T const & near, 
-		T const & far);
+		T const & farPlane);
 
 	/// Creates a matrix for a symetric perspective-view frustum.
 	/// 
@@ -183,7 +183,7 @@ namespace glm
 		T const & fovy, 
 		T const & aspect, 
 		T const & near, 
-		T const & far);
+		T const & farPlane);
 
 	/// Builds a perspective projection matrix based on a field of view.
 	/// 
@@ -200,7 +200,7 @@ namespace glm
 		valType const & width, 
 		valType const & height, 
 		valType const & near, 
-		valType const & far);
+		valType const & farPlane);
 
 	/// Creates a matrix for a symmetric perspective-view frustum with far plane at infinite.
 	/// 

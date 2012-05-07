@@ -6,19 +6,24 @@
 
 using namespace std;
 
+REGISTER(Ship);
+
 const float Ship::MIN_VELOCITY = 0.0f;
 const float Ship::MAX_VELOCITY = 45.0f;
 const float Ship::ACCELERATION = 30.0f;
 const float Ship::TURNING_SPEED_DEGREES_PER_SECOND = 30.0f;
 
-Ship::Ship(std::shared_ptr<Water> water)
+Ship::Ship()
 	: position(0, 0, 0),
 	currentAcceleration(0),
 	currentTurningSpeedDegreesPerSecond(0),
 	yaw(0),
-	water(water)
+	water()
 {
-	this->mesh = objMeshLoad("models/galleon.obj");
+}
+
+void Ship::setWater(std::shared_ptr<Water> water) {
+	this->water = water;
 }
 
 void Ship::startAcceleration() {
@@ -124,29 +129,12 @@ void Ship::draw(std::shared_ptr<FrameEventArgs> args) {
 
 	glColor3f(0.7f, 1.0f, 0.7f);
 
-	// OBJMesh rendering
-	//TODO: refactor
-	glBegin(GL_TRIANGLES);
-	for (int i = 0; i < mesh->numIndices; ++i) {
-		unsigned int index = mesh->indices[i];
-		float* vertex = (float*)((char*)mesh->vertices + index * mesh->stride);
-		float* normal = (float*)((char*)vertex + mesh->normalOffset);
-		if (mesh->hasNormals) {
-			glNormal3fv(normal);
-		}
-
-		glVertex3fv(vertex);
-	}
-	glEnd();
+	/// model rendering here
 
 	glPopMatrix();
 }
 
 Ship::~Ship() {
-	if(this->mesh) {
-		objMeshFree(&this->mesh);
-		this->mesh = 0;
-	}
 }
 
 glm::vec3* Ship::getPosition() {

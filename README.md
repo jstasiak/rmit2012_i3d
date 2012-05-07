@@ -5,6 +5,7 @@ You must have these libraries installed in your system globally:
 
 * SDL 1.2
 * Boost (any recent version should be ok)
+* Qt 4.x >= 4.5
 
 To compile projet you also need:
 
@@ -16,7 +17,7 @@ For Windows
 For Linux/Mac OS X
 ------------------
 
-* CMake
+* qmake
 * GNU make
 
 
@@ -26,9 +27,11 @@ Compilation and run
 Windows + Visual Studio 2010
 ----------------------------
 
+** This section is out of date **
+
 1. Open `VS2010/rmit2012_i3d.sln` solution file
-2. In project Configuration Properties/Debugging set Working Directory (for All Configurations) to `$(ProjectDir)../data`
-3. Hit `Debug->Start Debugging` menu entry.
+1. In project Configuration Properties/Debugging set Working Directory (for All Configurations) to `$(ProjectDir)../data`
+1. Hit `Debug->Start Debugging` menu entry.
 
 Linux/Mac OS X
 --------------

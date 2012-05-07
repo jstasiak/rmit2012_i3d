@@ -2,13 +2,13 @@
 #define SHIP_H
 
 #include "glm/glm.hpp"
-#include "obj.h"
 
 #include "../engine/gameobject/basegameobject.h"
 
 class Water;
 
 class Ship : public BaseGameObject {
+	Q_OBJECT
 
 public: enum ShipDrawAxes {
 	DontDraw,
@@ -16,7 +16,6 @@ public: enum ShipDrawAxes {
 	DrawWithRotation
 };
 
-private: OBJMesh* mesh;
 private: glm::vec3 position;
 private: float yaw;
 private: std::shared_ptr<Water> water;
@@ -35,8 +34,10 @@ private: static const float TURNING_SPEED_DEGREES_PER_SECOND;
 private: float currentTurningSpeedDegreesPerSecond;
 
 
+public: Q_INVOKABLE Ship();
 
-public: Ship(std::shared_ptr<Water> water);
+public: void setWater(std::shared_ptr<Water> water);
+
 public: virtual ~Ship();
 
 public: void startAcceleration();
@@ -59,4 +60,4 @@ public: Ship* setPosition(const glm::vec3* value);
 public: void setAxes(ShipDrawAxes axes);
 };
 
-#endif // SHIP_H
+#endif

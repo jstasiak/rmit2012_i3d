@@ -3,6 +3,8 @@
 
 #include "../engine/utils.h"
 
+REGISTER(Water);
+
 Water::Water()
 	: size(300, 300),
 	segments(64),

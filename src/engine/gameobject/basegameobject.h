@@ -2,22 +2,23 @@
 #define BASEGAMEOBJECT_H
 
 #include "../frameeventargs.h"
-#include "componentset.h"
 #include "basecomponent.h"
-
+#include "componentset.h"
 #include "../object.h"
 
 class BaseGameObject : public Object {
-protected: ComponentSet components;
+	Q_OBJECT
 
-public: BaseGameObject() : components(this) {}
+protected: std::shared_ptr<ComponentSet> components;
+
+public: BaseGameObject() : components(new ComponentSet(this)) {}
 
 public: virtual void update(std::shared_ptr<FrameEventArgs> args) {
 	this->updateComponents(args);
 }
 
 private: void updateComponents(std::shared_ptr<FrameEventArgs> args) {
-	auto l = this->components.getList();
+	auto l = this->components->getList();
 
 	for(auto i = l.begin(); i != l.end(); ++i) {
 		auto component = *i;
@@ -27,7 +28,7 @@ private: void updateComponents(std::shared_ptr<FrameEventArgs> args) {
 
 public: virtual void draw(std::shared_ptr<FrameEventArgs> args) {}
 
-public: ComponentSet& GetComponents() {
+public: std::shared_ptr<ComponentSet> getComponents() {
 		return this->components;
 	}
 

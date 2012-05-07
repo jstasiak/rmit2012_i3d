@@ -4,6 +4,8 @@
 #include <list>
 #include <boost/smart_ptr.hpp>
 
+#include "../object.h"
+
 class BaseComponent;
 class BaseGameObject;
 
@@ -13,7 +15,9 @@ struct string_comparator {
 	}
 };
 
-class ComponentSet {
+class ComponentSet : public Object {
+	Q_OBJECT
+
 private: typedef std::list < std::shared_ptr <BaseComponent> > int_components_t;
 
 private: BaseGameObject* gameObject;

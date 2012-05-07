@@ -4,11 +4,11 @@
 #include <boost/smart_ptr.hpp>
 
 #include "../object.h"
+
 class BaseGameObject;
 class FrameEventArgs;
 
 class BaseComponent : public Object {
-CLASS_NAME(BaseComponent);
 
 private: std::shared_ptr<BaseGameObject> gameObject;
 
@@ -29,4 +29,4 @@ public: ~BaseComponent() {}
 
 };
 
-#endif // BASECOMPONENT_H
+#endif

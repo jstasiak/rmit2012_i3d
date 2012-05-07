@@ -16,8 +16,11 @@ MyApp::MyApp()
 	axes(MyApp::WorldOrigin),
 	water(), ship()
 {
-	this->water = std::make_shared<Water>();
-	this->ship = std::make_shared<Ship>(this->water);
+
+	auto r = Registry::getSharedInstance();
+	this->water = r->create<Water>("Water");
+	this->ship = r->create<Ship>("Ship");
+	this->ship->setWater(this->water);
 }
 
 MyApp::~MyApp() {

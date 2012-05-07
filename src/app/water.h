@@ -12,6 +12,7 @@ struct Vertex {
 
 
 class Water : public BaseGameObject {
+	Q_OBJECT
 
 private: bool normalsVisible;
 private: glm::vec2 size;
@@ -28,7 +29,9 @@ private: boost::scoped_ptr<Wave> waveZ;
 
 private: float time;
 
-public: Water();
+public: Q_INVOKABLE Water();
+
+public: virtual ~Water() {}
 
 public: void resetData();
 private: int verticesCount();
@@ -53,5 +56,4 @@ public: Water* halveTesselationSafe();
 
 };
 
-
-#endif // WATER_H
+#endif

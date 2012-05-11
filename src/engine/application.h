@@ -15,6 +15,7 @@ protected:
 	std::shared_ptr<CommandSystem> commandSystem;
 	std::map<SDLKey, std::string> bindings;
 	std::shared_ptr<GameObjectSet> gameObjectSet;
+	std::string gameDir;
 
 private:
 	int updateFps;
@@ -49,6 +50,8 @@ protected: void quit();
 
 public: std::shared_ptr<CommandSystem> getCommandSystem();
 public: std::shared_ptr<Application> getSharedPointer();
+
+public: std::string getDataDirectory() const;
 
 };
 

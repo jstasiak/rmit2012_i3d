@@ -8,8 +8,11 @@
 #include "gameobject/gameobjectset.h"
 #include "gameobject/basegameobject.h"
 
+namespace po = boost::program_options;
+using namespace std;
+
 Application::Application()
-	: commandSystem(new CommandSystem()), bindings(), gameObjectSet() {
+	: commandSystem(new CommandSystem()), bindings(), gameObjectSet(), gameDir("data") {
 	setUpdateFps(77);
 	setDrawFps(60);
 }
@@ -19,7 +22,23 @@ Application::~Application() {
 }
 
 void Application::applyCommandlineParameters(int argc, char** argv) {
+	// Declare the supported options.
+	po::options_description desc("Allowed options");
+	desc.add_options()
+		("help", "shows help information")
+		("gamedir", po::value<string>()->default_value(this->gameDir), "sets game data directory")
+		;
 
+	po::variables_map vm;
+	po::store(po::parse_command_line(argc, argv, desc), vm);
+	po::notify(vm); 
+
+	if(vm.count("help")) {
+		cout << desc << "\n\n";
+		exit(0);
+	}
+
+	this->gameDir = vm["gamedir"].as<string>();
 }
 
 int Application::run() {
@@ -169,4 +188,8 @@ std::shared_ptr<CommandSystem> Application::getCommandSystem() {
 
 std::shared_ptr<Application> Application::getSharedPointer() {
 	return this->shared_from_this();
+}
+
+std::string Application::getDataDirectory() const {
+	return this->gameDir;
 }

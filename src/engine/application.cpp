@@ -1,11 +1,15 @@
 #include "precompile.h"
 #include "application.h"
 
+#include "command.h"
 #include "frameeventargs.h"
 #include "utils.h"
 
+#include "gameobject/gameobjectset.h"
+#include "gameobject/basegameobject.h"
+
 Application::Application()
-	: commandSystem(new CommandSystem()), bindings() {
+	: commandSystem(new CommandSystem()), bindings(), gameObjectSet() {
 	setUpdateFps(77);
 	setDrawFps(60);
 }
@@ -93,6 +97,9 @@ void Application::setDrawFps( int value )
 }
 
 void Application::doInitialize() {
+	this->gameObjectSet = std::make_shared<GameObjectSet>();
+	this->gameObjectSet->setApplication(this->getSharedPointer());
+
 	this->bindings[SDLK_q] = "quit";
 	this->bindings[SDLK_ESCAPE] = "quit";
 
@@ -101,23 +108,32 @@ void Application::doInitialize() {
 	});
 
 	this->initialize();
+
+	auto objects = this->gameObjectSet->getList();
+	for(auto i = objects.begin(); i != objects.end(); ++i) {
+		auto o = *i;
+		o->start();
+	}
 }
 
 void Application::doUpdate(std::shared_ptr<FrameEventArgs> args) {
-	std::shared_ptr<FrameEventArgs> sa(args);
-	assert(args);
-	this->update(sa);
+	auto objects = this->gameObjectSet->getList();
+	for(auto i = objects.begin(); i != objects.end(); ++i) {
+		auto o = *i;
+		o->update(args);
+	}
 }
 
 void Application::doDraw(std::shared_ptr<FrameEventArgs> args) {
-	assert(args);
+	this->beforeDraw(args);
 
-	this->draw(args);
+	auto objects = this->gameObjectSet->getList();
+	for(auto i = objects.begin(); i != objects.end(); ++i) {
+		auto o = *i;
+		o->draw(args);
+	}
+
 	SDL_GL_SwapBuffers();
-}
-
-void Application::initialize() {
-
 }
 
 void Application::onKeyDown(const SDL_KeyboardEvent* event) {
@@ -138,15 +154,6 @@ void Application::onKeyUp(const SDL_KeyboardEvent* event) {
 		}
 	}
 }
-
-void Application::update(std::shared_ptr<FrameEventArgs> args) {
-
-}
-
-void Application::draw(std::shared_ptr<FrameEventArgs> args) {
-
-}
-
 /**
  * Send SDL_QUIT event to message loop
  */
@@ -154,4 +161,12 @@ void Application::quit() {
 	SDL_Event event;
 	event.type = SDL_QUIT;
 	SDL_PushEvent(&event);
+}
+
+std::shared_ptr<CommandSystem> Application::getCommandSystem() {
+	return this->commandSystem;
+}
+
+std::shared_ptr<Application> Application::getSharedPointer() {
+	return this->shared_from_this();
 }

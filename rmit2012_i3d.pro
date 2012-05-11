@@ -47,6 +47,7 @@ HEADERS += src/precompile.h \
            src/engine/gameobject/basecomponent.h \
            src/engine/gameobject/basegameobject.h \
            src/engine/gameobject/componentset.h \
+	   src/engine/gameobject/gameobjectset.h\
            libs/include/glm/core/_detail.hpp \
            libs/include/glm/core/_fixes.hpp \
            libs/include/glm/core/_swizzle.hpp \
@@ -268,5 +269,6 @@ SOURCES += src/main.cpp \
            src/engine/camera/basecamera.cpp \
            src/engine/camera/perspectivecamera.cpp \
            src/engine/gameobject/componentset.cpp \
+	   src/engine/gameobject/gameobjectset.cpp \
 
 win32-msvc2010:LIBS += SDL.lib

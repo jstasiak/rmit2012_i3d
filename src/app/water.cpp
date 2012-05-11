@@ -1,6 +1,8 @@
 #include "precompile.h"
 #include "water.h"
 
+#include "../engine/application.h"
+#include "../engine/command.h"
 #include "../engine/utils.h"
 
 REGISTER(Water);
@@ -66,6 +68,22 @@ void Water::recalculate() {
 			memcpy(p->normal, glm::value_ptr(normal), 3 * sizeof(float));
 		}
 	}
+}
+
+void Water::start() {
+	auto cs = this->getApplication().lock()->getCommandSystem();
+	
+	cs->registerCommand("increase_water_tesselation", [this](command_parameters parameters) {
+		this->doubleTesselationSafe();
+	});
+
+	cs->registerCommand("decrease_water_tesselation", [this](command_parameters parameters) {
+		this->halveTesselationSafe();
+	});
+
+	cs->registerCommand("toggle_water_normals", [this](command_parameters parameters) {
+		this->toggleNormals();
+	});
 }
 
 void Water::update(std::shared_ptr<FrameEventArgs> args) {

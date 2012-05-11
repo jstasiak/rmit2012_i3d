@@ -6,7 +6,7 @@ using namespace std;
 int main(int argc, char** argv) {
 	int returnCode = 0;
 	try {
-		boost::scoped_ptr<Application> application(new MyApp());
+		auto application = make_shared<MyApp>();
 		returnCode = application->run();
 	}
 	catch(const exception& e) {

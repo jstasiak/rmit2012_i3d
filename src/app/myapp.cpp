@@ -3,6 +3,7 @@
 
 #include <SDL_opengl.h>
 
+#include "../engine/command.h"
 #include "../engine/utils.h"
 #include "ship.h"
 #include "water.h"
@@ -13,14 +14,8 @@ using namespace std;
 MyApp::MyApp()
 	:
 	wireframe(false),
-	axes(MyApp::WorldOrigin),
-	water(), ship()
+	axes(MyApp::WorldOrigin)
 {
-
-	auto r = Registry::getSharedInstance();
-	this->water = r->create<Water>("Water");
-	this->ship = r->create<Ship>("Ship");
-	this->ship->setWater(this->water);
 }
 
 MyApp::~MyApp() {
@@ -28,12 +23,6 @@ MyApp::~MyApp() {
 }
 
 void MyApp::initialize() {
-	this->initializeGraphics();
-	this->initializeCommands();
-	this->initializeKeyBindings();
-}
-
-void MyApp::initializeGraphics() {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(90.0f, 1.33f, 0.01f, 500.0f);
@@ -46,59 +35,33 @@ void MyApp::initializeGraphics() {
 
 	float white[] = {1.0f, 1.0f, 1.0f, 1.0f};
 	glMaterialfv(GL_FRONT, GL_SPECULAR, white);
-	
+
 	glEnable(GL_DEPTH_TEST);
 	glShadeModel(GL_SMOOTH);
+
+
+	this->bindings[SDLK_a] = "toggle_axes";
+	this->bindings[SDLK_EQUALS] = "increase_water_tesselation";
+	this->bindings[SDLK_MINUS] = "decrease_water_tesselation";
+	this->bindings[SDLK_n] = "toggle_water_normals";
+	this->bindings[SDLK_w] = "toggle_wireframe";
+	this->bindings[SDLK_UP] = "+accel";
+	this->bindings[SDLK_DOWN] = "+deccel";
+	this->bindings[SDLK_LEFT] = "+left";
+	this->bindings[SDLK_RIGHT] = "+right";
+
+	auto r = Registry::getSharedInstance();
+	auto water = r->create<BaseGameObject>("Water");
+	auto ship = r->create<BaseGameObject>("Ship");
+
+	this->gameObjectSet->add(water);
+	this->gameObjectSet->add(ship);
+
+	this->initializeCommands();
 }
 
 void MyApp::initializeCommands() {
-	auto& cs = this->commandSystem;
-
-	cs->registerCommand("increase_water_tesselation", [this](command_parameters parameters) {
-		this->water->doubleTesselationSafe();
-	});
-
-	cs->registerCommand("decrease_water_tesselation", [this](command_parameters parameters) {
-		this->water->halveTesselationSafe();
-	});
-
-	cs->registerCommand("toggle_water_normals", [this](command_parameters parameters) {
-		this->water->toggleNormals();
-	});
-
-	// Acceleration commands
-	auto stopAcceleration = [this](command_parameters parameters) {
-		this->ship->stopAcceleration();
-	};
-	cs->registerCommand("+accel", [this](command_parameters parameters) {
-		this->ship->startAcceleration();
-	});
-
-	cs->registerCommand("-accel", stopAcceleration);
-
-	cs->registerCommand("+deccel", [this](command_parameters parameters) {
-		this->ship->startDecceleration();
-	});
-
-	cs->registerCommand("-deccel", stopAcceleration);
-
-	// Turning commands
-	cs->registerCommand("+left", [this](command_parameters parameters) {
-		this->ship->startTurningLeft();
-	});
-
-	cs->registerCommand("-left", [this](command_parameters parameters) {
-		this->ship->stopTurningLeft();
-	});
-
-	cs->registerCommand("+right", [this](command_parameters parameters) {
-		this->ship->startTurningRight();
-	});
-
-	cs->registerCommand("-right", [this](command_parameters parameters) {
-		this->ship->stopTurningRight();
-	});
-
+	auto cs = this->getCommandSystem();
 
 	cs->registerCommand("toggle_wireframe", [this](command_parameters parameters) {
 		this->toggleWireframe();
@@ -109,34 +72,27 @@ void MyApp::initializeCommands() {
 	});
 }
 
-void MyApp::initializeKeyBindings() {
-	this->bindings[SDLK_a] = "toggle_axes";
-	this->bindings[SDLK_EQUALS] = "increase_water_tesselation";
-	this->bindings[SDLK_MINUS] = "decrease_water_tesselation";
-	this->bindings[SDLK_n] = "toggle_water_normals";
-	this->bindings[SDLK_w] = "toggle_wireframe";
-	this->bindings[SDLK_UP] = "+accel";
-	this->bindings[SDLK_DOWN] = "+deccel";
-	this->bindings[SDLK_LEFT] = "+left";
-	this->bindings[SDLK_RIGHT] = "+right";
-}
+void MyApp::beforeDraw(std::shared_ptr<FrameEventArgs> args) {
+	Application::beforeDraw(args);
 
-void MyApp::update(std::shared_ptr<FrameEventArgs> args) {
-	this->water->update(args);
-	this->ship->update(args);
-}
-
-void MyApp::draw(std::shared_ptr<FrameEventArgs> args) {
 	// Switch between wireframe and fill mode
 	glPolygonMode(GL_FRONT, this->wireframe ? GL_LINE : GL_FILL);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+
 	if(this->axes == MyApp::WorldOrigin) {
 		drawAxes(50.0f);
 	}
 
-	this->applyCameraTransform();
+	auto ship = this->gameObjectSet->getSingleByClass<Ship>();
+
+	//auto position = this->ship->getPosition();
+	auto position = *ship->getPosition();
+	gluLookAt(0, 100, 100,
+		position.x, 0, position.z,
+		0, 1, 0);
+
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -146,21 +102,6 @@ void MyApp::draw(std::shared_ptr<FrameEventArgs> args) {
 	if(this->axes == MyApp::WaterOrigin) {
 		drawAxes(50);
 	}
-	this->water->draw(args);
-
-	// Modify ship y coordinate to match water height
-	auto shipPosition = this->ship->getPosition();
-	float height = this->water->heightAtPositionAndTime(shipPosition, args->getTotalSeconds());
-	shipPosition->y = height;
-	this->ship->draw(args);
-
-}
-
-void MyApp::applyCameraTransform() const {
-	auto position = this->ship->getPosition();
-	gluLookAt(0, 100, 100,
-		position->x, 0, position->z,
-		0, 1, 0);
 }
 
 void MyApp::enableLights() {
@@ -190,19 +131,21 @@ void MyApp::toggleWireframe() {
 }
 
 void MyApp::toggleAxes() {
+	auto ship = this->gameObjectSet->getSingleByClass<Ship>();
+
 	if(this->axes == MyApp::WorldOrigin) {
 		this->axes = MyApp::WaterOrigin;
 	}
 	else if(this->axes == MyApp::WaterOrigin) {
 		this->axes = MyApp::ShipOrigin;
-		this->ship->setAxes(Ship::Draw);
+		ship->setAxes(Ship::Draw);
 	}
 	else if(this->axes == MyApp::ShipOrigin) {
 		this->axes = MyApp::ShipOriginWithRotation;
-		this->ship->setAxes(Ship::DrawWithRotation);
+		ship->setAxes(Ship::DrawWithRotation);
 	}
 	else if(this->axes == MyApp::ShipOriginWithRotation) {
 		this->axes = MyApp::WorldOrigin;
-		this->ship->setAxes(Ship::DontDraw);
+		ship->setAxes(Ship::DontDraw);
 	}
 }

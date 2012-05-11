@@ -4,14 +4,17 @@
 #include <boost/smart_ptr.hpp>
 #include <SDL.h>
 
-#include "command.h"
 #include "frameeventargs.h"
 
-class Application
+class GameObjectSet;
+class CommandSystem;
+
+class Application : public std::enable_shared_from_this<Application>
 {
 protected:
-	boost::scoped_ptr<CommandSystem> commandSystem;
+	std::shared_ptr<CommandSystem> commandSystem;
 	std::map<SDLKey, std::string> bindings;
+	std::shared_ptr<GameObjectSet> gameObjectSet;
 
 private:
 	int updateFps;
@@ -35,15 +38,18 @@ private:
 	void doUpdate(std::shared_ptr<FrameEventArgs> args);
 	void doDraw(std::shared_ptr<FrameEventArgs> args);
 
-protected:
-	virtual void initialize();
-	virtual void update(std::shared_ptr<FrameEventArgs> args);
-	virtual void draw(std::shared_ptr<FrameEventArgs> args);
-	virtual void onKeyDown(const SDL_KeyboardEvent* event);
-	virtual void onKeyUp(const SDL_KeyboardEvent* event);
 
-protected:
-	void quit();
+private: void onKeyDown(const SDL_KeyboardEvent* event);
+private: void onKeyUp(const SDL_KeyboardEvent* event);
+
+protected: virtual void initialize() {}
+protected: virtual void beforeDraw(std::shared_ptr<FrameEventArgs> args) {}
+
+protected: void quit();
+
+public: std::shared_ptr<CommandSystem> getCommandSystem();
+public: std::shared_ptr<Application> getSharedPointer();
+
 };
 
 #endif // APPLICATION_H

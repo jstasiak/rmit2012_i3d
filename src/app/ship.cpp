@@ -1,6 +1,8 @@
 #include "precompile.h"
 #include "ship.h"
 
+#include "../engine/application.h"
+#include "../engine/command.h"
 #include "../engine/utils.h"
 #include "water.h"
 
@@ -59,6 +61,46 @@ void Ship::stopTurningRight() {
 	}
 }
 
+void Ship::start() {
+	auto app = this->getApplication().lock();
+	auto cs = app->getCommandSystem();
+
+	auto water = this->getGameObjectSet().lock()->getSingleByClass<Water>();
+	this->setWater(water);
+
+	// Acceleration commands
+	auto stopAcceleration = [this](command_parameters parameters) {
+		this->stopAcceleration();
+	};
+	cs->registerCommand("+accel", [this](command_parameters parameters) {
+		this->startAcceleration();
+	});
+
+	cs->registerCommand("-accel", stopAcceleration);
+
+	cs->registerCommand("+deccel", [this](command_parameters parameters) {
+		this->startDecceleration();
+	});
+
+	cs->registerCommand("-deccel", stopAcceleration);
+
+	// Turning commands
+	cs->registerCommand("+left", [this](command_parameters parameters) {
+		this->startTurningLeft();
+	});
+
+	cs->registerCommand("-left", [this](command_parameters parameters) {
+		this->stopTurningLeft();
+	});
+
+	cs->registerCommand("+right", [this](command_parameters parameters) {
+		this->startTurningRight();
+	});
+
+	cs->registerCommand("-right", [this](command_parameters parameters) {
+		this->stopTurningRight();
+	});
+}
 
 void Ship::update(std::shared_ptr<FrameEventArgs> args) {
 	BaseGameObject::update(args);
@@ -91,7 +133,11 @@ void Ship::update(std::shared_ptr<FrameEventArgs> args) {
 		this->position += dx;
 	}
 
+	auto water = this->gameObjectSet.lock()->getSingleByClass<Water>();
 
+	// Modify ship y coordinate to match water height
+	float height = water->heightAtPositionAndTime(&this->position, args->getTotalSeconds());
+	this->position.y = height;
 }
 
 void Ship::draw(std::shared_ptr<FrameEventArgs> args) {

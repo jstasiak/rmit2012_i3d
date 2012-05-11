@@ -40,6 +40,7 @@ private: int vertexIndex(int x, int z);
 public: void recalculate();
 
 // BaseGameObject overrides
+public: virtual void start();
 public: virtual void update(std::shared_ptr<FrameEventArgs> args);
 public: virtual void draw(std::shared_ptr<FrameEventArgs> args);
 

@@ -1,9 +1,11 @@
 #ifndef SHIP_H
 #define SHIP_H
 
+#include "../engine/gameobject/basegameobject.h"
+
+#include "obj.h"
 #include "glm/glm.hpp"
 
-#include "../engine/gameobject/basegameobject.h"
 
 class Water;
 
@@ -16,6 +18,7 @@ public: enum ShipDrawAxes {
 	DrawWithRotation
 };
 
+private: OBJMesh* mesh;
 private: glm::vec3 position;
 private: float yaw;
 private: std::shared_ptr<Water> water;

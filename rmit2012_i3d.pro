@@ -33,6 +33,7 @@ HEADERS += src/precompile.h \
            src/app/myapp.h \
            src/app/ship.h \
            src/app/uthash.h \
+	   src/app/obj.h \
            src/app/water.h \
            src/app/wave.h \
            src/engine/application.h \
@@ -263,6 +264,7 @@ SOURCES += src/main.cpp \
            src/app/ship.cpp \
            src/app/water.cpp \
            src/app/wave.cpp \
+	   src/app/obj.cpp \
            src/engine/application.cpp \
            src/engine/command.cpp \
            src/engine/frameeventargs.cpp \

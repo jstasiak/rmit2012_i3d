@@ -20,7 +20,8 @@ Ship::Ship()
 	currentAcceleration(0),
 	currentTurningSpeedDegreesPerSecond(0),
 	yaw(0),
-	water()
+	water(),
+	mesh(0)
 {
 }
 
@@ -100,6 +101,9 @@ void Ship::start() {
 	cs->registerCommand("-right", [this](command_parameters parameters) {
 		this->stopTurningRight();
 	});
+
+	auto fileName = app->getDataDirectory() + string("/models/galleon.obj");
+	this->mesh = objMeshLoad(fileName.c_str());
 }
 
 void Ship::update(std::shared_ptr<FrameEventArgs> args) {
@@ -175,7 +179,21 @@ void Ship::draw(std::shared_ptr<FrameEventArgs> args) {
 
 	glColor3f(0.7f, 1.0f, 0.7f);
 
-	/// model rendering here
+	
+	// OBJMesh rendering
+  	
+	//TODO: refactor 	
+	glBegin(GL_TRIANGLES);  	
+	for (int i = 0; i < mesh->numIndices; ++i) {  	
+		unsigned int index = mesh->indices[i];	  	
+		float* vertex = (float*)((char*)mesh->vertices + index * mesh->stride);	
+		float* normal = (float*)((char*)vertex + mesh->normalOffset);	
+		if (mesh->hasNormals) {	
+			glNormal3fv(normal);
+		}  		
+		glVertex3fv(vertex);	
+	} 	
+	glEnd();
 
 	glPopMatrix();
 }

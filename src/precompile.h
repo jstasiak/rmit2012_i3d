@@ -9,11 +9,14 @@
 #include <cstdio>
 #include <exception>
 
+#include <boost/algorithm/string.hpp>
 #include <boost/bind.hpp>
 #include <boost/date_time/posix_time/posix_time_types.hpp>
+#include <boost/foreach.hpp>
 #include <boost/program_options.hpp>
 #include <boost/signal.hpp>
 #include <boost/smart_ptr.hpp>
+#include <boost/tokenizer.hpp>
 
 
 #include <SDL.h>
@@ -30,5 +33,9 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <QMetaType>
+#include <QString>
+#include <QTextStream>
+#include <QIODevice>
+#include <QFile>
 
 #endif // PRECOMPILE_H

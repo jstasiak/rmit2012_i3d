@@ -39,6 +39,7 @@ private:
 	void doUpdate(std::shared_ptr<FrameEventArgs> args);
 	void doDraw(std::shared_ptr<FrameEventArgs> args);
 
+protected: void executeConfigFile();
 
 private: void onKeyDown(const SDL_KeyboardEvent* event);
 private: void onKeyUp(const SDL_KeyboardEvent* event);

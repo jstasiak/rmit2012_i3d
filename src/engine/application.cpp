@@ -126,12 +126,39 @@ void Application::doInitialize() {
 		this->quit();
 	});
 
+	this->commandSystem->registerCommand("echo", [](command_parameters parameters) {
+		printf("[echo]");
+		BOOST_FOREACH(const string& item, parameters) {
+			printf(" %s", item.c_str());
+		}
+		printf("\n");
+	});
+
 	this->initialize();
+	this->executeConfigFile();
 
 	auto objects = this->gameObjectSet->getList();
 	for(auto i = objects.begin(); i != objects.end(); ++i) {
 		auto o = *i;
 		o->start();
+	}
+}
+
+void Application::executeConfigFile() {
+	auto fileName = QString::fromUtf8(this->getDataDirectory().c_str());
+	fileName += "/config.cfg";
+
+	QFile file(fileName);
+	if(file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+		QTextStream stream((QIODevice*) &file);
+		QString line = stream.readLine();
+		while(!line.isNull()) {
+			this->commandSystem->safeExecuteCommandLine(line.toStdString());
+			line = stream.readLine();
+		}
+	}
+	else {
+		printf("Error opening config file %s\n", fileName.toStdString().c_str());
 	}
 }
 
@@ -158,18 +185,18 @@ void Application::doDraw(std::shared_ptr<FrameEventArgs> args) {
 void Application::onKeyDown(const SDL_KeyboardEvent* event) {
 	auto iterator = this->bindings.find(event->keysym.sym);
 	if(iterator != this->bindings.end()) {
-		auto commandName = (*iterator).second;
-		this->commandSystem->safeExecuteCommand(commandName);
+		auto commandLine = (*iterator).second;
+		this->commandSystem->safeExecuteCommandLine(commandLine);
 	}
 }
 
 void Application::onKeyUp(const SDL_KeyboardEvent* event) {
 	auto iterator = this->bindings.find(event->keysym.sym);
 	if(iterator != this->bindings.end()) {
-		std::string commandName = (*iterator).second;
-		if(commandName.at(0) == '+') {
-			commandName.at(0) = '-';
-			this->commandSystem->safeExecuteCommand(commandName);
+		auto commandLine = (*iterator).second;
+		if(commandLine.at(0) == '+') {
+			commandLine.at(0) = '-';
+			this->commandSystem->safeExecuteCommandLine(commandLine);
 		}
 	}
 }

@@ -23,13 +23,6 @@ MyApp::~MyApp() {
 }
 
 void MyApp::initialize() {
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(90.0f, 1.33f, 0.01f, 500.0f);
-	glMatrixMode(GL_MODELVIEW);
-
-	glClearColor(0, 0, 0, 1.0f);
-
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 	glEnable(GL_COLOR_MATERIAL);
 
@@ -38,6 +31,7 @@ void MyApp::initialize() {
 
 	glEnable(GL_DEPTH_TEST);
 	glShadeModel(GL_SMOOTH);
+	glEnable(GL_SCISSOR_TEST);
 
 
 	this->bindings[SDLK_a] = "toggle_axes";
@@ -86,15 +80,6 @@ void MyApp::beforeDraw(std::shared_ptr<FrameEventArgs> args) {
 	}
 
 	auto ship = this->gameObjectSet->getSingleByClass<Ship>();
-
-	//auto position = this->ship->getPosition();
-	auto position = *ship->getPosition();
-	gluLookAt(0, 100, 100,
-		position.x, 0, position.z,
-		0, 1, 0);
-
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Enable lights in camera space only so light position is ok
 	this->enableLights();

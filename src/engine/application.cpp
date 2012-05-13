@@ -7,12 +7,14 @@
 
 #include "gameobject/gameobjectset.h"
 #include "gameobject/basegameobject.h"
+#include "gameobject/camera.h"
 
 namespace po = boost::program_options;
 using namespace std;
 
 Application::Application()
-	: commandSystem(new CommandSystem()), bindings(), gameObjectSet(), gameDir("data") {
+	: commandSystem(new CommandSystem()), bindings(), gameObjectSet(), gameDir("data"), surface(0)
+{
 	setUpdateFps(77);
 	setDrawFps(60);
 }
@@ -49,6 +51,8 @@ int Application::run() {
 
 	auto surface = SDL_SetVideoMode(800, 600, 32, SDL_DOUBLEBUF | SDL_OPENGL | SDL_HWSURFACE);
 	assert(surface);
+
+	this->surface = surface;
 
 	double last = millisecondsNow() / 1000.0f;
 	float updateDt = 0.0f;
@@ -98,6 +102,7 @@ int Application::run() {
 			drawDt = 0.0;
 		}
 	}
+	this->surface = 0;
 	return 0;
 }
 
@@ -137,6 +142,15 @@ void Application::doInitialize() {
 	this->initialize();
 	this->executeConfigFile();
 
+	auto c1 = make_shared<Camera>();
+	auto c2 = make_shared<Camera>();
+	c1->setRect(Rectf(0, 0, 1, 1));
+	c2->setRect(Rectf(0.75, 0.0, 0.25, 0.25));
+	c2->setDepth(1);
+
+	this->gameObjectSet->add(c1);
+	this->gameObjectSet->add(c2);
+
 	auto objects = this->gameObjectSet->getList();
 	for(auto i = objects.begin(); i != objects.end(); ++i) {
 		auto o = *i;
@@ -173,13 +187,40 @@ void Application::doUpdate(std::shared_ptr<FrameEventArgs> args) {
 void Application::doDraw(std::shared_ptr<FrameEventArgs> args) {
 	this->beforeDraw(args);
 
+	auto cameras = this->getSortedCameras();
+	BOOST_FOREACH(auto camera, cameras) {
+		camera->applyCamera();
+		this->drawGameObjects(args);
+	}
+
+	SDL_GL_SwapBuffers();
+}
+
+list < shared_ptr< Camera > > Application::getSortedCameras() const {
+	list < shared_ptr< Camera> > cameras;
+	auto all = this->gameObjectSet->getList();
+
+	BOOST_FOREACH(auto go, all) {
+		if(strcmp(go->metaObject()->className(), "Camera") == 0) {
+			cameras.push_back(go->getSharedPointer<Camera>());
+		}
+	}
+
+	auto cameraSorter = [](shared_ptr<Camera> c1, shared_ptr<Camera> c2) -> bool {
+		return c1->getDepth() < c2->getDepth();
+	};
+
+	cameras.sort(cameraSorter);
+
+	return cameras;
+}
+
+void Application::drawGameObjects(std::shared_ptr<FrameEventArgs> args) {
 	auto objects = this->gameObjectSet->getList();
 	for(auto i = objects.begin(); i != objects.end(); ++i) {
 		auto o = *i;
 		o->draw(args);
 	}
-
-	SDL_GL_SwapBuffers();
 }
 
 void Application::onKeyDown(const SDL_KeyboardEvent* event) {
@@ -219,4 +260,8 @@ std::shared_ptr<Application> Application::getSharedPointer() {
 
 std::string Application::getDataDirectory() const {
 	return this->gameDir;
+}
+
+glm::ivec2 Application::getScreenSize() const {
+	return glm::ivec2(this->surface->w, this->surface->h);
 }

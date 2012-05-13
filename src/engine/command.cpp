@@ -25,7 +25,6 @@ void CommandSystem::safeExecuteCommandLine(string commandLine) {
 	}
 }
 
-
 void CommandSystem::executeCommandLine(std::string commandLine) {
 	boost::algorithm::trim(commandLine);
 

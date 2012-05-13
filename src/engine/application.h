@@ -6,11 +6,15 @@
 
 #include "frameeventargs.h"
 
-class GameObjectSet;
+class Camera;
 class CommandSystem;
+class GameObjectSet;
+
 
 class Application : public std::enable_shared_from_this<Application>
 {
+private: SDL_Surface* surface;
+
 protected:
 	std::shared_ptr<CommandSystem> commandSystem;
 	std::map<SDLKey, std::string> bindings;
@@ -39,6 +43,9 @@ private:
 	void doUpdate(std::shared_ptr<FrameEventArgs> args);
 	void doDraw(std::shared_ptr<FrameEventArgs> args);
 
+private: std::list< std::shared_ptr< Camera > > getSortedCameras() const;
+private: void drawGameObjects(std::shared_ptr<FrameEventArgs> args);
+
 protected: void executeConfigFile();
 
 private: void onKeyDown(const SDL_KeyboardEvent* event);
@@ -54,6 +61,8 @@ public: std::shared_ptr<Application> getSharedPointer();
 
 public: std::string getDataDirectory() const;
 
+public: glm::ivec2 getScreenSize() const;
+
 };
 
-#endif // APPLICATION_H
+#endif

@@ -17,7 +17,7 @@ private: SDL_Surface* surface;
 
 protected:
 	std::shared_ptr<CommandSystem> commandSystem;
-	std::map<SDLKey, std::string> bindings;
+	std::map<std::string, std::string> bindings;
 	std::shared_ptr<GameObjectSet> gameObjectSet;
 	std::string gameDir;
 

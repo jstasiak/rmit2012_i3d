@@ -124,9 +124,6 @@ void Application::doInitialize() {
 	this->gameObjectSet = std::make_shared<GameObjectSet>();
 	this->gameObjectSet->setApplication(this->getSharedPointer());
 
-	this->bindings[SDLK_q] = "quit";
-	this->bindings[SDLK_ESCAPE] = "quit";
-
 	this->commandSystem->registerCommand("quit", [this](command_parameters parameters) {
 		this->quit();
 	});
@@ -137,6 +134,19 @@ void Application::doInitialize() {
 			printf(" %s", item.c_str());
 		}
 		printf("\n");
+	});
+
+	this->commandSystem->registerCommand("bind", [this](command_parameters parameters) {
+		if(parameters.size() < 2) {
+			printf("Bind error, usage: bind KEY COMMAND ...\n");
+		}
+		else {
+			auto key = parameters.at(0);
+			boost::algorithm::to_lower(key, locale());
+			parameters.erase(parameters.begin());
+			auto commandLine = boost::algorithm::join(parameters, " ");
+			this->bindings[key] = commandLine;
+		}
 	});
 
 	this->initialize();
@@ -223,8 +233,22 @@ void Application::drawGameObjects(std::shared_ptr<FrameEventArgs> args) {
 	}
 }
 
+string sdlKeyToOurKey(SDLKey key) {
+	string our(SDL_GetKeyName(key));
+	if(our == string("-")) {
+		our = "minus";
+	}
+	else if(our == string("=")) {
+		our = "plus";
+	}
+
+	return our;
+}
+
+
 void Application::onKeyDown(const SDL_KeyboardEvent* event) {
-	auto iterator = this->bindings.find(event->keysym.sym);
+	auto key = sdlKeyToOurKey(event->keysym.sym);
+	auto iterator = this->bindings.find(key);
 	if(iterator != this->bindings.end()) {
 		auto commandLine = (*iterator).second;
 		this->commandSystem->safeExecuteCommandLine(commandLine);
@@ -232,7 +256,9 @@ void Application::onKeyDown(const SDL_KeyboardEvent* event) {
 }
 
 void Application::onKeyUp(const SDL_KeyboardEvent* event) {
-	auto iterator = this->bindings.find(event->keysym.sym);
+	auto key = sdlKeyToOurKey(event->keysym.sym);
+	auto iterator = this->bindings.find(key);
+
 	if(iterator != this->bindings.end()) {
 		auto commandLine = (*iterator).second;
 		if(commandLine.at(0) == '+') {
@@ -241,6 +267,8 @@ void Application::onKeyUp(const SDL_KeyboardEvent* event) {
 		}
 	}
 }
+
+
 /**
  * Send SDL_QUIT event to message loop
  */

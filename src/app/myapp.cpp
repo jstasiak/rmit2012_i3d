@@ -33,17 +33,6 @@ void MyApp::initialize() {
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_SCISSOR_TEST);
 
-
-	this->bindings[SDLK_a] = "toggle_axes";
-	this->bindings[SDLK_EQUALS] = "increase_water_tesselation";
-	this->bindings[SDLK_MINUS] = "decrease_water_tesselation";
-	this->bindings[SDLK_n] = "toggle_water_normals";
-	this->bindings[SDLK_w] = "toggle_wireframe";
-	this->bindings[SDLK_UP] = "+accel";
-	this->bindings[SDLK_DOWN] = "+deccel";
-	this->bindings[SDLK_LEFT] = "+left";
-	this->bindings[SDLK_RIGHT] = "+right";
-
 	auto r = Registry::getSharedInstance();
 	auto water = r->create<BaseGameObject>("Water");
 	auto ship = r->create<BaseGameObject>("Ship");

@@ -17,7 +17,6 @@ DEPENDPATH += . \
               src\app \
               src\engine \
               libs\include\glm \
-              src\engine\camera \
               src\engine\gameobject \
               libs\include\glm\core \
               libs\include\glm\gtc \
@@ -43,8 +42,6 @@ HEADERS += src/precompile.h \
            src/engine/utils.h \
            libs/include/glm/ext.hpp \
            libs/include/glm/glm.hpp \
-           src/engine/camera/basecamera.h \
-           src/engine/camera/perspectivecamera.h \
            src/engine/gameobject/basecomponent.h \
            src/engine/gameobject/basegameobject.h \
            src/engine/gameobject/componentset.h \
@@ -269,8 +266,6 @@ SOURCES += src/main.cpp \
            src/engine/command.cpp \
            src/engine/frameeventargs.cpp \
            src/engine/utils.cpp \
-           src/engine/camera/basecamera.cpp \
-           src/engine/camera/perspectivecamera.cpp \
            src/engine/gameobject/componentset.cpp \
 	   src/engine/gameobject/gameobjectset.cpp \
 	   src/engine/gameobject/camera.cpp \

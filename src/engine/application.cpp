@@ -149,8 +149,18 @@ void Application::doInitialize() {
 		}
 	});
 
-	this->initialize();
 	this->executeConfigFile();
+
+	auto r = Registry::getSharedInstance();
+	auto water = r->create<BaseGameObject>("Water");
+	auto ship = r->create<BaseGameObject>("Ship");
+
+	this->gameObjectSet->add(water);
+	this->gameObjectSet->add(ship);
+	auto bo = r->create<BaseGameObject>("BaseGameObject");
+	bo->getComponents()->add(r->create<BaseComponent>("Manager"));
+	this->gameObjectSet->add(bo);
+
 
 	auto c1 = make_shared<Camera>();
 	auto c2 = make_shared<Camera>();
@@ -166,6 +176,18 @@ void Application::doInitialize() {
 		auto o = *i;
 		o->start();
 	}
+
+
+	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+	glEnable(GL_COLOR_MATERIAL);
+
+	float white[] = {1.0f, 1.0f, 1.0f, 1.0f};
+	glMaterialfv(GL_FRONT, GL_SPECULAR, white);
+
+	glEnable(GL_DEPTH_TEST);
+	glShadeModel(GL_SMOOTH);
+	glEnable(GL_SCISSOR_TEST);
+
 }
 
 void Application::executeConfigFile() {
@@ -195,11 +217,13 @@ void Application::doUpdate(std::shared_ptr<FrameEventArgs> args) {
 }
 
 void Application::doDraw(std::shared_ptr<FrameEventArgs> args) {
-	this->beforeDraw(args);
-
 	auto cameras = this->getSortedCameras();
 	BOOST_FOREACH(auto camera, cameras) {
 		camera->applyCamera();
+
+		// Enable lights in camera space only so light position is ok
+		this->enableLights();
+
 		this->drawGameObjects(args);
 	}
 
@@ -292,4 +316,26 @@ std::string Application::getDataDirectory() const {
 
 glm::ivec2 Application::getScreenSize() const {
 	return glm::ivec2(this->surface->w, this->surface->h);
+}
+
+void Application::enableLights() {
+	glEnable(GL_LIGHTING);
+
+	float white[] = {1.0f, 1.0f, 1.0f, 1.0f};
+	float black[] = {0.0f, 0.0f, 0.0f, 1.0f};
+	float position[] = {0.0f, 30.0f, -100.0f, 1.0f};
+
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, black);
+
+	float shininess[] = { 64.0f };
+
+	glMaterialfv(GL_FRONT, GL_SPECULAR, white);
+	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
+
+	glLightfv(GL_LIGHT0, GL_POSITION, position);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, black);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, white);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, white);
+
+	glEnable(GL_LIGHT0);
 }

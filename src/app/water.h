@@ -14,6 +14,7 @@ struct Vertex {
 class Water : public BaseGameObject {
 	Q_OBJECT
 
+private: bool axesVisible;
 private: bool normalsVisible;
 private: glm::vec2 size;
 
@@ -54,6 +55,8 @@ public: void toggleNormals();
 
 public: Water* doubleTesselationSafe();
 public: Water* halveTesselationSafe();
+
+public: void setAxesVisible(bool value);
 
 };
 

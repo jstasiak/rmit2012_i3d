@@ -1,6 +1,7 @@
 #include "precompile.h"
 
 #include "gameobjectset.h"
+#include "basegameobject.h"
 
 GameObjectSet::GameObjectSet() : gameObjects() {
 

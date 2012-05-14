@@ -9,8 +9,9 @@ class BaseGameObject;
 class FrameEventArgs;
 
 class BaseComponent : public Object {
+	Q_OBJECT
 
-private: std::shared_ptr<BaseGameObject> gameObject;
+protected: std::shared_ptr<BaseGameObject> gameObject;
 
 public: BaseComponent() : gameObject() {}
 

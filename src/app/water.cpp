@@ -14,7 +14,8 @@ Water::Water()
 	waveZ((new Wave())->setAmplitude(4)->setLength(44)->setFrequency(0.5f)),
 	time(0),
 	vertices(0),
-	normalsVisible(false)
+	normalsVisible(false),
+	axesVisible(false)
 {
 	this->resetData();
 
@@ -90,8 +91,11 @@ void Water::update(std::shared_ptr<FrameEventArgs> args) {
 	BaseGameObject::update(args);
 }
 
-
 void Water::draw(std::shared_ptr<FrameEventArgs> args) {
+	if(this->axesVisible) {
+		drawAxes(50);
+	}
+
 	// Every frame we want to recalculate waves
 	this->time = args->getTotalSeconds();
 	this->recalculate();
@@ -192,7 +196,6 @@ void Water::drawNormals() {
 	glEnable(GL_LIGHTING);
 }
 
-
 void Water::toggleNormals() {
 	this->normalsVisible = !this->normalsVisible;
 	printf("[Water] Normals visible: %d\n", this->normalsVisible);
@@ -218,4 +221,8 @@ Water* Water::halveTesselationSafe() {
 	printf("[Water] Current tesselation: %d\n", this->segments);
 
 	return this;
+}
+
+void Water::setAxesVisible(bool value) {
+	this->axesVisible = value;
 }

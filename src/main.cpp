@@ -6,7 +6,7 @@ using namespace std;
 int main(int argc, char** argv) {
 	int returnCode = 0;
 	try {
-		auto application = make_shared<MyApp>();
+		auto application = make_shared<Application>();
 		application->applyCommandlineParameters(argc, argv);
 		returnCode = application->run();
 	}

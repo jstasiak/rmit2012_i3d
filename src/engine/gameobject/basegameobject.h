@@ -13,7 +13,7 @@ class BaseGameObject : public Object {
 protected: std::weak_ptr<GameObjectSet> gameObjectSet;
 protected: std::shared_ptr<ComponentSet> components;
 
-public: BaseGameObject() : gameObjectSet(), components(new ComponentSet(this)) {}
+public: Q_INVOKABLE BaseGameObject() : gameObjectSet(), components(new ComponentSet(this)) {}
 
 public: virtual void start() {
 		auto l = this->components->getList();

@@ -51,9 +51,6 @@ protected: void executeConfigFile();
 private: void onKeyDown(const SDL_KeyboardEvent* event);
 private: void onKeyUp(const SDL_KeyboardEvent* event);
 
-protected: virtual void initialize() {}
-protected: virtual void beforeDraw(std::shared_ptr<FrameEventArgs> args) {}
-
 protected: void quit();
 
 public: std::shared_ptr<CommandSystem> getCommandSystem();
@@ -62,6 +59,8 @@ public: std::shared_ptr<Application> getSharedPointer();
 public: std::string getDataDirectory() const;
 
 public: glm::ivec2 getScreenSize() const;
+
+private: void enableLights();
 
 };
 

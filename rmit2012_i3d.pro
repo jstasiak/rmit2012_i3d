@@ -29,12 +29,12 @@ INCLUDEPATH += src
 
 # Input
 HEADERS += src/precompile.h \
-           src/app/myapp.h \
            src/app/ship.h \
            src/app/uthash.h \
-	   src/app/obj.h \
+           src/app/obj.h \
            src/app/water.h \
            src/app/wave.h \
+           src/app/manager.h \
            src/engine/application.h \
            src/engine/command.h \
            src/engine/frameeventargs.h \
@@ -257,10 +257,10 @@ HEADERS += src/precompile.h \
            libs/include/glm/gtx/simd_mat4.inl
 SOURCES += src/main.cpp \
            src/precompile.cpp \
-           src/app/myapp.cpp \
            src/app/ship.cpp \
            src/app/water.cpp \
            src/app/wave.cpp \
+	   src/app/manager.cpp \
 	   src/app/obj.cpp \
            src/engine/application.cpp \
            src/engine/command.cpp \
@@ -269,5 +269,7 @@ SOURCES += src/main.cpp \
            src/engine/gameobject/componentset.cpp \
 	   src/engine/gameobject/gameobjectset.cpp \
 	   src/engine/gameobject/camera.cpp \
+	   src/engine/gameobject/basecomponent.cpp \
+	   src/engine/gameobject/basegameobject.cpp \
 
 win32-msvc2010:LIBS += SDL.lib

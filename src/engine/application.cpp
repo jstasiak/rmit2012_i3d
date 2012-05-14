@@ -154,8 +154,8 @@ void Application::doInitialize() {
 
 	auto c1 = make_shared<Camera>();
 	auto c2 = make_shared<Camera>();
-	c1->setRect(Rectf(0, 0, 1, 1));
-	c2->setRect(Rectf(0.75, 0.0, 0.25, 0.25));
+	c1->setNormalizedRect(Rectf(0, 0, 1, 1));
+	c2->setNormalizedRect(Rectf(0.75, 0.0, 0.25, 0.25));
 	c2->setDepth(1);
 
 	this->gameObjectSet->add(c1);

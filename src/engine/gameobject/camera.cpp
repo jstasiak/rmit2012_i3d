@@ -7,17 +7,28 @@
 
 REGISTER(Camera);
 
-Camera::Camera() : BaseGameObject(), rect(), backgroundColor(), depth()
+Camera::Camera() : BaseGameObject(), normalizedRect(), backgroundColor(), depth()
 {
 
 }
 
-Rectf Camera::getRect() const {
-	return this->rect;
+Rectf Camera::getNormalizedRect() const {
+	return this->normalizedRect;
 }
 
-void Camera::setRect(Rectf value) {
-	this->rect = value;
+void Camera::setNormalizedRect(Rectf value) {
+	this->normalizedRect = value;
+}
+
+Recti Camera::getRect() const {
+	auto app = this->gameObjectSet.lock()->getApplication().lock();
+
+	auto screenSize = app->getScreenSize();
+	auto w = screenSize.x;
+	auto h = screenSize.y;
+
+	auto& r = this->normalizedRect;
+	return Recti(r.x * w, r.y * h, r.width * w, r.height * h);
 }
 
 glm::vec3 Camera::getBackgroundColor() const {
@@ -37,13 +48,12 @@ void Camera::setDepth(float value) {
 }
 
 void Camera::applyCamera() {
-	auto app = this->getGameObjectSet().lock()->getApplication().lock();
-	auto screenSize = app->getScreenSize();
+	auto rect = this->getRect();
 
-	float x = this->rect.x * screenSize.x;
-	float y = this->rect.y * screenSize.y;
-	float w = this->rect.width * screenSize.x;
-	float h = this->rect.height * screenSize.y;
+	float x = rect.x;
+	float y = rect.y;
+	float w = rect.width;
+	float h = rect.height;
 
 	glViewport(x, y, w, h);
 	glScissor(x, y, w, h);

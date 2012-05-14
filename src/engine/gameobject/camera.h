@@ -11,13 +11,15 @@ class BaseGameObject;
 
 class Camera : public BaseGameObject {
 	Q_OBJECT
-private: Rectf rect;
+private: Rectf normalizedRect;
 private: glm::vec3 backgroundColor;
 private: float depth;
 
 public: Q_INVOKABLE Camera();
-public: Rectf getRect() const;
-public: void setRect(Rectf value);
+public: Rectf getNormalizedRect() const;
+public: void setNormalizedRect(Rectf value);
+
+public: Recti getRect() const;
 
 public: glm::vec3 getBackgroundColor() const;
 public: void setBackgroundColor(glm::vec3 value);

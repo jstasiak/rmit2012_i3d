@@ -184,18 +184,17 @@ void Application::initializeGraphics() {
 void Application::initializeScene() {
 	//TODO: load scene definition from file on demand
 	auto r = Registry::getSharedInstance();
-	auto water = r->create<BaseGameObject>("Water");
-	auto ship = r->create<BaseGameObject>("Ship");
 
-	this->gameObjectSet->add(water);
-	this->gameObjectSet->add(ship);
-	auto bo = r->create<BaseGameObject>("BaseGameObject");
+	this->gameObjectSet->add(r->create<BaseGameObject>("Water"));
+	this->gameObjectSet->add(r->create<BaseGameObject>("Ship"));
+
+	auto bo = r->create<BaseGameObject>();
 	bo->getComponents()->add(r->create<BaseComponent>("Manager"));
 	this->gameObjectSet->add(bo);
 
 
-	auto c1 = make_shared<Camera>();
-	auto c2 = make_shared<Camera>();
+	auto c1 = r->create<Camera>();
+	auto c2 = r->create<Camera>();
 	c1->setNormalizedRect(Rectf(0, 0, 1, 1));
 	c2->setNormalizedRect(Rectf(0.75, 0.0, 0.25, 0.25));
 	c2->setDepth(1);

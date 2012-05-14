@@ -35,6 +35,10 @@ public: static Registry* getSharedInstance() {
 		return instance;
 	}
 
+public: template<class T> std::shared_ptr<T> create() {
+		return this->create<T>(T::staticMetaObject.className());
+	}
+
 public: template<class T> std::shared_ptr<T> create(const QString& className) {
 		auto mo = this->getByName(className);
 		if(!mo) {

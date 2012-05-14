@@ -45,8 +45,8 @@ HEADERS += src/precompile.h \
            src/engine/gameobject/basecomponent.h \
            src/engine/gameobject/basegameobject.h \
            src/engine/gameobject/componentset.h \
-	   src/engine/gameobject/gameobjectset.h \
-	   src/engine/gameobject/camera.h\
+           src/engine/gameobject/gameobjectset.h \
+           src/engine/gameobject/camera.h\
            libs/include/glm/core/_detail.hpp \
            libs/include/glm/core/_fixes.hpp \
            libs/include/glm/core/_swizzle.hpp \
@@ -260,16 +260,16 @@ SOURCES += src/main.cpp \
            src/app/ship.cpp \
            src/app/water.cpp \
            src/app/wave.cpp \
-	   src/app/manager.cpp \
-	   src/app/obj.cpp \
+           src/app/manager.cpp \
+           src/app/obj.cpp \
            src/engine/application.cpp \
            src/engine/command.cpp \
            src/engine/frameeventargs.cpp \
            src/engine/utils.cpp \
            src/engine/gameobject/componentset.cpp \
-	   src/engine/gameobject/gameobjectset.cpp \
-	   src/engine/gameobject/camera.cpp \
-	   src/engine/gameobject/basecomponent.cpp \
-	   src/engine/gameobject/basegameobject.cpp \
+           src/engine/gameobject/gameobjectset.cpp \
+           src/engine/gameobject/camera.cpp \
+           src/engine/gameobject/basecomponent.cpp \
+           src/engine/gameobject/basegameobject.cpp \
 
 win32-msvc2010:LIBS += SDL.lib

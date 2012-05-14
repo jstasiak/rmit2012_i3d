@@ -13,7 +13,11 @@ namespace po = boost::program_options;
 using namespace std;
 
 Application::Application()
-	: commandSystem(new CommandSystem()), bindings(), gameObjectSet(), gameDir("data"), surface(0)
+	: commandSystem(new CommandSystem()),
+	bindings(),
+	gameObjectSet(),
+	gameDir("data"),
+	surface(0)
 {
 	setUpdateFps(77);
 	setDrawFps(60);
@@ -23,7 +27,7 @@ Application::~Application() {
 	SDL_Quit();
 }
 
-void Application::applyCommandlineParameters(int argc, char** argv) {
+int Application::runWithCommandLineParameters(int argc, char** argv) {
 	// Declare the supported options.
 	po::options_description desc("Allowed options");
 	desc.add_options()
@@ -35,12 +39,17 @@ void Application::applyCommandlineParameters(int argc, char** argv) {
 	po::store(po::parse_command_line(argc, argv, desc), vm);
 	po::notify(vm); 
 
+	int returnCode = 0;
+
 	if(vm.count("help")) {
 		cout << desc << "\n\n";
-		exit(0);
+	}
+	else {
+		this->gameDir = vm["gamedir"].as<string>();
+		returnCode = this->run();
 	}
 
-	this->gameDir = vm["gamedir"].as<string>();
+	return returnCode;
 }
 
 int Application::run() {
@@ -64,7 +73,7 @@ int Application::run() {
 
 	SDL_Event event;
 
-	this->doInitialize();
+	this->initialize();
 
 	while(running) {
 		while(SDL_PollEvent(&event)) {
@@ -92,13 +101,13 @@ int Application::run() {
 			updateDt -= this->updateEverySeconds;
 			auto args = std::shared_ptr<FrameEventArgs>(
 				FrameEventArgs::createFromSecondsAndTotalSeconds(this->updateEverySeconds, now));
-			this->doUpdate(args);
+			this->update(args);
 		}
 
 		if(drawDt >= this->drawEverySeconds) {
 			auto args = std::shared_ptr<FrameEventArgs>(
 				FrameEventArgs::createFromSecondsAndTotalSeconds(drawDt, now));
-			this->doDraw(args);
+			this->draw(args);
 			drawDt = 0.0;
 		}
 	}
@@ -120,10 +129,20 @@ void Application::setDrawFps( int value )
 	this->drawEverySeconds = 1.0f / this->drawFps;
 }
 
-void Application::doInitialize() {
+void Application::initialize() {
 	this->gameObjectSet = std::make_shared<GameObjectSet>();
 	this->gameObjectSet->setApplication(this->getSharedPointer());
 
+	this->initializeCommands();
+	this->initializeScene();
+	this->startGameObjects();
+
+	this->executeConfigFile("config.cfg");
+
+	this->initializeGraphics();
+}
+
+void Application::initializeCommands() {
 	this->commandSystem->registerCommand("quit", [this](command_parameters parameters) {
 		this->quit();
 	});
@@ -148,9 +167,22 @@ void Application::doInitialize() {
 			this->bindings[key] = commandLine;
 		}
 	});
+}
 
-	this->executeConfigFile();
+void Application::initializeGraphics() {
+	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+	glEnable(GL_COLOR_MATERIAL);
 
+	float white[] = {1.0f, 1.0f, 1.0f, 1.0f};
+	glMaterialfv(GL_FRONT, GL_SPECULAR, white);
+
+	glEnable(GL_DEPTH_TEST);
+	glShadeModel(GL_SMOOTH);
+	glEnable(GL_SCISSOR_TEST);
+}
+
+void Application::initializeScene() {
+	//TODO: load scene definition from file on demand
 	auto r = Registry::getSharedInstance();
 	auto water = r->create<BaseGameObject>("Water");
 	auto ship = r->create<BaseGameObject>("Ship");
@@ -170,29 +202,20 @@ void Application::doInitialize() {
 
 	this->gameObjectSet->add(c1);
 	this->gameObjectSet->add(c2);
+}
 
+void Application::startGameObjects() {
 	auto objects = this->gameObjectSet->getList();
 	for(auto i = objects.begin(); i != objects.end(); ++i) {
 		auto o = *i;
 		o->start();
 	}
-
-
-	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-	glEnable(GL_COLOR_MATERIAL);
-
-	float white[] = {1.0f, 1.0f, 1.0f, 1.0f};
-	glMaterialfv(GL_FRONT, GL_SPECULAR, white);
-
-	glEnable(GL_DEPTH_TEST);
-	glShadeModel(GL_SMOOTH);
-	glEnable(GL_SCISSOR_TEST);
-
 }
 
-void Application::executeConfigFile() {
+void Application::executeConfigFile(string configFile) {
 	auto fileName = QString::fromUtf8(this->getDataDirectory().c_str());
-	fileName += "/config.cfg";
+	fileName += "/";
+	fileName += configFile.c_str();
 
 	QFile file(fileName);
 	if(file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -208,7 +231,7 @@ void Application::executeConfigFile() {
 	}
 }
 
-void Application::doUpdate(std::shared_ptr<FrameEventArgs> args) {
+void Application::update(std::shared_ptr<FrameEventArgs> args) {
 	auto objects = this->gameObjectSet->getList();
 	for(auto i = objects.begin(); i != objects.end(); ++i) {
 		auto o = *i;
@@ -216,7 +239,7 @@ void Application::doUpdate(std::shared_ptr<FrameEventArgs> args) {
 	}
 }
 
-void Application::doDraw(std::shared_ptr<FrameEventArgs> args) {
+void Application::draw(std::shared_ptr<FrameEventArgs> args) {
 	auto cameras = this->getSortedCameras();
 	BOOST_FOREACH(auto camera, cameras) {
 		camera->applyCamera();
@@ -319,6 +342,7 @@ glm::ivec2 Application::getScreenSize() const {
 }
 
 void Application::enableLights() {
+	//TODO: refactor it to separate light object
 	glEnable(GL_LIGHTING);
 
 	float white[] = {1.0f, 1.0f, 1.0f, 1.0f};

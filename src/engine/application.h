@@ -31,27 +31,30 @@ private:
 public: void setUpdateFps(int value);
 public: void setDrawFps(int value);
 
-public:
-	Application();
-	virtual ~Application();
+public: Application();
+public: ~Application();
 
-	virtual void applyCommandlineParameters(int argc, char** argv);
-	int run();
+public: int runWithCommandLineParameters(int argc, char** argv);
+private: int run();
 
-private:
-	void doInitialize();
-	void doUpdate(std::shared_ptr<FrameEventArgs> args);
-	void doDraw(std::shared_ptr<FrameEventArgs> args);
+private: void initialize();
+private: void initializeScene();
+private: void initializeCommands();
+private: void startGameObjects();
+private: void initializeGraphics();
+
+private: void executeConfigFile(std::string configFile);
+
+private: void update(std::shared_ptr<FrameEventArgs> args);
+private: void draw(std::shared_ptr<FrameEventArgs> args);
 
 private: std::list< std::shared_ptr< Camera > > getSortedCameras() const;
 private: void drawGameObjects(std::shared_ptr<FrameEventArgs> args);
 
-protected: void executeConfigFile();
-
 private: void onKeyDown(const SDL_KeyboardEvent* event);
 private: void onKeyUp(const SDL_KeyboardEvent* event);
 
-protected: void quit();
+private: void quit();
 
 public: std::shared_ptr<CommandSystem> getCommandSystem();
 public: std::shared_ptr<Application> getSharedPointer();

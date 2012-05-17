@@ -18,7 +18,7 @@ Manager::Manager()
 }
 
 void Manager::start() {
-	auto app = this->gameObject->getGameObjectSet().lock()->getApplication().lock();
+	auto app = this->gameObject->getGameObjectSet().lock()->getOwner();
 	auto cs = app->getCommandSystem();
 
 	cs->registerCommand("toggle_wireframe", [this](command_parameters parameters) {

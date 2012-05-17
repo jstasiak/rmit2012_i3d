@@ -3,18 +3,7 @@
 #include "gameobjectset.h"
 #include "basegameobject.h"
 
-GameObjectSet::GameObjectSet() : gameObjects() {
-
-}
-
-GameObjectSet::GameObjects GameObjectSet::getList() {
-	return this->gameObjects;
-}
-
-std::weak_ptr<Application> GameObjectSet::getApplication() {
-	return this->application;
-}
-
-void GameObjectSet::setApplication(std::weak_ptr<Application> value) {
-	this->application = value;
+void GameObjectSet::onAdd(std::shared_ptr<BaseGameObject> object) {
+	auto go = std::dynamic_pointer_cast<BaseGameObject>(object);
+	go->setGameObjectSet(this->getSharedPointer< GameObjectSet >());
 }

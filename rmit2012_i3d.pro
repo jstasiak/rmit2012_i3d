@@ -44,6 +44,7 @@ HEADERS += src/precompile.h \
            libs/include/glm/glm.hpp \
            src/engine/gameobject/basecomponent.h \
            src/engine/gameobject/basegameobject.h \
+           src/engine/gameobject/objectset.h \
            src/engine/gameobject/componentset.h \
            src/engine/gameobject/gameobjectset.h \
            src/engine/gameobject/camera.h\
@@ -268,6 +269,7 @@ SOURCES += src/main.cpp \
            src/engine/utils.cpp \
            src/engine/gameobject/componentset.cpp \
            src/engine/gameobject/gameobjectset.cpp \
+           src/engine/gameobject/objectset.cpp \
            src/engine/gameobject/camera.cpp \
            src/engine/gameobject/basecomponent.cpp \
            src/engine/gameobject/basegameobject.cpp \

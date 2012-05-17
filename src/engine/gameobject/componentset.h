@@ -5,36 +5,15 @@
 #include <boost/smart_ptr.hpp>
 
 #include "../object.h"
+#include "objectset.h"
 
 class BaseComponent;
 class BaseGameObject;
 
-struct string_comparator {
-	bool operator()(char const *a, char const *b) {
-		return std::strcmp(a, b) < 0;
-	}
-};
-
-class ComponentSet : public Object {
+class ComponentSet : public ObjectSet<BaseComponent, BaseGameObject> {
 	Q_OBJECT
 
-private: typedef std::list < std::shared_ptr <BaseComponent> > int_components_t;
-
-private: BaseGameObject* gameObject;
-
-private: int_components_t components;
-
-public: ComponentSet(BaseGameObject* gameObject);
-
-public: template <class T> void add(std::shared_ptr<T> component) {
-	component->setGameObject(this->gameObject->getSharedPointer<BaseGameObject>());
-	this->components.push_back(component);
-}
-
-public: std::shared_ptr<BaseGameObject> getGameObject();
-
-public: typedef int_components_t components_t;
-public: components_t getList();
+protected: virtual void onAdd(std::shared_ptr<BaseComponent> object);
 };
 
 #endif // COMPONENTSET_H

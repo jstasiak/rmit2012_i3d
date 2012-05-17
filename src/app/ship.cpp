@@ -6,6 +6,8 @@
 #include "../engine/utils.h"
 #include "water.h"
 
+#include "../engine/gameobject/gameobjectset.h"
+
 using namespace std;
 
 REGISTER(Ship);
@@ -63,7 +65,7 @@ void Ship::stopTurningRight() {
 }
 
 void Ship::start() {
-	auto app = this->getApplication().lock();
+	auto app = this->getApplication();
 	auto cs = app->getCommandSystem();
 
 	auto water = this->getGameObjectSet().lock()->getSingleByClass<Water>();

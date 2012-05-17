@@ -58,7 +58,7 @@ int Application::run() {
 	result = SDL_Init(SDL_INIT_EVERYTHING);
 	assert(result == 0);
 
-	auto surface = SDL_SetVideoMode(800, 600, 32, SDL_DOUBLEBUF | SDL_OPENGL | SDL_HWSURFACE);
+	auto surface = SDL_SetVideoMode(1200, 600, 32, SDL_DOUBLEBUF | SDL_OPENGL | SDL_HWSURFACE);
 	assert(surface);
 
 	this->surface = surface;
@@ -131,7 +131,7 @@ void Application::setDrawFps( int value )
 
 void Application::initialize() {
 	this->gameObjectSet = std::make_shared<GameObjectSet>();
-	this->gameObjectSet->setApplication(this->getSharedPointer());
+	this->gameObjectSet->setOwner(this->getSharedPointer());
 
 	this->initializeCommands();
 	this->initializeScene();
@@ -187,16 +187,17 @@ void Application::initializeScene() {
 
 	this->gameObjectSet->add(r->create<BaseGameObject>("Water"));
 	this->gameObjectSet->add(r->create<BaseGameObject>("Ship"));
-
+	
 	auto bo = r->create<BaseGameObject>();
+	bo->initialize();
 	bo->getComponents()->add(r->create<BaseComponent>("Manager"));
 	this->gameObjectSet->add(bo);
 
 
 	auto c1 = r->create<Camera>();
 	auto c2 = r->create<Camera>();
-	c1->setNormalizedRect(Rectf(0, 0, 1, 1));
-	c2->setNormalizedRect(Rectf(0.75, 0.0, 0.25, 0.25));
+	c1->setNormalizedRect(Rectf(0, 0, 0.5, 1));
+	c2->setNormalizedRect(Rectf(0.5, 0.0, 0.5, 1));
 	c2->setDepth(1);
 
 	this->gameObjectSet->add(c1);
@@ -207,6 +208,7 @@ void Application::startGameObjects() {
 	auto objects = this->gameObjectSet->getList();
 	for(auto i = objects.begin(); i != objects.end(); ++i) {
 		auto o = *i;
+		o->initialize();
 		o->start();
 	}
 }

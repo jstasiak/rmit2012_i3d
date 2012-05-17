@@ -4,6 +4,7 @@
 #include "../../app/ship.h"
 
 #include "../application.h"
+#include "gameobjectset.h"
 
 REGISTER(Camera);
 
@@ -21,7 +22,7 @@ void Camera::setNormalizedRect(Rectf value) {
 }
 
 Recti Camera::getRect() const {
-	auto app = this->gameObjectSet.lock()->getApplication().lock();
+	auto app = this->gameObjectSet.lock()->getOwner();
 
 	auto screenSize = app->getScreenSize();
 	auto w = screenSize.x;
@@ -61,7 +62,11 @@ void Camera::applyCamera() {
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(90.0f, 1.33f, 0.01f, 500.0f);
+
+	float aspectRatio = rect.width * 1.0f / rect.height;
+	float fovX = 90.0f;
+
+	gluPerspective(fovX * aspectRatio, aspectRatio, 0.01f, 500.0f);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 

@@ -5,24 +5,20 @@
 #include "basecomponent.h"
 #include "../object.h"
 #include "componentset.h"
-#include "gameobjectset.h"
 
+class GameObjectSet;
+class Application;
 
 class BaseGameObject : public Object {
 	Q_OBJECT
 protected: std::weak_ptr<GameObjectSet> gameObjectSet;
 protected: std::shared_ptr<ComponentSet> components;
 
-public: Q_INVOKABLE BaseGameObject() : gameObjectSet(), components(new ComponentSet(this)) {}
+public: Q_INVOKABLE BaseGameObject();
 
-public: virtual void start() {
-		auto l = this->components->getList();
+public: void initialize();
 
-		for(auto i = l.begin(); i != l.end(); ++i) {
-			auto component = *i;
-			component->start();
-		}
-	}
+public: virtual void start();
 
 public: virtual void update(std::shared_ptr<FrameEventArgs> args) {
 		this->updateComponents(args);
@@ -40,6 +36,7 @@ private: void updateComponents(std::shared_ptr<FrameEventArgs> args) {
 public: virtual void draw(std::shared_ptr<FrameEventArgs> args) {}
 
 public: std::shared_ptr<ComponentSet> getComponents() {
+		assert(this->components);
 		return this->components;
 	}
 
@@ -47,13 +44,14 @@ public: std::weak_ptr<GameObjectSet> getGameObjectSet() {
 		return this->gameObjectSet;
 	}
 
-public: void setGameObjectSet(std::weak_ptr<GameObjectSet> value) {
+public: void setGameObjectSet(std::shared_ptr<GameObjectSet> value) {
 		this->gameObjectSet = value;
 	}
 
-protected: std::weak_ptr<Application> getApplication() {
-		return this->gameObjectSet.lock()->getApplication();
-	}
+public: std::shared_ptr<Application> getApplication();
+
+private: void setComponents(std::shared_ptr<ComponentSet> value);
+
 };
 
 #endif

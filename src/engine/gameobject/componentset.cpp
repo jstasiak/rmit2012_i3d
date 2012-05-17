@@ -3,15 +3,6 @@
 #include "componentset.h"
 #include "basegameobject.h"
 
-ComponentSet::ComponentSet(BaseGameObject* gameObject)
-	: gameObject(gameObject)
-{
-}
-
-std::shared_ptr<BaseGameObject> ComponentSet::getGameObject() {
-	return this->gameObject->getSharedPointer<BaseGameObject>();
-}
-
-ComponentSet::components_t ComponentSet::getList() {
-	return this->components;
+void ComponentSet::onAdd(std::shared_ptr<BaseComponent> object) {
+	object->setGameObject(this->owner.lock()->getSharedPointer<BaseGameObject>());
 }

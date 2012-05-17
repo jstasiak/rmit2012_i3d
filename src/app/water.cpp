@@ -72,7 +72,7 @@ void Water::recalculate() {
 }
 
 void Water::start() {
-	auto cs = this->getApplication().lock()->getCommandSystem();
+	auto cs = this->getApplication()->getCommandSystem();
 	
 	cs->registerCommand("increase_water_tesselation", [this](command_parameters parameters) {
 		this->doubleTesselationSafe();

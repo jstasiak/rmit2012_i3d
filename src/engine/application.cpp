@@ -8,6 +8,7 @@
 #include "gameobject/gameobjectset.h"
 #include "gameobject/basegameobject.h"
 #include "gameobject/camera.h"
+#include "gameobject/transform.h"
 
 namespace po = boost::program_options;
 using namespace std;
@@ -277,7 +278,12 @@ void Application::drawGameObjects(std::shared_ptr<FrameEventArgs> args) {
 	auto objects = this->gameObjectSet->getList();
 	for(auto i = objects.begin(); i != objects.end(); ++i) {
 		auto o = *i;
+		auto transform = o->getComponents()->getSingleByClass<Transform>();
+		auto pos = transform->getPosition();
+		glPushMatrix();
+		glTranslatef(pos.x, pos.y, pos.z);
 		o->draw(args);
+		glPopMatrix();
 	}
 }
 

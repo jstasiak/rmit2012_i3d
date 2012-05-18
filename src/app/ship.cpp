@@ -148,10 +148,8 @@ void Ship::update(std::shared_ptr<FrameEventArgs> args) {
 }
 
 void Ship::draw(std::shared_ptr<FrameEventArgs> args) {
-	glPushMatrix();
 	auto transform = this->components->getSingleByClass<Transform>();
 	auto position = transform->getPosition();
-	glTranslatef(position.x, position.y, position.z);
 
 	// Models is too big so I need to scale it
 	float scale = 0.3f;
@@ -165,7 +163,7 @@ void Ship::draw(std::shared_ptr<FrameEventArgs> args) {
 	}
 
 	// Calculate normal in ship position and roll/pitch according to this normal
-	auto normal = this->water->normalAtPositionAndTime(&transform->getPosition(), args->getTotalSeconds());
+	auto normal = this->water->normalAtPositionAndTime(&position, args->getTotalSeconds());
 
 	auto vxy = glm::normalize(glm::vec3(normal.x, normal.y, 0));
 	auto vzy = glm::normalize(glm::vec3(0, normal.y, normal.z));
@@ -199,8 +197,6 @@ void Ship::draw(std::shared_ptr<FrameEventArgs> args) {
 		glVertex3fv(vertex);	
 	} 	
 	glEnd();
-
-	glPopMatrix();
 }
 
 Ship::~Ship() {

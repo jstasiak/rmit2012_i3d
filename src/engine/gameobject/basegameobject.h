@@ -51,7 +51,6 @@ public: void setGameObjectSet(std::shared_ptr<GameObjectSet> value) {
 public: std::shared_ptr<Application> getApplication();
 
 private: void setComponents(std::shared_ptr<ComponentSet> value);
-
 };
 
 #endif

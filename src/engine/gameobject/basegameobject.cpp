@@ -15,6 +15,7 @@ BaseGameObject::BaseGameObject()
 void BaseGameObject::initialize() {
 	if(!this->components) {
 		this->setComponents(make_shared<ComponentSet>());
+		this->components->add(Registry::getSharedInstance()->create<BaseComponent>("Transform"));
 	}
 }
 

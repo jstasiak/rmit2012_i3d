@@ -5,6 +5,7 @@
 
 #include "../application.h"
 #include "gameobjectset.h"
+#include "transform.h"
 
 REGISTER(Camera);
 
@@ -76,7 +77,7 @@ void Camera::applyCamera() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	auto ship = this->gameObjectSet.lock()->getSingleByClass<Ship>();
-	auto position = *ship->getPosition();
+	auto position = ship->getComponents()->getSingleByClass<Transform>()->getPosition();
 	gluLookAt(0, 100, 100,
 		position.x, 0, position.z,
 		0, 1, 0);

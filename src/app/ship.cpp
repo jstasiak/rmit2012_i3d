@@ -7,6 +7,7 @@
 #include "water.h"
 
 #include "../engine/gameobject/gameobjectset.h"
+#include "../engine/gameobject/transform.h"
 
 using namespace std;
 
@@ -18,17 +19,13 @@ const float Ship::ACCELERATION = 30.0f;
 const float Ship::TURNING_SPEED_DEGREES_PER_SECOND = 30.0f;
 
 Ship::Ship()
-	: position(0, 0, 0),
+	:
 	currentAcceleration(0),
 	currentTurningSpeedDegreesPerSecond(0),
 	yaw(0),
 	water(),
 	mesh(0)
 {
-}
-
-void Ship::setWater(std::shared_ptr<Water> water) {
-	this->water = water;
 }
 
 void Ship::startAcceleration() {
@@ -68,8 +65,7 @@ void Ship::start() {
 	auto app = this->getApplication();
 	auto cs = app->getCommandSystem();
 
-	auto water = this->getGameObjectSet().lock()->getSingleByClass<Water>();
-	this->setWater(water);
+	this->water = this->getGameObjectSet().lock()->getSingleByClass<Water>() ;
 
 	// Acceleration commands
 	auto stopAcceleration = [this](command_parameters parameters) {
@@ -111,6 +107,8 @@ void Ship::start() {
 void Ship::update(std::shared_ptr<FrameEventArgs> args) {
 	BaseGameObject::update(args);
 
+	auto transform = this->components->getSingleByClass<Transform>();
+
 	float dt = args->getSeconds();
 
 	// If acceleration has non-zero value, change velocity
@@ -136,19 +134,24 @@ void Ship::update(std::shared_ptr<FrameEventArgs> args) {
 
 		// Move ship using forward vector
 		auto dx = unit * this->velocity * dt;
-		this->position += dx;
+		transform->setPosition(transform->getPosition() + dx);
 	}
 
 	auto water = this->gameObjectSet.lock()->getSingleByClass<Water>();
 
 	// Modify ship y coordinate to match water height
-	float height = water->heightAtPositionAndTime(&this->position, args->getTotalSeconds());
-	this->position.y = height;
+	float height = water->heightAtPositionAndTime(&transform->getPosition(), args->getTotalSeconds());
+
+	auto pos = transform->getPosition();
+	pos.y = height;
+	transform->setPosition(pos);
 }
 
 void Ship::draw(std::shared_ptr<FrameEventArgs> args) {
 	glPushMatrix();
-	glTranslatef(this->position.x, this->position.y, this->position.z);
+	auto transform = this->components->getSingleByClass<Transform>();
+	auto position = transform->getPosition();
+	glTranslatef(position.x, position.y, position.z);
 
 	// Models is too big so I need to scale it
 	float scale = 0.3f;
@@ -162,7 +165,7 @@ void Ship::draw(std::shared_ptr<FrameEventArgs> args) {
 	}
 
 	// Calculate normal in ship position and roll/pitch according to this normal
-	auto normal = this->water->normalAtPositionAndTime(&this->position, args->getTotalSeconds());
+	auto normal = this->water->normalAtPositionAndTime(&transform->getPosition(), args->getTotalSeconds());
 
 	auto vxy = glm::normalize(glm::vec3(normal.x, normal.y, 0));
 	auto vzy = glm::normalize(glm::vec3(0, normal.y, normal.z));
@@ -201,15 +204,6 @@ void Ship::draw(std::shared_ptr<FrameEventArgs> args) {
 }
 
 Ship::~Ship() {
-}
-
-glm::vec3* Ship::getPosition() {
-	return &(this->position);
-}
-
-Ship* Ship::setPosition(const glm::vec3* value) {
-	this->position = *value;
-	return this;
 }
 
 void Ship::setAxes(Ship::ShipDrawAxes axes) {

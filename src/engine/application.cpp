@@ -186,8 +186,9 @@ void Application::initializeScene() {
 	//TODO: load scene definition from file on demand
 	auto r = Registry::getSharedInstance();
 
+	auto ship = r->create<BaseGameObject>("Ship");
 	this->gameObjectSet->add(r->create<BaseGameObject>("Water"));
-	this->gameObjectSet->add(r->create<BaseGameObject>("Ship"));
+	this->gameObjectSet->add(ship);
 	
 	auto bo = r->create<BaseGameObject>();
 	bo->initialize();
@@ -200,6 +201,9 @@ void Application::initializeScene() {
 	c1->setNormalizedRect(Rectf(0, 0, 0.5, 1));
 	c2->setNormalizedRect(Rectf(0.5, 0.0, 0.5, 1));
 	c2->setDepth(1);
+
+	c1->setTrackedObject(ship);
+	c2->setTrackedObject(ship);
 
 	this->gameObjectSet->add(c1);
 	this->gameObjectSet->add(c2);

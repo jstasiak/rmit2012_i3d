@@ -9,7 +9,8 @@
 
 REGISTER(Camera);
 
-Camera::Camera() : BaseGameObject(), normalizedRect(), backgroundColor(), depth()
+Camera::Camera()
+	: BaseGameObject(), normalizedRect(), backgroundColor(), depth(), trackedObject()
 {
 
 }
@@ -76,9 +77,20 @@ void Camera::applyCamera() {
 	glClearColor(bg.x, bg.y, bg.z, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	auto ship = this->gameObjectSet.lock()->getSingleByClass<Ship>();
-	auto position = ship->getComponents()->getSingleByClass<Transform>()->getPosition();
-	gluLookAt(0, 100, 100,
-		position.x, 0, position.z,
-		0, 1, 0);
+	if(!this->trackedObject.expired()) {
+		auto to = this->trackedObject.lock();
+		auto position = to->getComponents()->getSingleByClass<Transform>()->getPosition();
+	
+		gluLookAt(0, 100, 100,
+			position.x, 0, position.z,
+			0, 1, 0);
+	}
+}
+
+std::weak_ptr<BaseGameObject> Camera::getTrackedObject() {
+	return this->trackedObject;
+}
+
+void Camera::setTrackedObject(std::shared_ptr<BaseGameObject> value) {
+	this->trackedObject = value;
 }

@@ -154,6 +154,8 @@ float Water::heightAtPositionAndTime(const glm::vec3* position, float time) cons
 }
 
 glm::vec3 Water::normalAtPositionAndTime(const glm::vec3* position, float time) const {
+	assert(this);
+
 	float dydx = this->waveX->derivativeForPositionAndTime(position->x, time);
 	float dydz = this->waveZ->derivativeForPositionAndTime(position->z, time);
 

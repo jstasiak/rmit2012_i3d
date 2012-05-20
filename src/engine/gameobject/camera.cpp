@@ -6,6 +6,7 @@
 #include "../application.h"
 #include "gameobjectset.h"
 #include "transform.h"
+#include "../scene.h"
 
 REGISTER(Camera);
 
@@ -15,7 +16,7 @@ Camera::Camera()
 
 }
 
-Rectf Camera::getNormalizedRect() const {
+Rectf Camera::getNormalizedRect() {
 	return this->normalizedRect;
 }
 
@@ -23,8 +24,8 @@ void Camera::setNormalizedRect(Rectf value) {
 	this->normalizedRect = value;
 }
 
-Recti Camera::getRect() const {
-	auto app = this->gameObjectSet.lock()->getOwner();
+Recti Camera::getRect() {
+	auto app = this->getApplication();
 
 	auto screenSize = app->getScreenSize();
 	auto w = screenSize.x;

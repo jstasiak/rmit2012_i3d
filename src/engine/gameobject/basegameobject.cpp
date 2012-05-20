@@ -12,16 +12,19 @@ BaseGameObject::BaseGameObject()
 {
 }
 
-void BaseGameObject::initialize() {
+std::shared_ptr<ComponentSet> BaseGameObject::getComponents() {
 	if(!this->components) {
-		this->setComponents(make_shared<ComponentSet>());
+		this->components = make_shared<ComponentSet>();
+		this->components->setOwner(this->getSharedPointer<BaseGameObject>());
 		this->components->add(Registry::getSharedInstance()->create<BaseComponent>("Transform"));
 	}
+
+	return this->components;
 }
 
 
 void BaseGameObject::start() {
-	auto l = this->components->getList();
+	auto l = this->getComponents()->getList();
 
 	for(auto i = l.begin(); i != l.end(); ++i) {
 		auto component = *i;
@@ -29,15 +32,6 @@ void BaseGameObject::start() {
 	}
 }
 
-shared_ptr<Application> BaseGameObject::getApplication() {
-	return this->gameObjectSet.lock()->getOwner();
-}
-
-void BaseGameObject::setComponents(std::shared_ptr< ComponentSet > value) {
-	if(this->components) {
-		this->components->setOwner(std::shared_ptr< BaseGameObject >(0));
-	}
-
-	this->components = value;
-	value->setOwner(this->getSharedPointer<BaseGameObject>());
+std::shared_ptr<Application> BaseGameObject::getApplication() {
+	return this->gameObjectSet.lock()->getApplication();
 }

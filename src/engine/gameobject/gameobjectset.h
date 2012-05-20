@@ -9,11 +9,13 @@
 #include "basegameobject.h"
 
 class Application;
+class Scene;
 
-class GameObjectSet : public ObjectSet<BaseGameObject, Application> {
+class GameObjectSet : public ObjectSet<BaseGameObject, Scene> {
 	Q_OBJECT
 
 protected: virtual void onAdd(std::shared_ptr<BaseGameObject> object);
+public: std::shared_ptr<Application> getApplication();
 };
 
 #endif

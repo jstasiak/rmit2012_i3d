@@ -107,7 +107,7 @@ void Ship::start() {
 void Ship::update(std::shared_ptr<FrameEventArgs> args) {
 	BaseGameObject::update(args);
 
-	auto transform = this->components->getSingleByClass<Transform>();
+	auto transform = this->getComponents()->getSingleByClass<Transform>();
 
 	float dt = args->getSeconds();
 
@@ -148,7 +148,9 @@ void Ship::update(std::shared_ptr<FrameEventArgs> args) {
 }
 
 void Ship::draw(std::shared_ptr<FrameEventArgs> args) {
-	auto transform = this->components->getSingleByClass<Transform>();
+	assert(this);
+
+	auto transform = this->getComponents()->getSingleByClass<Transform>();
 	auto position = transform->getPosition();
 
 	// Models is too big so I need to scale it

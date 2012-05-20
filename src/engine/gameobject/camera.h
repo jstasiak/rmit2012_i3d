@@ -19,10 +19,10 @@ private: std::weak_ptr<BaseGameObject> trackedObject;
 
 
 public: Q_INVOKABLE Camera();
-public: Rectf getNormalizedRect() const;
+public: Rectf getNormalizedRect();
 public: void setNormalizedRect(Rectf value);
 
-public: Recti getRect() const;
+public: Recti getRect();
 
 public: glm::vec3 getBackgroundColor() const;
 public: void setBackgroundColor(glm::vec3 value);

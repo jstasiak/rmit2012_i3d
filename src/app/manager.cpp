@@ -5,6 +5,8 @@
 #include "../engine/command.h"
 #include "../engine/gameobject/gameobjectset.h"
 #include "../engine/gameobject/basegameobject.h"
+#include "../engine/scene.h"
+
 #include "ship.h"
 #include "water.h"
 
@@ -18,7 +20,7 @@ Manager::Manager()
 }
 
 void Manager::start() {
-	auto app = this->gameObject->getGameObjectSet().lock()->getOwner();
+	auto app = this->gameObject->getApplication();
 	auto cs = app->getCommandSystem();
 
 	cs->registerCommand("toggle_wireframe", [this](command_parameters parameters) {

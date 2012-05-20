@@ -12,11 +12,9 @@ class Application;
 class BaseGameObject : public Object {
 	Q_OBJECT
 protected: std::weak_ptr<GameObjectSet> gameObjectSet;
-protected: std::shared_ptr<ComponentSet> components;
+private: std::shared_ptr<ComponentSet> components;
 
 public: Q_INVOKABLE BaseGameObject();
-
-public: void initialize();
 
 public: virtual void start();
 
@@ -25,7 +23,7 @@ public: virtual void update(std::shared_ptr<FrameEventArgs> args) {
 	}
 
 private: void updateComponents(std::shared_ptr<FrameEventArgs> args) {
-		auto l = this->components->getList();
+		auto l = this->getComponents()->getList();
 
 		for(auto i = l.begin(); i != l.end(); ++i) {
 			auto component = *i;
@@ -35,10 +33,7 @@ private: void updateComponents(std::shared_ptr<FrameEventArgs> args) {
 
 public: virtual void draw(std::shared_ptr<FrameEventArgs> args) {}
 
-public: std::shared_ptr<ComponentSet> getComponents() {
-		assert(this->components);
-		return this->components;
-	}
+public: std::shared_ptr<ComponentSet> getComponents();
 
 public: std::weak_ptr<GameObjectSet> getGameObjectSet() {
 		return this->gameObjectSet;
@@ -50,7 +45,6 @@ public: void setGameObjectSet(std::shared_ptr<GameObjectSet> value) {
 
 public: std::shared_ptr<Application> getApplication();
 
-private: void setComponents(std::shared_ptr<ComponentSet> value);
 };
 
 #endif

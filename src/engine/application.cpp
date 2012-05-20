@@ -9,6 +9,7 @@
 #include "gameobject/basegameobject.h"
 #include "gameobject/camera.h"
 #include "gameobject/transform.h"
+#include "scene.h"
 
 namespace po = boost::program_options;
 using namespace std;
@@ -16,7 +17,7 @@ using namespace std;
 Application::Application()
 	: commandSystem(new CommandSystem()),
 	bindings(),
-	gameObjectSet(),
+	scene(),
 	gameDir("data"),
 	surface(0)
 {
@@ -97,18 +98,20 @@ int Application::run() {
 		updateDt += dt;
 		drawDt += dt;
 
+		this->scene->startUnstartedGameObjects();
+
 		while(updateDt >= this->updateEverySeconds) {
 			//FIXME: HACK: develop smarter system of update managing
 			updateDt -= this->updateEverySeconds;
 			auto args = std::shared_ptr<FrameEventArgs>(
 				FrameEventArgs::createFromSecondsAndTotalSeconds(this->updateEverySeconds, now));
-			this->update(args);
+			this->scene->updateGameObjects(args);
 		}
 
 		if(drawDt >= this->drawEverySeconds) {
 			auto args = std::shared_ptr<FrameEventArgs>(
 				FrameEventArgs::createFromSecondsAndTotalSeconds(drawDt, now));
-			this->draw(args);
+			this->scene->draw(args);
 			drawDt = 0.0;
 		}
 	}
@@ -131,12 +134,11 @@ void Application::setDrawFps( int value )
 }
 
 void Application::initialize() {
-	this->gameObjectSet = std::make_shared<GameObjectSet>();
-	this->gameObjectSet->setOwner(this->getSharedPointer());
+	this->scene = make_shared<Scene>();
+	this->scene->setApplication(this->getSharedPointer());
+	this->scene->initialize();
 
 	this->initializeCommands();
-	this->initializeScene();
-	this->startGameObjects();
 
 	this->executeConfigFile("config.cfg");
 
@@ -182,42 +184,6 @@ void Application::initializeGraphics() {
 	glEnable(GL_SCISSOR_TEST);
 }
 
-void Application::initializeScene() {
-	//TODO: load scene definition from file on demand
-	auto r = Registry::getSharedInstance();
-
-	auto ship = r->create<BaseGameObject>("Ship");
-	this->gameObjectSet->add(r->create<BaseGameObject>("Water"));
-	this->gameObjectSet->add(ship);
-	
-	auto bo = r->create<BaseGameObject>();
-	bo->initialize();
-	bo->getComponents()->add(r->create<BaseComponent>("Manager"));
-	this->gameObjectSet->add(bo);
-
-
-	auto c1 = r->create<Camera>();
-	auto c2 = r->create<Camera>();
-	c1->setNormalizedRect(Rectf(0, 0, 0.5, 1));
-	c2->setNormalizedRect(Rectf(0.5, 0.0, 0.5, 1));
-	c2->setDepth(1);
-
-	c1->setTrackedObject(ship);
-	c2->setTrackedObject(ship);
-
-	this->gameObjectSet->add(c1);
-	this->gameObjectSet->add(c2);
-}
-
-void Application::startGameObjects() {
-	auto objects = this->gameObjectSet->getList();
-	for(auto i = objects.begin(); i != objects.end(); ++i) {
-		auto o = *i;
-		o->initialize();
-		o->start();
-	}
-}
-
 void Application::executeConfigFile(string configFile) {
 	auto fileName = QString::fromUtf8(this->getDataDirectory().c_str());
 	fileName += "/";
@@ -234,60 +200,6 @@ void Application::executeConfigFile(string configFile) {
 	}
 	else {
 		printf("Error opening config file %s\n", fileName.toStdString().c_str());
-	}
-}
-
-void Application::update(std::shared_ptr<FrameEventArgs> args) {
-	auto objects = this->gameObjectSet->getList();
-	for(auto i = objects.begin(); i != objects.end(); ++i) {
-		auto o = *i;
-		o->update(args);
-	}
-}
-
-void Application::draw(std::shared_ptr<FrameEventArgs> args) {
-	auto cameras = this->getSortedCameras();
-	BOOST_FOREACH(auto camera, cameras) {
-		camera->applyCamera();
-
-		// Enable lights in camera space only so light position is ok
-		this->enableLights();
-
-		this->drawGameObjects(args);
-	}
-
-	SDL_GL_SwapBuffers();
-}
-
-list < shared_ptr< Camera > > Application::getSortedCameras() const {
-	list < shared_ptr< Camera> > cameras;
-	auto all = this->gameObjectSet->getList();
-
-	BOOST_FOREACH(auto go, all) {
-		if(strcmp(go->metaObject()->className(), "Camera") == 0) {
-			cameras.push_back(go->getSharedPointer<Camera>());
-		}
-	}
-
-	auto cameraSorter = [](shared_ptr<Camera> c1, shared_ptr<Camera> c2) -> bool {
-		return c1->getDepth() < c2->getDepth();
-	};
-
-	cameras.sort(cameraSorter);
-
-	return cameras;
-}
-
-void Application::drawGameObjects(std::shared_ptr<FrameEventArgs> args) {
-	auto objects = this->gameObjectSet->getList();
-	for(auto i = objects.begin(); i != objects.end(); ++i) {
-		auto o = *i;
-		auto transform = o->getComponents()->getSingleByClass<Transform>();
-		auto pos = transform->getPosition();
-		glPushMatrix();
-		glTranslatef(pos.x, pos.y, pos.z);
-		o->draw(args);
-		glPopMatrix();
 	}
 }
 
@@ -350,27 +262,4 @@ std::string Application::getDataDirectory() const {
 
 glm::ivec2 Application::getScreenSize() const {
 	return glm::ivec2(this->surface->w, this->surface->h);
-}
-
-void Application::enableLights() {
-	//TODO: refactor it to separate light object
-	glEnable(GL_LIGHTING);
-
-	float white[] = {1.0f, 1.0f, 1.0f, 1.0f};
-	float black[] = {0.0f, 0.0f, 0.0f, 1.0f};
-	float position[] = {0.0f, 30.0f, -100.0f, 1.0f};
-
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, black);
-
-	float shininess[] = { 64.0f };
-
-	glMaterialfv(GL_FRONT, GL_SPECULAR, white);
-	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
-
-	glLightfv(GL_LIGHT0, GL_POSITION, position);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, black);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, white);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, white);
-
-	glEnable(GL_LIGHT0);
 }

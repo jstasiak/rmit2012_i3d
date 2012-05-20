@@ -38,6 +38,7 @@ HEADERS += src/precompile.h \
            src/engine/frameeventargs.h \
            src/engine/object.h \
            src/engine/utils.h \
+           src/engine/scene.h \
            libs/include/glm/ext.hpp \
            libs/include/glm/glm.hpp \
            src/engine/gameobject/basecomponent.h \
@@ -266,6 +267,7 @@ SOURCES += src/main.cpp \
            src/engine/command.cpp \
            src/engine/frameeventargs.cpp \
            src/engine/utils.cpp \
+           src/engine/scene.cpp \
            src/engine/gameobject/componentset.cpp \
            src/engine/gameobject/gameobjectset.cpp \
            src/engine/gameobject/objectset.cpp \

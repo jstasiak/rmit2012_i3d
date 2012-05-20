@@ -12,10 +12,24 @@
 class Object : public QObject, public std::enable_shared_from_this<Object> {
 Q_OBJECT
 
+private: std::string name;
+
+public: Object() : name("")
+	{
+	}
+
 public: virtual ~Object() {}
 
 public: template <class T> std::shared_ptr<T> getSharedPointer() {
 		return std::dynamic_pointer_cast<T>(this->shared_from_this());
+	}
+
+public: std::string getName() const {
+		return this->name;
+	}
+
+public: void setName(std::string value) {
+		this->name = value;
 	}
 };
 

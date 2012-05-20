@@ -62,44 +62,9 @@ void Ship::stopTurningRight() {
 }
 
 void Ship::start() {
-	auto app = this->getApplication();
-	auto cs = app->getCommandSystem();
-
 	this->water = this->getGameObjectSet().lock()->getSingleByClass<Water>() ;
 
-	// Acceleration commands
-	auto stopAcceleration = [this](command_parameters parameters) {
-		this->stopAcceleration();
-	};
-	cs->registerCommand("+accel", [this](command_parameters parameters) {
-		this->startAcceleration();
-	});
-
-	cs->registerCommand("-accel", stopAcceleration);
-
-	cs->registerCommand("+deccel", [this](command_parameters parameters) {
-		this->startDecceleration();
-	});
-
-	cs->registerCommand("-deccel", stopAcceleration);
-
-	// Turning commands
-	cs->registerCommand("+left", [this](command_parameters parameters) {
-		this->startTurningLeft();
-	});
-
-	cs->registerCommand("-left", [this](command_parameters parameters) {
-		this->stopTurningLeft();
-	});
-
-	cs->registerCommand("+right", [this](command_parameters parameters) {
-		this->startTurningRight();
-	});
-
-	cs->registerCommand("-right", [this](command_parameters parameters) {
-		this->stopTurningRight();
-	});
-
+	auto app = this->getApplication();
 	auto fileName = app->getDataDirectory() + string("/models/galleon.obj");
 	this->mesh = objMeshLoad(fileName.c_str());
 }

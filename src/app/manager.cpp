@@ -30,6 +30,55 @@ void Manager::start() {
 	cs->registerCommand("toggle_axes", [this](command_parameters parameters) {
 		this->toggleAxes();
 	});
+
+	auto getShip = [this](std::string id) -> std::shared_ptr<Ship> {
+		auto gos = this->getGameObject()->getGameObjectSet().lock();
+		auto name = std::string("ship") + id;
+		return gos->getSingleByName<Ship>(name);
+	};
+
+	// Acceleration commands
+	auto stopAcceleration = [this, getShip](command_parameters parameters) {
+		auto shipId = parameters.front();
+		getShip(shipId)->stopAcceleration();
+	};
+	cs->registerCommand("+accel", [this, getShip](command_parameters parameters) {
+		auto shipId = parameters.front();
+		getShip(shipId)->startAcceleration();
+	});
+
+	cs->registerCommand("-accel", stopAcceleration);
+
+	cs->registerCommand("+deccel", [this, getShip](command_parameters parameters) {
+		auto shipId = parameters.front();
+		getShip(shipId)->startDecceleration();
+	});
+
+	cs->registerCommand("-deccel", stopAcceleration);
+
+	// Turning commands
+	cs->registerCommand("+left", [this, getShip](command_parameters parameters) {
+		auto shipId = parameters.front();
+		getShip(shipId)->startTurningLeft();
+	});
+
+	cs->registerCommand("-left", [this, getShip](command_parameters parameters) {
+		auto shipId = parameters.front();
+		getShip(shipId)->stopTurningLeft();
+	});
+
+	cs->registerCommand("+right", [this, getShip](command_parameters parameters) {
+		auto shipId = parameters.front();
+		getShip(shipId)->startTurningRight();
+	});
+
+	cs->registerCommand("-right", [this, getShip](command_parameters parameters) {
+		auto shipId = parameters.front();
+		getShip(shipId)->stopTurningRight();
+	});
+
+
+
 }
 
 void Manager::update(std::shared_ptr<FrameEventArgs> args) {

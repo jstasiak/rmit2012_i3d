@@ -67,6 +67,34 @@ public: template<class T> std::list< std::shared_ptr< T > > getMultipleByClass()
 		return objects;
 	}
 
+public: template<class T> std::shared_ptr<T> getSingleByName(std::string name) {
+		auto multiple = this->getMultipleByName<T>(name);
+		auto size = multiple.size();
+
+		if(size == 0) {
+			throw DoesNotExist();
+		}
+		else if(size > 1) {
+			throw MultipleObjectsReturned();
+		}
+
+		return multiple.front();
+	}
+
+public: template<class T> std::list< std::shared_ptr< T > > getMultipleByName(std::string name) {
+		std::list< std::shared_ptr< T > > objects;
+
+		for(auto i = this->objects.begin(); i != this->objects.end(); ++i) {
+			auto o = *i;
+			if(o->getName() == name) {
+				objects.push_back(o->getSharedPointer<T>());
+			}
+		}
+		return objects;
+	}
+
+
+
 public: std::shared_ptr<TOwner> getOwner() {
 		return this->owner.lock();
 	}

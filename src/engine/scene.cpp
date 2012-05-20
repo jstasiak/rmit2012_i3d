@@ -22,9 +22,15 @@ void Scene::initialize() {
 	//TODO: load scene definition from file on demand
 	auto r = Registry::getSharedInstance();
 
-	auto ship = r->create<BaseGameObject>("Ship");
+	auto ship1 = r->create<BaseGameObject>("Ship");
+	ship1->setName("ship1");
+
+	auto ship2 = r->create<BaseGameObject>("Ship");
+	ship2->setName("ship2");
+
 	objects->add(r->create<BaseGameObject>("Water"));
-	objects->add(ship);
+	objects->add(ship1);
+	objects->add(ship2);
 	
 	auto bo = r->create<BaseGameObject>();
 	bo->getComponents()->add(r->create<BaseComponent>("Manager"));
@@ -37,12 +43,13 @@ void Scene::initialize() {
 	c2->setNormalizedRect(Rectf(0.5, 0.0, 0.5, 1));
 	c2->setDepth(1);
 
-	c1->setTrackedObject(ship);
-	c2->setTrackedObject(ship);
+	c1->setTrackedObject(ship1);
+	c2->setTrackedObject(ship2);
 
 	objects->add(c1);
 	objects->add(c2);
-	
+
+		
 	BOOST_FOREACH(auto o, objects->getList()) {
 		this->newlyAddedObjects.push_back(o);
 	}

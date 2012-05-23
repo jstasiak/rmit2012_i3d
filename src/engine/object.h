@@ -9,12 +9,19 @@
 #include <QMetaType>
 #include <QString>
 
+class NotImplemented : public std::exception {
+public: virtual const char* what() const {
+		return "NotImplemented";
+	}
+};
+
 class Object : public QObject, public std::enable_shared_from_this<Object> {
 Q_OBJECT
 
 private: std::string name;
+private: bool destroying;
 
-public: Object() : name("")
+public: Object() : name(""), destroying(false)
 	{
 	}
 
@@ -31,7 +38,24 @@ public: std::string getName() const {
 public: void setName(std::string value) {
 		this->name = value;
 	}
+
+
+public: void destroy() {
+		this->destroying = true;
+	}
+
+public: bool isDestroying() const {
+		return this->destroying;
+	}
+
+public: virtual void destroyImmediately() {
+		throw NotImplemented();
+	}
 };
+
+
+
+
 
 class Registry {
 private: QMap<QString, const QMetaObject*> metaLookup;

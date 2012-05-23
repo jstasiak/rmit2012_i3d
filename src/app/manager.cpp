@@ -5,6 +5,7 @@
 #include "../engine/command.h"
 #include "../engine/gameobject/gameobjectset.h"
 #include "../engine/gameobject/basegameobject.h"
+#include "../engine/gameobject/transform.h"
 #include "../engine/scene.h"
 
 #include "ship.h"
@@ -75,6 +76,23 @@ void Manager::start() {
 	cs->registerCommand("-right", [this, getShip](command_parameters parameters) {
 		auto shipId = parameters.front();
 		getShip(shipId)->stopTurningRight();
+	});
+
+	cs->registerCommand("test", [this, getShip](command_parameters parameters) {
+		try {
+			auto ship = getShip("test");
+			printf("ship exists, destroying...\n");
+			ship->destroy();
+		}
+		catch(const DoesNotExist& e) {
+			printf("there's no ship, creating new\n");
+			auto scene = this->getGameObject()->getGameObjectSet().lock()->getOwner();
+			auto r = Registry::getSharedInstance();
+			auto newShip = r->create<BaseGameObject>("Ship");
+			newShip->getComponents()->getSingleByClass<Transform>()->setPosition(glm::vec3(5, 0, 5));
+			newShip->setName("shiptest");
+			scene->add(newShip);
+		}
 	});
 
 

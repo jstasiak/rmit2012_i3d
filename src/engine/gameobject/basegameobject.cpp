@@ -2,6 +2,7 @@
 
 #include "basegameobject.h"
 #include "gameobjectset.h"
+#include "basecomponent.h"
 
 using namespace std;
 
@@ -34,4 +35,9 @@ void BaseGameObject::start() {
 
 std::shared_ptr<Application> BaseGameObject::getApplication() {
 	return this->gameObjectSet.lock()->getApplication();
+}
+
+void BaseGameObject::destroyImmediately() {
+	this->getComponents()->destroyImmediately();
+	this->gameObjectSet.reset();
 }

@@ -108,6 +108,8 @@ int Application::run() {
 			this->scene->updateGameObjects(args);
 		}
 
+		this->scene->deleteDestroyedGameObjects();
+
 		if(drawDt >= this->drawEverySeconds) {
 			auto args = std::shared_ptr<FrameEventArgs>(
 				FrameEventArgs::createFromSecondsAndTotalSeconds(drawDt, now));
@@ -211,6 +213,7 @@ string sdlKeyToOurKey(SDLKey key) {
 	else if(our == string("=")) {
 		our = "plus";
 	}
+	std::replace(our.begin(), our.end(), ' ', '_');
 
 	return our;
 }

@@ -11,14 +11,12 @@ using namespace std;
 
 Scene::Scene()
 	: gameObjects(),
-	newlyAddedObjects(),
+	notStartedObjects(),
 	application()
 {
 }
 
 void Scene::initialize() {
-	auto objects = this->getGameObjects();
-
 	//TODO: load scene definition from file on demand
 	auto r = Registry::getSharedInstance();
 
@@ -28,13 +26,13 @@ void Scene::initialize() {
 	auto ship2 = r->create<BaseGameObject>("Ship");
 	ship2->setName("ship2");
 
-	objects->add(r->create<BaseGameObject>("Water"));
-	objects->add(ship1);
-	objects->add(ship2);
+	this->add(r->create<BaseGameObject>("Water"));
+	this->add(ship1);
+	this->add(ship2);
 	
 	auto bo = r->create<BaseGameObject>();
 	bo->getComponents()->add(r->create<BaseComponent>("Manager"));
-	objects->add(bo);
+	this->add(bo);
 
 
 	auto c1 = r->create<Camera>();
@@ -46,13 +44,8 @@ void Scene::initialize() {
 	c1->setTrackedObject(ship1);
 	c2->setTrackedObject(ship2);
 
-	objects->add(c1);
-	objects->add(c2);
-
-		
-	BOOST_FOREACH(auto o, objects->getList()) {
-		this->newlyAddedObjects.push_back(o);
-	}
+	this->add(c1);
+	this->add(c2);
 }
 
 
@@ -74,15 +67,18 @@ std::shared_ptr<GameObjectSet> Scene::getGameObjects() {
 	return this->gameObjects;
 }
 
+void Scene::deleteDestroyedGameObjects() {
+	this->getGameObjects()->deleteDestroyed();
+}
 
 void Scene::startUnstartedGameObjects() {
-	auto& objects = this->newlyAddedObjects;
+	auto& objects = this->notStartedObjects;
 	for(auto i = objects.begin(); i != objects.end(); ++i) {
 		auto o = *i;
 		o->start();
 	}
 
-	this->newlyAddedObjects.clear();
+	objects.clear();
 }
 
 void Scene::updateGameObjects(std::shared_ptr<FrameEventArgs> args) {
@@ -160,4 +156,10 @@ void Scene::drawGameObjects(std::shared_ptr<FrameEventArgs> args) {
 		o->draw(args);
 		glPopMatrix();
 	}
+}
+
+void Scene::add(std::shared_ptr<BaseGameObject> object) {
+	auto objects = this->getGameObjects();
+	objects->add(object);
+	this->notStartedObjects.push_back(object);
 }

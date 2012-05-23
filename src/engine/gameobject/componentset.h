@@ -6,8 +6,9 @@
 
 #include "../object.h"
 #include "objectset.h"
+#include "basecomponent.h"
 
-class BaseComponent;
+
 class BaseGameObject;
 
 class ComponentSet : public ObjectSet<BaseComponent, BaseGameObject> {
@@ -16,4 +17,4 @@ class ComponentSet : public ObjectSet<BaseComponent, BaseGameObject> {
 protected: virtual void onAdd(std::shared_ptr<BaseComponent> object);
 };
 
-#endif // COMPONENTSET_H
+#endif

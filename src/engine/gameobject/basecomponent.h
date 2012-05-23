@@ -28,6 +28,8 @@ public: virtual void update(std::shared_ptr<FrameEventArgs> args) {}
 
 public: ~BaseComponent() {}
 
+public: virtual void destroyImmediately();
+
 };
 
 #endif

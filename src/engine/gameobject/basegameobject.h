@@ -45,6 +45,8 @@ public: void setGameObjectSet(std::shared_ptr<GameObjectSet> value) {
 
 public: std::shared_ptr<Application> getApplication();
 
+public: virtual void destroyImmediately();
+
 };
 
 #endif

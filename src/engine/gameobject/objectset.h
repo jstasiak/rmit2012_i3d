@@ -12,7 +12,10 @@ class ObjectSetException : public std::exception {};
 class DoesNotExist : public ObjectSetException {};
 class MultipleObjectsReturned : public ObjectSetException {};
 
+
+
 template< class TElement, class TOwner >
+
 class ObjectSet : public Object {
 
 protected: std::weak_ptr<TOwner> owner;
@@ -32,6 +35,10 @@ public: template< class T > void add(std::shared_ptr<T> object) {
 		auto casted = object->getSharedPointer<TElement>();
 		this->objects.push_back(casted);
 		this->onAdd(casted);
+	}
+
+public: void remove(std::shared_ptr<TElement> object) {
+		this->objects.remove(object);
 	}
 
 protected: virtual void onAdd(std::shared_ptr<TElement> object) {}
@@ -101,6 +108,24 @@ public: std::shared_ptr<TOwner> getOwner() {
 
 public: void setOwner(std::weak_ptr<TOwner> value) {
 		this->owner = value;
+	}
+
+public: virtual void destroyImmediately() {
+		BOOST_FOREACH(auto op, this->objects) {
+			op->destroyImmediately();
+		}	
+		this->objects.clear();
+	}
+
+		
+public: void deleteDestroyed() {
+		std::list< std::shared_ptr< TElement > > cp(this->objects);
+		BOOST_FOREACH(auto o, cp) {
+			if(o->isDestroying()) {
+				o->destroyImmediately();
+				this->objects.remove(o);
+			}
+		}
 	}
 };
 

@@ -16,7 +16,7 @@ class Scene : public Object {
 
 private: std::weak_ptr<Application> application;
 private: std::shared_ptr<GameObjectSet> gameObjects;
-private: std::list< std::shared_ptr< BaseGameObject > > newlyAddedObjects;
+private: std::list< std::shared_ptr< BaseGameObject > > notStartedObjects;
 
 public: Scene();
 public: void initialize();
@@ -24,16 +24,18 @@ public: void initialize();
 public: std::shared_ptr<Application> getApplication();
 public: void setApplication(std::weak_ptr<Application>);
 
-public: std::shared_ptr<GameObjectSet> getGameObjects();
+private: std::shared_ptr<GameObjectSet> getGameObjects();
 
 public: void startUnstartedGameObjects();
 public: void updateGameObjects(std::shared_ptr<FrameEventArgs> args);
-
+public: void deleteDestroyedGameObjects();
 
 public: void draw(std::shared_ptr<FrameEventArgs> args);
 private: std::list < std::shared_ptr< Camera > > getSortedCameras() const;
 private: void Scene::enableLights();
 private: void drawGameObjects(std::shared_ptr<FrameEventArgs> args);
+
+public: void add(std::shared_ptr<BaseGameObject> object);
 };
 
 #endif

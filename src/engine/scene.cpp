@@ -22,9 +22,11 @@ void Scene::initialize() {
 
 	auto ship1 = r->create<BaseGameObject>("Ship");
 	ship1->setName("ship1");
+	ship1->getComponents()->getSingleByClass<Transform>()->setPosition(glm::vec3(100, 0, 100));
 
 	auto ship2 = r->create<BaseGameObject>("Ship");
 	ship2->setName("ship2");
+	ship2->getComponents()->getSingleByClass<Transform>()->setPosition(glm::vec3(-100, 0, -100));
 
 	this->add(r->create<BaseGameObject>("Water"));
 	this->add(ship1);
@@ -41,8 +43,11 @@ void Scene::initialize() {
 	c2->setNormalizedRect(Rectf(0.5, 0.0, 0.5, 1));
 	c2->setDepth(1);
 
-	c1->setTrackedObject(ship1);
-	c2->setTrackedObject(ship2);
+	c1->setOwnerObject(ship1);
+	c1->setTrackedObject(ship2);
+	
+	c2->setOwnerObject(ship2);
+	c2->setTrackedObject(ship1);
 
 	this->add(c1);
 	this->add(c2);

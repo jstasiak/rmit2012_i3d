@@ -16,6 +16,7 @@ private: Rectf normalizedRect;
 private: glm::vec3 backgroundColor;
 private: float depth;
 private: std::weak_ptr<BaseGameObject> trackedObject;
+private: std::weak_ptr<BaseGameObject> ownerObject;
 
 
 public: Q_INVOKABLE Camera();
@@ -34,6 +35,9 @@ public: void applyCamera();
 
 public: std::weak_ptr<BaseGameObject> getTrackedObject();
 public: void setTrackedObject(std::shared_ptr<BaseGameObject> value);
+
+public: std::weak_ptr< BaseGameObject > getOwnerObject();
+public: void setOwnerObject(std::shared_ptr< BaseGameObject > value);
 
 };
 

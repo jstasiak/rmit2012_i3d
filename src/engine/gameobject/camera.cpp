@@ -11,7 +11,13 @@
 REGISTER(Camera);
 
 Camera::Camera()
-	: BaseGameObject(), normalizedRect(), backgroundColor(), depth(), trackedObject()
+	:
+	BaseGameObject(),
+	normalizedRect(),
+	backgroundColor(),
+	depth(),
+	trackedObject(),
+	ownerObject()
 {
 
 }
@@ -78,12 +84,20 @@ void Camera::applyCamera() {
 	glClearColor(bg.x, bg.y, bg.z, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	if(!this->trackedObject.expired()) {
+	if(!this->trackedObject.expired() && !this->ownerObject.expired()) {
 		auto to = this->trackedObject.lock();
-		auto position = to->getComponents()->getSingleByClass<Transform>()->getPosition();
+		auto oo = this->ownerObject.lock();
+
+		auto ownerPosition = oo->getComponents()->getSingleByClass<Transform>()->getPosition();
+		auto trackedPosition = to->getComponents()->getSingleByClass<Transform>()->getPosition();
+
+		auto ownerToTracked = trackedPosition - ownerPosition;
+		ownerToTracked = glm::normalize(ownerToTracked);
+
+		auto cameraPosition = ownerPosition - 30.0f * ownerToTracked + glm::vec3(0, 50, 0);
 	
-		gluLookAt(0, 100, 100,
-			position.x, 0, position.z,
+		gluLookAt(cameraPosition.x, cameraPosition.y, cameraPosition.z,
+			trackedPosition.x, trackedPosition.y, trackedPosition.z,
 			0, 1, 0);
 	}
 }
@@ -94,4 +108,12 @@ std::weak_ptr<BaseGameObject> Camera::getTrackedObject() {
 
 void Camera::setTrackedObject(std::shared_ptr<BaseGameObject> value) {
 	this->trackedObject = value;
+}
+
+std::weak_ptr<BaseGameObject> Camera::getOwnerObject() {
+	return this->ownerObject;
+}
+
+void Camera::setOwnerObject(std::shared_ptr<BaseGameObject> value) {
+	this->ownerObject = value;
 }

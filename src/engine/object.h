@@ -86,9 +86,6 @@ public: template<class T> std::shared_ptr<T> create(const QString& className) {
 		QObject* qobjptr = mo->newInstance();
 		T* tptr = qobject_cast<T*>(qobjptr);
 
-		printf("Got object of class %s, casting to %s\n", qobjptr->metaObject()->className(),
-			T::staticMetaObject.className());	
-
 		if(!tptr) {
 			delete qobjptr;
 			throw std::exception("Class mismatch");

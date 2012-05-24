@@ -30,6 +30,8 @@ private: static const float ACCELERATION;
 private: float currentAcceleration;
 private: float velocity;
 
+private: bool useWaterLevel;
+
 
 private: static const float TURNING_SPEED_DEGREES_PER_SECOND;
 
@@ -55,6 +57,9 @@ public: virtual void update(std::shared_ptr<FrameEventArgs> args);
 public: virtual void draw(std::shared_ptr<FrameEventArgs> args);
 
 public: void setAxes(ShipDrawAxes axes);
+
+public: bool getUseWaterLevel() const;
+public: void setUseWaterLevel(bool value);
 };
 
 #endif

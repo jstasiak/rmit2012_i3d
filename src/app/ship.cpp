@@ -24,7 +24,8 @@ Ship::Ship()
 	currentTurningSpeedDegreesPerSecond(0),
 	yaw(0),
 	water(),
-	mesh(0)
+	mesh(0),
+	useWaterLevel(true)
 {
 }
 
@@ -102,14 +103,16 @@ void Ship::update(std::shared_ptr<FrameEventArgs> args) {
 		transform->setPosition(transform->getPosition() + dx);
 	}
 
-	auto water = this->gameObjectSet.lock()->getSingleByClass<Water>();
+	if(this->useWaterLevel) {
+		auto water = this->gameObjectSet.lock()->getSingleByClass<Water>();
 
-	// Modify ship y coordinate to match water height
-	float height = water->heightAtPositionAndTime(&transform->getPosition(), args->getTotalSeconds());
+		// Modify ship y coordinate to match water height
+		float height = water->heightAtPositionAndTime(&transform->getPosition(), args->getTotalSeconds());
 
-	auto pos = transform->getPosition();
-	pos.y = height;
-	transform->setPosition(pos);
+		auto pos = transform->getPosition();
+		pos.y = height;
+		transform->setPosition(pos);
+	}
 }
 
 void Ship::draw(std::shared_ptr<FrameEventArgs> args) {
@@ -129,17 +132,19 @@ void Ship::draw(std::shared_ptr<FrameEventArgs> args) {
 		drawAxes(150.0f);
 	}
 
-	// Calculate normal in ship position and roll/pitch according to this normal
-	auto normal = this->water->normalAtPositionAndTime(&position, args->getTotalSeconds());
+	if(this->useWaterLevel) {
+		// Calculate normal in ship position and roll/pitch according to this normal
+		auto normal = this->water->normalAtPositionAndTime(&position, args->getTotalSeconds());
 
-	auto vxy = glm::normalize(glm::vec3(normal.x, normal.y, 0));
-	auto vzy = glm::normalize(glm::vec3(0, normal.y, normal.z));
+		auto vxy = glm::normalize(glm::vec3(normal.x, normal.y, 0));
+		auto vzy = glm::normalize(glm::vec3(0, normal.y, normal.z));
 
-	float rollRadians = std::asin(vxy.x);
-	float pitchRadians = std::asin(vzy.z);
+		float rollRadians = std::asin(vxy.x);
+		float pitchRadians = std::asin(vzy.z);
 
-	glRotatef(glm::degrees(rollRadians), 0, 0, -1);
-	glRotatef(glm::degrees(pitchRadians), 1, 0, 0);
+		glRotatef(glm::degrees(rollRadians), 0, 0, -1);
+		glRotatef(glm::degrees(pitchRadians), 1, 0, 0);
+	}
 
 
 	if(this->axes == DrawWithRotation) {
@@ -171,4 +176,12 @@ Ship::~Ship() {
 
 void Ship::setAxes(Ship::ShipDrawAxes axes) {
 	this->axes = axes;
+}
+
+bool Ship::getUseWaterLevel() const {
+	return this->useWaterLevel;
+}
+
+void Ship::setUseWaterLevel(bool value) {
+	this->useWaterLevel = value;
 }

@@ -88,9 +88,11 @@ void Manager::start() {
 			printf("there's no ship, creating new\n");
 			auto scene = this->getGameObject()->getGameObjectSet().lock()->getOwner();
 			auto r = Registry::getSharedInstance();
-			auto newShip = r->create<BaseGameObject>("Ship");
-			newShip->getComponents()->getSingleByClass<Transform>()->setPosition(glm::vec3(5, 0, 5));
+			auto newShip = r->create<Ship>("Ship");
+			newShip->getComponents()->getSingleByClass<Transform>()->setPosition(glm::vec3(0, 100, 0));
+			newShip->setUseWaterLevel(false);
 			newShip->setName("shiptest");
+			newShip->getComponents()->add(r->create<BaseComponent>("RigidBody"));
 			scene->add(newShip);
 		}
 	});

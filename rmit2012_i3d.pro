@@ -48,6 +48,7 @@ HEADERS += src/precompile.h \
            src/engine/gameobject/gameobjectset.h \
            src/engine/gameobject/camera.h\
            src/engine/gameobject/transform.h \
+           src/engine/gameobject/rigidbody.h \
            libs/include/glm/core/_detail.hpp \
            libs/include/glm/core/_fixes.hpp \
            libs/include/glm/core/_swizzle.hpp \
@@ -275,5 +276,6 @@ SOURCES += src/main.cpp \
            src/engine/gameobject/basecomponent.cpp \
            src/engine/gameobject/basegameobject.cpp \
            src/engine/gameobject/transform.cpp \
+           src/engine/gameobject/rigidbody.cpp \
 
 win32-msvc2010:LIBS += SDL.lib

@@ -10,8 +10,8 @@ REGISTER(Water);
 Water::Water()
 	: size(300, 300),
 	segments(64),
-	waveX((new Wave())->setAmplitude(4)->setLength(73)->setFrequency(0.7f)),
-	waveZ((new Wave())->setAmplitude(4)->setLength(44)->setFrequency(0.5f)),
+	waveX((new Wave())->setAmplitude(3)->setLength(73)->setFrequency(0.7f)),
+	waveZ((new Wave())->setAmplitude(3)->setLength(44)->setFrequency(0.5f)),
 	time(0),
 	vertices(0),
 	normalsVisible(false),

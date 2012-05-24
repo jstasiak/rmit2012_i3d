@@ -20,8 +20,8 @@ const float Ship::TURNING_SPEED_DEGREES_PER_SECOND = 30.0f;
 
 Ship::Ship()
 	:
-	currentAcceleration(0),
-	currentTurningSpeedDegreesPerSecond(0),
+	currentAcceleration(0.0f),
+	currentTurningSpeedDegreesPerSecond(0.0f),
 	yaw(0),
 	water(),
 	mesh(0),
@@ -72,19 +72,23 @@ void Ship::start() {
 
 void Ship::update(std::shared_ptr<FrameEventArgs> args) {
 	BaseGameObject::update(args);
+}
+
+void Ship::fixedUpdate(std::shared_ptr<FrameEventArgs> args) {
+	BaseGameObject::fixedUpdate(args);
 
 	auto transform = this->getComponents()->getSingleByClass<Transform>();
 
 	float dt = args->getSeconds();
 
 	// If acceleration has non-zero value, change velocity
-	if(this->currentAcceleration != 0) {
+	if(this->currentAcceleration != 0.0f) {
 		auto dv = this->currentAcceleration * dt;
 		this->velocity = glm::clamp(this->velocity + dv, Ship::MIN_VELOCITY, Ship::MAX_VELOCITY);
 	}
 
 	// If velocity has greater-than-zero value, move or rotate ship
-	if(this->velocity > 0) {
+	if(this->velocity > 0.0f) {
 		// If angular speed is non-zero, rotate ship a little
 		if(this->currentTurningSpeedDegreesPerSecond != 0) {
 			auto dyaw = this->currentTurningSpeedDegreesPerSecond * dt;

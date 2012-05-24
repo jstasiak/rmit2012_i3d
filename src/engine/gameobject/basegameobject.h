@@ -18,6 +18,19 @@ public: Q_INVOKABLE BaseGameObject();
 
 public: virtual void start();
 
+public: virtual void fixedUpdate(std::shared_ptr<FrameEventArgs> args) {
+		this->fixedUpdateComponents(args);
+	}
+
+private: void fixedUpdateComponents(std::shared_ptr<FrameEventArgs> args) {
+		auto l = this->getComponents()->getList();
+
+		for(auto i = l.begin(); i != l.end(); ++i) {
+			auto component = *i;
+			component->fixedUpdate(args);
+		}
+	}
+
 public: virtual void update(std::shared_ptr<FrameEventArgs> args) {
 		this->updateComponents(args);
 	}

@@ -86,6 +86,14 @@ void Scene::startUnstartedGameObjects() {
 	objects.clear();
 }
 
+void Scene::fixedUpdateGameObjects(std::shared_ptr<FrameEventArgs> args) {
+	auto objects = this->gameObjects->getList();
+	for(auto i = objects.begin(); i != objects.end(); ++i) {
+		auto o = *i;
+		o->fixedUpdate(args);
+	}
+}
+
 void Scene::updateGameObjects(std::shared_ptr<FrameEventArgs> args) {
 	auto objects = this->gameObjects->getList();
 	for(auto i = objects.begin(); i != objects.end(); ++i) {

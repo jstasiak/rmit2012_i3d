@@ -24,6 +24,7 @@ public: void setGameObject(std::shared_ptr<BaseGameObject> gameObject) {
 	}
 
 public: virtual void start() {}
+public: virtual void fixedUpdate(std::shared_ptr<FrameEventArgs> args) {}
 public: virtual void update(std::shared_ptr<FrameEventArgs> args) {}
 
 public: ~BaseComponent() {}

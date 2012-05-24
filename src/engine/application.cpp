@@ -65,11 +65,10 @@ int Application::run() {
 
 	this->surface = surface;
 
-	double last = millisecondsNow() / 1000.0f;
-	float updateDt = 0.0f;
-	float drawDt = 0.0f;
-	double now = 0.0;
-	double dt = 0.0;
+	float last = millisecondsNow() / 1000.0f;
+	float lastUpdate = last;
+	float lastDraw = last;
+	float fixedUpdates = 0.0f;
 
 	bool running = true;
 
@@ -92,29 +91,37 @@ int Application::run() {
 			}
 		}
 
-		now = millisecondsNow() / 1000.0f;
-		dt = now - last;
-		last = now;
-		updateDt += dt;
-		drawDt += dt;
-
 		this->scene->startUnstartedGameObjects();
 
-		while(updateDt >= this->updateEverySeconds) {
-			//FIXME: HACK: develop smarter system of update managing
-			updateDt -= this->updateEverySeconds;
+		float now = millisecondsNow() / 1000.0f;
+		auto updateDt = now - lastUpdate;
+		lastUpdate = now;
+
+		this->scene->updateGameObjects(std::shared_ptr<FrameEventArgs>(
+				FrameEventArgs::createFromSecondsAndTotalSeconds(updateDt, now)
+			)
+		);
+
+		fixedUpdates += updateDt / this->updateEverySeconds;
+
+		while(fixedUpdates >= 1) {
+			fixedUpdates -= 1;
 			auto args = std::shared_ptr<FrameEventArgs>(
 				FrameEventArgs::createFromSecondsAndTotalSeconds(this->updateEverySeconds, now));
-			this->scene->updateGameObjects(args);
+			this->scene->fixedUpdateGameObjects(args);
 		}
 
 		this->scene->deleteDestroyedGameObjects();
+
+
+		now = millisecondsNow() / 1000.0f;
+		float drawDt = now - lastDraw;
 
 		if(drawDt >= this->drawEverySeconds) {
 			auto args = std::shared_ptr<FrameEventArgs>(
 				FrameEventArgs::createFromSecondsAndTotalSeconds(drawDt, now));
 			this->scene->draw(args);
-			drawDt = 0.0;
+			lastDraw = now;
 		}
 	}
 	this->surface = 0;

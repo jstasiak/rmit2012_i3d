@@ -27,6 +27,7 @@ public: void setApplication(std::weak_ptr<Application>);
 private: std::shared_ptr<GameObjectSet> getGameObjects();
 
 public: void startUnstartedGameObjects();
+public: void fixedUpdateGameObjects(std::shared_ptr<FrameEventArgs> args);
 public: void updateGameObjects(std::shared_ptr<FrameEventArgs> args);
 public: void deleteDestroyedGameObjects();
 

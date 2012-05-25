@@ -33,6 +33,7 @@ HEADERS += src/precompile.h \
            src/app/water.h \
            src/app/wave.h \
            src/app/manager.h \
+           src/app/projectile.h \
            src/engine/application.h \
            src/engine/command.h \
            src/engine/frameeventargs.h \
@@ -49,6 +50,7 @@ HEADERS += src/precompile.h \
            src/engine/gameobject/camera.h\
            src/engine/gameobject/transform.h \
            src/engine/gameobject/rigidbody.h \
+           src/engine/gameobject/ball.h \
            libs/include/glm/core/_detail.hpp \
            libs/include/glm/core/_fixes.hpp \
            libs/include/glm/core/_swizzle.hpp \
@@ -264,6 +266,7 @@ SOURCES += src/main.cpp \
            src/app/wave.cpp \
            src/app/manager.cpp \
            src/app/obj.cpp \
+           src/app/projectile.cpp \
            src/engine/application.cpp \
            src/engine/command.cpp \
            src/engine/frameeventargs.cpp \
@@ -277,5 +280,6 @@ SOURCES += src/main.cpp \
            src/engine/gameobject/basegameobject.cpp \
            src/engine/gameobject/transform.cpp \
            src/engine/gameobject/rigidbody.cpp \
+           src/engine/gameobject/ball.cpp \
 
 win32-msvc2010:LIBS += SDL.lib

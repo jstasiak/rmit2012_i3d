@@ -35,6 +35,10 @@ glm::vec3 RigidBody::getVelocity() const {
 	return this->velocity;
 }
 
+void RigidBody::setVelocity(glm::vec3 value) {
+	this->velocity = value;
+}
+
 void RigidBody::applyForce(glm::vec3 force, float seconds) {
 	auto acceleration = force * (1.0f / this->mass);
 	auto dvelocity = acceleration * seconds;

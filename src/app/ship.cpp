@@ -9,6 +9,10 @@
 #include "../engine/gameobject/gameobjectset.h"
 #include "../engine/gameobject/transform.h"
 
+#include "../engine/gameobject/ball.h"
+#include "../engine/gameobject/rigidbody.h"
+#include "../engine/scene.h"
+
 using namespace std;
 
 REGISTER(Ship);
@@ -60,6 +64,20 @@ void Ship::stopTurningRight() {
 	if(this->currentTurningSpeedDegreesPerSecond < 0) {
 		this->currentTurningSpeedDegreesPerSecond = 0;
 	}
+}
+
+void Ship::fire(std::string side) {
+	auto transform = this->getComponents()->getSingleByClass< Transform >();
+
+	auto scene = this->getGameObjectSet().lock()->getOwner();
+	auto r = Registry::getSharedInstance();
+	auto ball = r->create<Ball>();
+	auto ballComponents = ball->getComponents();
+
+	ballComponents->getSingleByClass< Transform >()->setPosition(transform->getPosition());
+	ballComponents->add(r->create< RigidBody >());
+	ballComponents->getSingleByClass< RigidBody >()->setVelocity(glm::vec3(0, 0, 50));
+	scene->add(ball);
 }
 
 void Ship::start() {

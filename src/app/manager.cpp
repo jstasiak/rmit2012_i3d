@@ -10,6 +10,8 @@
 
 #include "ship.h"
 #include "water.h"
+#include "../engine/gameobject/ball.h"
+#include "../engine/gameobject/rigidbody.h"
 
 REGISTER(Manager);
 
@@ -78,26 +80,16 @@ void Manager::start() {
 		getShip(shipId)->stopTurningRight();
 	});
 
-	cs->registerCommand("test", [this, getShip](command_parameters parameters) {
-		try {
-			auto ship = getShip("test");
-			printf("ship exists, destroying...\n");
-			ship->destroy();
-		}
-		catch(const DoesNotExist& e) {
-			printf("there's no ship, creating new\n");
-			auto scene = this->getGameObject()->getGameObjectSet().lock()->getOwner();
-			auto r = Registry::getSharedInstance();
-			auto newShip = r->create<Ship>("Ship");
-			newShip->getComponents()->getSingleByClass<Transform>()->setPosition(glm::vec3(0, 100, 0));
-			newShip->setUseWaterLevel(false);
-			newShip->setName("shiptest");
-			newShip->getComponents()->add(r->create<BaseComponent>("RigidBody"));
-			scene->add(newShip);
-		}
+	cs->registerCommand("fire", [this, getShip](command_parameters parameters) {
+		assert(parameters.size() >= 2);
+		auto shipId = parameters.at(0);
+		auto side = parameters.at(1);
+		getShip(shipId)->fire(side);
 	});
 
-
+	cs->registerCommand("test", [this, getShip](command_parameters parameters) {
+		
+	});
 
 }
 

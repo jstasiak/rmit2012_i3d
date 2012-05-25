@@ -51,6 +51,8 @@ public: void stopTurningLeft();
 public: void startTurningRight();
 public: void stopTurningRight();
 
+public: void fire(std::string side);
+
 // BaseGameObject overrides
 public: virtual void start();
 public: virtual void fixedUpdate(std::shared_ptr<FrameEventArgs> args);

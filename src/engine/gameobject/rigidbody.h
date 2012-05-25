@@ -18,7 +18,9 @@ public: Q_INVOKABLE RigidBody();
 public: virtual void update(std::shared_ptr< FrameEventArgs > args);
 
 public: glm::vec3 getVelocity() const;
-		
+
+public: void setVelocity(glm::vec3 value);
+
 public: void applyForce(glm::vec3 force, float seconds);
 
 public: bool getGravityEnabled() const;

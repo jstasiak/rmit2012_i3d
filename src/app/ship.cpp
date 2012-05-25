@@ -26,7 +26,6 @@ Ship::Ship()
 	:
 	currentAcceleration(0.0f),
 	currentTurningSpeedDegreesPerSecond(0.0f),
-	yaw(0),
 	water(),
 	mesh(0),
 	useWaterLevel(true)
@@ -110,19 +109,11 @@ void Ship::fixedUpdate(std::shared_ptr<FrameEventArgs> args) {
 		// If angular speed is non-zero, rotate ship a little
 		if(this->currentTurningSpeedDegreesPerSecond != 0) {
 			auto dyaw = this->currentTurningSpeedDegreesPerSecond * dt;
-			this->yaw = std::fmod(this->yaw + dyaw, 360.0f);
+			transform->rotateAroundLocal(glm::vec3(0, 1, 0), dyaw);
 		}
 
-		// Calculate forward vector based on current yaw
-		auto yawInRadians = glm::radians(this->yaw);
-		auto unit = glm::vec3(
-			std::cos(yawInRadians),
-			0,
-			-std::sin(yawInRadians));
-
 		// Move ship using forward vector
-		auto dx = unit * this->velocity * dt;
-		transform->setPosition(transform->getPosition() + dx);
+		transform->translateLocal(glm::vec3(0, 0, -1) * this->velocity * dt);
 	}
 
 	if(this->useWaterLevel) {
@@ -143,12 +134,13 @@ void Ship::draw(std::shared_ptr<FrameEventArgs> args) {
 	auto transform = this->getComponents()->getSingleByClass<Transform>();
 	auto position = transform->getPosition();
 
+	// Model isn't facing -Z direction, we shall correct it
+	glRotatef(90.0f, 0, 1, 0);
+
 	// Models is too big so I need to scale it
 	float scale = 0.3f;
+	
 	glScalef(scale, scale, scale);
-
-	// Apply current yaw
-	glRotatef(this->yaw, 0, 1, 0);
 
 	if(this->axes == Ship::Draw) {
 		drawAxes(150.0f);

@@ -19,7 +19,6 @@ public: enum ShipDrawAxes {
 };
 
 private: OBJMesh* mesh;
-private: float yaw;
 private: std::shared_ptr<Water> water;
 private: ShipDrawAxes axes;
 		 

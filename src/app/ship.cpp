@@ -73,9 +73,11 @@ void Ship::fire(std::string side) {
 	auto ball = r->create<Ball>();
 	auto ballComponents = ball->getComponents();
 
-	ballComponents->getSingleByClass< Transform >()->setPosition(transform->getPosition());
+	auto direction = (side == std::string("right") ? 1.0f : -1.0f) * transform->getRight();
+
+	ballComponents->getSingleByClass< Transform >()->setPosition(transform->getPosition() + glm::vec3(0, 10, 0));
 	ballComponents->add(r->create< RigidBody >());
-	ballComponents->getSingleByClass< RigidBody >()->setVelocity(glm::vec3(0, 0, 50));
+	ballComponents->getSingleByClass< RigidBody >()->setVelocity(direction * 50.0f);
 	scene->add(ball);
 }
 

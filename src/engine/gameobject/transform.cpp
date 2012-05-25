@@ -1,28 +1,65 @@
 #include "precompile.h"
 #include "transform.h"
 
+using namespace std;
+
 REGISTER(Transform);
 
 Transform::Transform()
-	: position(),
-	rotationDegrees()
+	:
+	matrix()
 {
 }
 
 
 glm::vec3 Transform::getPosition() const {
-	return this->position;
+	auto column = glm::column(this->matrix, 3);
+	return column.swizzle(glm::X, glm::Y, glm::Z);
 }
 
 void Transform::setPosition(glm::vec3 value) {
-	this->position = value;
+	this->translateGlobal(value + -this->getPosition());
 }
 
-
-glm::vec3 Transform::getRotationDegrees() const {
-	return this->rotationDegrees;
+glm::mat4x4 Transform::getMatrix() {
+	return this->matrix;
 }
 
-void Transform::setRotationDegrees(glm::vec3 value) {
-	this->rotationDegrees = value;
+glm::vec3 Transform::getForward() {
+	auto column = glm::column(this->matrix, 2);
+	glm::normalize(column);
+	glm::vec3 column3 = column.swizzle(glm::X, glm::Y, glm::Z);
+	return -column3;
+}
+
+glm::vec3 Transform::getUp() {
+	auto column = glm::column(this->matrix, 1);
+	glm::normalize(column);
+	return column.swizzle(glm::X, glm::Y, glm::Z);
+}
+
+glm::vec3 Transform::getRight() {
+	auto column = glm::column(this->matrix, 0);
+	glm::normalize(column);
+	return column.swizzle(glm::X, glm::Y, glm::Z);
+}
+
+void Transform::translateGlobal(glm::vec3 value) {
+	glm::mat4x4 mat;
+	mat = glm::translate(mat, value);
+	this->matrix = mat * this->matrix;
+}
+
+void Transform::translateLocal(glm::vec3 value) {
+	this->matrix = glm::translate(this->matrix, value);
+}
+
+void Transform::rotateAroundGlobal(glm::vec3 axis, float degrees) {
+	glm::mat4x4 mat;
+	mat = glm::rotate(mat, glm::radians(degrees), axis);
+	this->matrix = mat * this->matrix;
+}
+
+void Transform::rotateAroundLocal(glm::vec3 axis, float degrees) {
+	this->matrix = glm::rotate(this->matrix, glm::radians(degrees), axis);
 }

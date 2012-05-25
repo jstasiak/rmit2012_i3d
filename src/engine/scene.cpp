@@ -162,11 +162,16 @@ void Scene::drawGameObjects(std::shared_ptr<FrameEventArgs> args) {
 	auto objects = this->gameObjects->getList();
 	for(auto i = objects.begin(); i != objects.end(); ++i) {
 		auto o = *i;
-		auto transform = o->getComponents()->getSingleByClass<Transform>();
-		auto pos = transform->getPosition();
+
 		glPushMatrix();
-		glTranslatef(pos.x, pos.y, pos.z);
+
+		auto transform = o->getComponents()->getSingleByClass<Transform>();
+		auto matrix = transform->getMatrix();
+		auto matrixData = glm::value_ptr(matrix);
+		glMultMatrixf(matrixData);
+
 		o->draw(args);
+		
 		glPopMatrix();
 	}
 }

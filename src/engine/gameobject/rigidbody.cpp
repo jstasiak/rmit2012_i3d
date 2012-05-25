@@ -53,3 +53,24 @@ bool RigidBody::getGravityEnabled() const {
 void RigidBody::setGravityEnabled(bool value) {
 	this->gravityEnabled = value;
 }
+
+float RigidBody::getRadius() const {
+	return this->radius;
+}
+
+void RigidBody::setRadius(float value) {
+	this->radius = value;
+}
+
+bool RigidBody::collidesWith(std::shared_ptr< RigidBody> otherBody) {
+	assert(this);
+	auto thisTransform = this->getGameObject()->getComponents()->getSingleByClass<Transform>();
+	auto otherTransform = otherBody->getGameObject()->getComponents()->getSingleByClass<Transform>();
+
+	auto posA = thisTransform->getPosition();
+	auto posB = otherTransform->getPosition();
+	auto v = posB - posA;
+	float distance = glm::length(v);
+
+	return distance < (this->radius + otherBody->getRadius());
+}

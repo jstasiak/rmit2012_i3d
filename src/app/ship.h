@@ -58,6 +58,8 @@ public: virtual void fixedUpdate(std::shared_ptr<FrameEventArgs> args);
 public: virtual void update(std::shared_ptr<FrameEventArgs> args);
 public: virtual void draw(std::shared_ptr<FrameEventArgs> args);
 
+public: virtual void onCollide(std::shared_ptr< BaseGameObject > collider);
+
 public: void setAxes(ShipDrawAxes axes);
 
 public: bool getUseWaterLevel() const;

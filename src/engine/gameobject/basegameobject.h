@@ -44,7 +44,11 @@ private: void updateComponents(std::shared_ptr<FrameEventArgs> args) {
 		}
 	}
 
+public: virtual void onCollide(std::shared_ptr< BaseGameObject > collider);
+
 public: virtual void draw(std::shared_ptr<FrameEventArgs> args) {}
+
+
 
 public: std::shared_ptr<ComponentSet> getComponents();
 

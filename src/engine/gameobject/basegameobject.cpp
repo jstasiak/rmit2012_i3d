@@ -33,6 +33,17 @@ void BaseGameObject::start() {
 	}
 }
 
+
+void BaseGameObject::onCollide(std::shared_ptr< BaseGameObject > collider) {
+	auto l = this->getComponents()->getList();
+
+	for(auto i = l.begin(); i != l.end(); ++i) {
+		auto component = *i;
+		component->onCollide(collider);
+	}
+}
+
+
 std::shared_ptr<Application> BaseGameObject::getApplication() {
 	return this->gameObjectSet.lock()->getApplication();
 }

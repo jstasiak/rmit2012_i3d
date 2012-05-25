@@ -6,6 +6,7 @@
 #include "gameobject/gameobjectset.h"
 #include "gameobject/camera.h"
 #include "gameobject/transform.h"
+#include "gameobject/rigidbody.h"
 
 using namespace std;
 
@@ -20,13 +21,24 @@ void Scene::initialize() {
 	//TODO: load scene definition from file on demand
 	auto r = Registry::getSharedInstance();
 
-	auto ship1 = r->create<BaseGameObject>("Ship");
-	ship1->setName("ship1");
-	ship1->getComponents()->getSingleByClass<Transform>()->setPosition(glm::vec3(100, 0, 100));
+	auto createShip = [r](std::string name, glm::vec3 position) -> std::shared_ptr< BaseGameObject > {
+		auto ship = r->create< BaseGameObject >("Ship");
+		ship->setName(name);
+		auto components = ship->getComponents();
+		auto transform = components->getSingleByClass< Transform >();
+		transform->setPosition(position);
 
-	auto ship2 = r->create<BaseGameObject>("Ship");
-	ship2->setName("ship2");
-	ship2->getComponents()->getSingleByClass<Transform>()->setPosition(glm::vec3(-100, 0, -100));
+		auto body = r->create< RigidBody >();
+		body->setRadius(10);
+		body->setGravityEnabled(false);
+		
+		components->add(body);
+
+		return ship;
+	};
+
+	auto ship1 = createShip("ship1", glm::vec3(80, 0, 80));
+	auto ship2 = createShip("ship2", glm::vec3(-80, 0, -80));
 
 	this->add(r->create<BaseGameObject>("Water"));
 	this->add(ship1);
@@ -99,6 +111,35 @@ void Scene::updateGameObjects(std::shared_ptr<FrameEventArgs> args) {
 	for(auto i = objects.begin(); i != objects.end(); ++i) {
 		auto o = *i;
 		o->update(args);
+	}
+
+	this->checkForCollisions();
+}
+
+void Scene::checkForCollisions() {
+	auto objects = this->gameObjects->getList();
+	std::vector< std::shared_ptr< RigidBody > > bodies;
+
+	for(auto i = objects.begin(); i != objects.end(); ++i) {
+		auto o = *i;
+		try {
+			auto body = o->getComponents()->getSingleByClass< RigidBody >();
+			bodies.push_back(body);
+		}
+		catch(const DoesNotExist& e) {}
+	}
+
+	for(int i = 0; i < bodies.size(); ++i) {
+		auto bodyA = bodies.at(i);
+		for(int j = i + 1; j < bodies.size(); ++j) {
+			auto bodyB = bodies.at(j);
+			if(bodyA->collidesWith(bodyB)) {
+				auto gameObjectA = bodyA->getGameObject();
+				auto gameObjectB = bodyB->getGameObject();
+				gameObjectA->onCollide(gameObjectB);
+				gameObjectB->onCollide(gameObjectA);
+			}
+		}
 	}
 }
 

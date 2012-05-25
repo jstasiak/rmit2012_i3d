@@ -75,7 +75,10 @@ void Ship::fire(std::string side) {
 
 	auto direction = (side == std::string("right") ? 1.0f : -1.0f) * transform->getRight();
 
-	ballComponents->getSingleByClass< Transform >()->setPosition(transform->getPosition() + glm::vec3(0, 10, 0));
+	ballComponents->getSingleByClass< Transform >()->setPosition(
+		transform->getPosition() + glm::vec3(0, 10, 0) + direction * 5.0f
+	);
+
 	ballComponents->add(r->create< RigidBody >());
 	ballComponents->getSingleByClass< RigidBody >()->setVelocity(direction * 50.0f);
 	scene->add(ball);
@@ -186,6 +189,16 @@ void Ship::draw(std::shared_ptr<FrameEventArgs> args) {
 	} 	
 	glEnd();
 }
+
+void Ship::onCollide(std::shared_ptr< BaseGameObject > collider) {
+	BaseGameObject::onCollide(collider);
+
+	printf("Collision!\n");
+	this->destroy();
+	collider->destroy();
+}
+
+
 
 Ship::~Ship() {
 }

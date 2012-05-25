@@ -25,4 +25,9 @@ public: void applyForce(glm::vec3 force, float seconds);
 
 public: bool getGravityEnabled() const;
 public: void setGravityEnabled(bool value);
+
+public: float getRadius() const;
+public: void setRadius(float value);
+
+public: bool collidesWith(std::shared_ptr< RigidBody> otherBody);
 };

@@ -29,6 +29,7 @@ private: std::shared_ptr<GameObjectSet> getGameObjects();
 public: void startUnstartedGameObjects();
 public: void fixedUpdateGameObjects(std::shared_ptr<FrameEventArgs> args);
 public: void updateGameObjects(std::shared_ptr<FrameEventArgs> args);
+private: void checkForCollisions();
 public: void deleteDestroyedGameObjects();
 
 public: void draw(std::shared_ptr<FrameEventArgs> args);

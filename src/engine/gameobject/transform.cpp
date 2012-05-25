@@ -56,10 +56,10 @@ void Transform::translateLocal(glm::vec3 value) {
 
 void Transform::rotateAroundGlobal(glm::vec3 axis, float degrees) {
 	glm::mat4x4 mat;
-	mat = glm::rotate(mat, glm::radians(degrees), axis);
+	mat = glm::rotate(mat, degrees, axis);
 	this->matrix = mat * this->matrix;
 }
 
 void Transform::rotateAroundLocal(glm::vec3 axis, float degrees) {
-	this->matrix = glm::rotate(this->matrix, glm::radians(degrees), axis);
+	this->matrix = glm::rotate(this->matrix, degrees, axis);
 }

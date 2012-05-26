@@ -110,7 +110,9 @@ void Scene::updateGameObjects(std::shared_ptr<FrameEventArgs> args) {
 	auto objects = this->gameObjects->getList();
 	for(auto i = objects.begin(); i != objects.end(); ++i) {
 		auto o = *i;
-		o->update(args);
+		if(o->isActive()) {
+			o->update(args);
+		}
 	}
 
 	this->checkForCollisions();
@@ -162,7 +164,8 @@ std::list < std::shared_ptr< Camera > > Scene::getSortedCameras() const {
 	auto all = this->gameObjects->getList();
 
 	BOOST_FOREACH(auto go, all) {
-		if(strcmp(go->metaObject()->className(), "Camera") == 0) {
+		if(strcmp(go->metaObject()->className(), "Camera") == 0
+			&& go->isActive()) {
 			cameras.push_back(go->getSharedPointer<Camera>());
 		}
 	}
@@ -204,16 +207,18 @@ void Scene::drawGameObjects(std::shared_ptr<FrameEventArgs> args) {
 	for(auto i = objects.begin(); i != objects.end(); ++i) {
 		auto o = *i;
 
-		glPushMatrix();
+		if(o->isActive()) {
+			glPushMatrix();
 
-		auto transform = o->getComponents()->getSingleByClass<Transform>();
-		auto matrix = transform->getMatrix();
-		auto matrixData = glm::value_ptr(matrix);
-		glMultMatrixf(matrixData);
+			auto transform = o->getComponents()->getSingleByClass<Transform>();
+			auto matrix = transform->getMatrix();
+			auto matrixData = glm::value_ptr(matrix);
+			glMultMatrixf(matrixData);
 
-		o->draw(args);
+			o->draw(args);
 		
-		glPopMatrix();
+			glPopMatrix();
+		}
 	}
 }
 

@@ -9,7 +9,10 @@ using namespace std;
 REGISTER(BaseGameObject);
 
 BaseGameObject::BaseGameObject()
-	: gameObjectSet(), components(0)
+	:
+	gameObjectSet(),
+	components(0),
+	active(true)
 {
 }
 
@@ -51,4 +54,21 @@ std::shared_ptr<Application> BaseGameObject::getApplication() {
 void BaseGameObject::destroyImmediately() {
 	this->getComponents()->destroyImmediately();
 	this->gameObjectSet.reset();
+}
+
+
+bool BaseGameObject::isActive() const {
+	return this->active;
+}
+
+void BaseGameObject::setActive(bool value) {
+	this->active = value;
+}
+
+void BaseGameObject::activate() {
+	this->setActive(true);
+}
+
+void BaseGameObject::deactivate() {
+	this->setActive(false);
 }

@@ -11,8 +11,12 @@ class Application;
 
 class BaseGameObject : public Object {
 	Q_OBJECT
+
 protected: std::weak_ptr<GameObjectSet> gameObjectSet;
+
 private: std::shared_ptr<ComponentSet> components;
+
+private: bool active;
 
 public: Q_INVOKABLE BaseGameObject();
 
@@ -63,6 +67,11 @@ public: void setGameObjectSet(std::shared_ptr<GameObjectSet> value) {
 public: std::shared_ptr<Application> getApplication();
 
 public: virtual void destroyImmediately();
+
+public: bool isActive() const;
+public: void setActive(bool value);
+public: void activate();
+public: void deactivate();
 
 };
 

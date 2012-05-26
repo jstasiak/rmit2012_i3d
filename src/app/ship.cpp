@@ -194,8 +194,8 @@ void Ship::onCollide(std::shared_ptr< BaseGameObject > collider) {
 	BaseGameObject::onCollide(collider);
 
 	printf("Collision!\n");
-	this->destroy();
-	collider->destroy();
+	this->deactivate();
+	collider->deactivate();
 }
 
 

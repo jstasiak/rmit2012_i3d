@@ -17,7 +17,8 @@ Camera::Camera()
 	backgroundColor(),
 	depth(),
 	trackedObject(),
-	ownerObject()
+	ownerObject(),
+	forward()
 {
 
 }
@@ -112,7 +113,10 @@ void Camera::applyCamera() {
 		auto ownerToTracked = trackedPosition - ownerPosition;
 		ownerToTracked = glm::normalize(ownerToTracked);
 
-		auto cameraPosition = ownerPosition - 30.0f * ownerToTracked + glm::vec3(0, 50, 0);
+		auto cameraPosition = ownerPosition - 50.0f * ownerToTracked + glm::vec3(0, 50, 0);
+
+		this->forward = trackedPosition - cameraPosition;
+		this->forward = glm::normalize(this->forward);
 	
 		gluLookAt(cameraPosition.x, cameraPosition.y, cameraPosition.z,
 			trackedPosition.x, trackedPosition.y, trackedPosition.z,
@@ -136,4 +140,8 @@ std::weak_ptr<BaseGameObject> Camera::getOwnerObject() {
 
 void Camera::setOwnerObject(std::shared_ptr<BaseGameObject> value) {
 	this->ownerObject = value;
+}
+
+glm::vec3 Camera::getForward() const {
+	return this->forward;
 }

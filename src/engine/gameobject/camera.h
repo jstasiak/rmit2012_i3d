@@ -18,6 +18,7 @@ private: float depth;
 private: std::weak_ptr<BaseGameObject> trackedObject;
 private: std::weak_ptr<BaseGameObject> ownerObject;
 
+private: glm::vec3 forward;
 
 public: Q_INVOKABLE Camera();
 
@@ -43,6 +44,7 @@ public: void setTrackedObject(std::shared_ptr<BaseGameObject> value);
 public: std::weak_ptr< BaseGameObject > getOwnerObject();
 public: void setOwnerObject(std::shared_ptr< BaseGameObject > value);
 
+public: glm::vec3 getForward() const;
 };
 
 #endif

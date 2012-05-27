@@ -129,7 +129,7 @@ void Water::draw(std::shared_ptr<FrameEventArgs> args) {
 
 	float time = args->getTotalSeconds();
 	auto setTexcoordForPosition = [time](float* position) -> void {
-		glTexCoord2f((position[0] + time * 6.1f) / 110.0f, (position[2] + time * 9.1f) / 140.0f);
+		glTexCoord2f((position[0] - time * 6.1f) / 110.0f, (position[2] - time * 9.1f) / 140.0f);
 	};
 
 	glBegin(GL_TRIANGLES);

@@ -22,6 +22,7 @@
 
 #include <SDL.h>
 #include <SDL_ttf.h>
+#include <SDL_image.h>
 
 // For Windows, because SDL apparently redefines main to
 // mean something different

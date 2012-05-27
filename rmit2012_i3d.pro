@@ -40,6 +40,7 @@ HEADERS += src/precompile.h \
            src/engine/object.h \
            src/engine/utils.h \
            src/engine/scene.h \
+           src/engine/font.h \
            libs/include/glm/ext.hpp \
            libs/include/glm/glm.hpp \
            src/engine/gameobject/basecomponent.h \
@@ -272,6 +273,7 @@ SOURCES += src/main.cpp \
            src/engine/frameeventargs.cpp \
            src/engine/utils.cpp \
            src/engine/scene.cpp \
+           src/engine/font.cpp \
            src/engine/gameobject/componentset.cpp \
            src/engine/gameobject/gameobjectset.cpp \
            src/engine/gameobject/objectset.cpp \
@@ -282,4 +284,4 @@ SOURCES += src/main.cpp \
            src/engine/gameobject/rigidbody.cpp \
            src/engine/gameobject/ball.cpp \
 
-win32-msvc2010:LIBS += SDL.lib
+win32-msvc2010:LIBS += SDL.lib SDL_ttf.lib

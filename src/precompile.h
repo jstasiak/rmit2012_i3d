@@ -20,6 +20,7 @@
 
 
 #include <SDL.h>
+#include <SDL_ttf.h>
 
 // For Windows, because SDL apparently redefines main to
 // mean something different

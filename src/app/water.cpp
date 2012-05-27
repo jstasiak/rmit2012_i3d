@@ -4,11 +4,15 @@
 #include "../engine/application.h"
 #include "../engine/command.h"
 #include "../engine/utils.h"
+#include "../engine/scene.h"
+#include "../engine/gameobject/gameobjectset.h"
+#include "../engine/gameobject/camera.h"
+#include "../engine/gameobject/transform.h"
 
 REGISTER(Water);
 
 Water::Water()
-	: size(300, 300),
+	: size(600, 600),
 	segments(64),
 	waveX((new Wave())->setAmplitude(3)->setLength(89)->setFrequency(0.7f)),
 	waveZ((new Wave())->setAmplitude(3)->setLength(111)->setFrequency(0.5f)),
@@ -23,7 +27,6 @@ Water::Water()
 
 void Water::resetData() {
 	this->vertices.reset(new Vertex[this->verticesCount()]);
-	this->recalculate();
 }
 
 int Water::verticesCount() {
@@ -38,7 +41,16 @@ int Water::vertexIndex(int x, int z) {
 
 void Water::recalculate() {
 	float time = this->time;
-	auto center = glm::vec3(0, 0, 0);
+
+	// We center water plane at active camera position so there's always
+	// water around us
+
+	auto scene = this->getGameObjectSet().lock()->getOwner();
+	auto camera = scene->getActiveCamera();
+	auto cameraTransform = camera->getComponents()->getSingleByClass<Transform>();
+	auto center = cameraTransform->getPosition();
+	center.y = 0;
+
 
 	glm::vec2 segmentSize(this->size.x / this->segments,
 		this->size.y / this->segments);

@@ -19,15 +19,31 @@ public: enum DrawAxes {
 		ShipOriginWithRotation,
 	};
 
+public: enum GameState {
+		STATE_RUNNING,
+		STATE_PLAYER1_WON,
+		STATE_PLAYER2_WON,
+		STATE_DRAW
+	};
+
 private: bool wireframe;
 private: DrawAxes axes;
 
 public: Q_INVOKABLE Manager();
 
 public: virtual void start();
+
+private: void createShips();
+
+private: void resetGame();
+private: void clearShips();
+
+public: GameState getState();
+
 public: virtual void update(std::shared_ptr<FrameEventArgs> args);
 public: virtual void onGui();
 
+private: std::list< std::shared_ptr< Ship > > getShips();
 
 public: void toggleWireframe();
 public: void toggleAxes();

@@ -7,12 +7,15 @@
 #include "../engine/gameobject/basegameobject.h"
 #include "../engine/gameobject/transform.h"
 #include "../engine/scene.h"
-
-#include "ship.h"
-#include "water.h"
 #include "../engine/gameobject/ball.h"
 #include "../engine/gameobject/rigidbody.h"
 #include "../engine/font.h"
+#include "../engine/gameobject/camera.h"
+#include "../engine/utils.h"
+
+#include "ship.h"
+#include "water.h"
+
 
 REGISTER(Manager);
 
@@ -92,11 +95,100 @@ void Manager::start() {
 		getShip(shipId)->fire(side);
 	});
 
-	cs->registerCommand("test", [this, getShip](command_parameters parameters) {
-		
+	cs->registerCommand("reset", [this](command_parameters parameters) {
+		this->resetGame();
 	});
 
+	this->createShips();
 }
+
+
+void Manager::resetGame() {
+	if(this->getState() != Manager::STATE_RUNNING) {
+		this->clearShips();
+		this->createShips();
+	}
+}
+
+void Manager::clearShips() {
+	auto ships = this->getShips();
+	BOOST_FOREACH(auto ship, ships) {
+		ship->destroy();
+	}
+}
+
+void Manager::createShips() {
+	auto r = Registry::getSharedInstance();
+	auto createShip = [r](std::string name, glm::vec3 position) -> std::shared_ptr< BaseGameObject > {
+		auto ship = r->create< BaseGameObject >("Ship");
+		ship->setName(name);
+		auto components = ship->getComponents();
+		auto transform = components->getSingleByClass< Transform >();
+		transform->setPosition(position);
+
+		auto body = r->create< RigidBody >();
+		body->setRadius(10);
+		body->setGravityEnabled(false);
+		
+		components->add(body);
+
+		return ship;
+	};
+
+	auto ship1 = createShip("ship1", glm::vec3(80, 0, 80));
+	auto ship2 = createShip("ship2", glm::vec3(-80, 0, -80));
+
+	auto gos = this->gameObject->getGameObjectSet().lock();
+	auto scene = gos->getOwner();
+
+	scene->add(ship1);
+	scene->add(ship2);
+
+
+	auto c1 = r->create<Camera>();
+	auto c2 = r->create<Camera>();
+	c1->setNormalizedRect(Rectf(0, 0, 0.5, 1));
+	c2->setNormalizedRect(Rectf(0.5, 0.0, 0.5, 1));
+	c2->setDepth(1);
+
+	c1->setOwnerObject(ship1);
+	c1->setTrackedObject(ship2);
+	
+	c2->setOwnerObject(ship2);
+	c2->setTrackedObject(ship1);
+
+	scene->add(c1);
+	scene->add(c2);
+}
+
+Manager::GameState Manager::getState() {
+	auto gos = this->gameObject->getGameObjectSet().lock();
+	auto ship1 = gos->getSingleByName<Ship>("ship1");
+	auto ship2 = gos->getSingleByName<Ship>("ship2");
+
+	GameState state;
+
+	if(ship1->isDead()) {
+		if(ship2->isDead()) {
+			state = Manager::STATE_DRAW;
+		}
+		else {
+			state = Manager::STATE_PLAYER2_WON;
+		}
+	}
+	else {
+		if(ship2->isDead()) {
+			state = Manager::STATE_PLAYER1_WON;
+		}
+		else {
+			state = Manager::STATE_RUNNING;
+		}
+	}
+
+	return state;
+}
+
+
 
 void Manager::update(std::shared_ptr<FrameEventArgs> args) {
 	glPolygonMode(GL_FRONT, this->wireframe ? GL_LINE : GL_FILL);
@@ -111,8 +203,32 @@ void Manager::onGui() {
 	float fps = app->getCurrentDrawFps();
 	auto text = (boost::format("Draw FPS: %.1f") % fps).str();
 	this->font->drawText(glm::vec2(0, ss.y), 15, text);
+
+	auto state = this->getState();
+
+	std::string message("");
+
+	auto center = glm::vec2(ss.x * 1.0f / 2, ss.y * 1.0f / 2);
+
+	if(state != Manager::STATE_RUNNING) {
+		if(state == Manager::STATE_DRAW) {
+			message += std::string("DRAW");
+		}
+		else {
+			message += (boost::format("PLAYER %1% WON") % (state == Manager::STATE_PLAYER1_WON ? 1 : 2 )).str();
+		}
+
+		this->font->drawText(center, 30, message);
+
+		message = std::string("Press ENTER to reset");
+		this->font->drawText(center + glm::vec2(0, -40), 30, message);
+	}
 }
 
+std::list< std::shared_ptr< Ship > > Manager::getShips() {
+	auto gos = this->gameObject->getGameObjectSet().lock();
+	return gos->getMultipleByClass<Ship>();
+}
 
 
 void Manager::toggleWireframe() {

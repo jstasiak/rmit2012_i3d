@@ -31,10 +31,11 @@ private: float velocity;
 
 private: bool useWaterLevel;
 
-
 private: static const float TURNING_SPEED_DEGREES_PER_SECOND;
 
 private: float currentTurningSpeedDegreesPerSecond;
+
+private: int hp;
 
 public: Q_INVOKABLE Ship();
 
@@ -64,6 +65,13 @@ public: void setAxes(ShipDrawAxes axes);
 
 public: bool getUseWaterLevel() const;
 public: void setUseWaterLevel(bool value);
+
+public: int getHp();
+public: bool isDead();
+public: bool isAlive();
+
+public: void damage(int hp);
+private: void instantDeath();
 };
 
 #endif

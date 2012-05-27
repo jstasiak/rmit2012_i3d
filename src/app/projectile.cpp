@@ -6,6 +6,7 @@
 #include "../engine/gameobject/transform.h"
 
 #include "water.h"
+#include "ship.h"
 
 REGISTER(Projectile);
 
@@ -31,5 +32,10 @@ void Projectile::update(std::shared_ptr< FrameEventArgs > args) {
 }
 
 void Projectile::onCollide(std::shared_ptr< BaseGameObject > collider) {
-	this->destroy();
+	if(strcmp(collider->metaObject()->className(), "Ship") == 0) {
+		auto ship = collider->getSharedPointer<Ship>();
+		ship->damage(10);
+	}
+
+	this->gameObject->destroy();
 }

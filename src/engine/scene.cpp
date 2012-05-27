@@ -23,55 +23,18 @@ Scene::Scene()
 }
 
 void Scene::initialize() {
-	//TODO: load scene definition from file on demand
 	auto r = Registry::getSharedInstance();
 
 	auto app = this->getApplication();
 	auto skyboxFile = app->getDataDirectory() + std::string("/textures/skybox/miramar_large.jpg");
 	this->skybox = std::shared_ptr< Skybox >(new Skybox(skyboxFile));
 
-	auto createShip = [r](std::string name, glm::vec3 position) -> std::shared_ptr< BaseGameObject > {
-		auto ship = r->create< BaseGameObject >("Ship");
-		ship->setName(name);
-		auto components = ship->getComponents();
-		auto transform = components->getSingleByClass< Transform >();
-		transform->setPosition(position);
-
-		auto body = r->create< RigidBody >();
-		body->setRadius(10);
-		body->setGravityEnabled(false);
-		
-		components->add(body);
-
-		return ship;
-	};
-
-	auto ship1 = createShip("ship1", glm::vec3(80, 0, 80));
-	auto ship2 = createShip("ship2", glm::vec3(-80, 0, -80));
-
 	this->add(r->create<BaseGameObject>("Water"));
-	this->add(ship1);
-	this->add(ship2);
-	
+
+		
 	auto bo = r->create<BaseGameObject>();
 	bo->getComponents()->add(r->create<BaseComponent>("Manager"));
 	this->add(bo);
-
-
-	auto c1 = r->create<Camera>();
-	auto c2 = r->create<Camera>();
-	c1->setNormalizedRect(Rectf(0, 0, 0.5, 1));
-	c2->setNormalizedRect(Rectf(0.5, 0.0, 0.5, 1));
-	c2->setDepth(1);
-
-	c1->setOwnerObject(ship1);
-	c1->setTrackedObject(ship2);
-	
-	c2->setOwnerObject(ship2);
-	c2->setTrackedObject(ship1);
-
-	this->add(c1);
-	this->add(c2);
 }
 
 
@@ -113,6 +76,8 @@ void Scene::fixedUpdateGameObjects(std::shared_ptr<FrameEventArgs> args) {
 		auto o = *i;
 		o->fixedUpdate(args);
 	}
+
+	this->checkForCollisions();
 }
 
 void Scene::updateGameObjects(std::shared_ptr<FrameEventArgs> args) {
@@ -123,8 +88,6 @@ void Scene::updateGameObjects(std::shared_ptr<FrameEventArgs> args) {
 			o->update(args);
 		}
 	}
-
-	this->checkForCollisions();
 }
 
 void Scene::checkForCollisions() {
@@ -133,11 +96,13 @@ void Scene::checkForCollisions() {
 
 	for(auto i = objects.begin(); i != objects.end(); ++i) {
 		auto o = *i;
-		try {
-			auto body = o->getComponents()->getSingleByClass< RigidBody >();
-			bodies.push_back(body);
+		if(o->isActive() && !o->isDestroying()) {
+			try {
+				auto body = o->getComponents()->getSingleByClass< RigidBody >();
+				bodies.push_back(body);
+			}
+			catch(const DoesNotExist& e) {}
 		}
-		catch(const DoesNotExist& e) {}
 	}
 
 	for(int i = 0; i < bodies.size(); ++i) {
@@ -147,6 +112,11 @@ void Scene::checkForCollisions() {
 			if(bodyA->collidesWith(bodyB)) {
 				auto gameObjectA = bodyA->getGameObject();
 				auto gameObjectB = bodyB->getGameObject();
+				
+				printf("collision %s vs %s\n", gameObjectA->metaObject()->className(),
+					gameObjectB->metaObject()->className());
+
+
 				gameObjectA->onCollide(gameObjectB);
 				gameObjectB->onCollide(gameObjectA);
 			}
@@ -265,7 +235,12 @@ void Scene::drawGui() {
 		auto o = *i;
 
 		if(o->isActive()) {
-			o->onGui();
+			try {
+				o->onGui();
+			}
+			catch(const std::exception& e) {
+				printf("exception: %s\n", e.what());
+			}
 		}
 	}
 

@@ -28,7 +28,8 @@ Ship::Ship()
 	currentTurningSpeedDegreesPerSecond(0.0f),
 	water(),
 	mesh(0),
-	useWaterLevel(true)
+	useWaterLevel(true),
+	hp(100)
 {
 }
 
@@ -102,24 +103,26 @@ void Ship::fixedUpdate(std::shared_ptr<FrameEventArgs> args) {
 
 	auto transform = this->getComponents()->getSingleByClass<Transform>();
 
-	float dt = args->getSeconds();
+	if(this->isAlive()) {
+		float dt = args->getSeconds();
 
-	// If acceleration has non-zero value, change velocity
-	if(this->currentAcceleration != 0.0f) {
-		auto dv = this->currentAcceleration * dt;
-		this->velocity = glm::clamp(this->velocity + dv, Ship::MIN_VELOCITY, Ship::MAX_VELOCITY);
-	}
-
-	// If velocity has greater-than-zero value, move or rotate ship
-	if(this->velocity > 0.0f) {
-		// If angular speed is non-zero, rotate ship a little
-		if(this->currentTurningSpeedDegreesPerSecond != 0) {
-			auto dyaw = this->currentTurningSpeedDegreesPerSecond * dt;
-			transform->rotateAroundLocal(glm::vec3(0, 1, 0), dyaw);
+		// If acceleration has non-zero value, change velocity
+		if(this->currentAcceleration != 0.0f) {
+			auto dv = this->currentAcceleration * dt;
+			this->velocity = glm::clamp(this->velocity + dv, Ship::MIN_VELOCITY, Ship::MAX_VELOCITY);
 		}
 
-		// Move ship using forward vector
-		transform->translateLocal(glm::vec3(0, 0, -1) * this->velocity * dt);
+		// If velocity has greater-than-zero value, move or rotate ship
+		if(this->velocity > 0.0f) {
+			// If angular speed is non-zero, rotate ship a little
+			if(this->currentTurningSpeedDegreesPerSecond != 0) {
+				auto dyaw = this->currentTurningSpeedDegreesPerSecond * dt;
+				transform->rotateAroundLocal(glm::vec3(0, 1, 0), dyaw);
+			}
+
+			// Move ship using forward vector
+			transform->translateLocal(glm::vec3(0, 0, -1) * this->velocity * dt);
+		}
 	}
 
 	if(this->useWaterLevel) {
@@ -194,7 +197,9 @@ void Ship::draw(std::shared_ptr<FrameEventArgs> args) {
 void Ship::onCollide(std::shared_ptr< BaseGameObject > collider) {
 	BaseGameObject::onCollide(collider);
 
-	this->deactivate();
+	if(strcmp(collider->metaObject()->className(), "Ship") == 0) {
+		this->instantDeath();
+	}
 }
 
 
@@ -211,4 +216,24 @@ bool Ship::getUseWaterLevel() const {
 
 void Ship::setUseWaterLevel(bool value) {
 	this->useWaterLevel = value;
+}
+
+int Ship::getHp() {
+	return this->hp;
+}
+
+bool Ship::isDead() {
+	return this->hp <= 0;
+}
+
+bool Ship::isAlive() {
+	return this->hp > 0;
+}
+
+void Ship::damage(int damagePoints) {
+	this->hp -= damagePoints;
+}
+
+void Ship::instantDeath() {
+	this->hp = 0;
 }

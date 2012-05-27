@@ -110,6 +110,8 @@ int Application::run() {
 			)
 		);
 
+		this->scene->deleteDestroyedGameObjects();
+
 		fixedUpdates += updateDt / this->updateEverySeconds;
 
 		while(fixedUpdates >= 1) {
@@ -117,9 +119,9 @@ int Application::run() {
 			auto args = std::shared_ptr<FrameEventArgs>(
 				FrameEventArgs::createFromSecondsAndTotalSeconds(this->updateEverySeconds, now));
 			this->scene->fixedUpdateGameObjects(args);
-		}
 
-		this->scene->deleteDestroyedGameObjects();
+			this->scene->deleteDestroyedGameObjects();
+		}
 
 
 		now = millisecondsNow() / 1000.0f;
@@ -243,6 +245,10 @@ string sdlKeyToOurKey(SDLKey key) {
 	else if(our == string("=")) {
 		our = "plus";
 	}
+	else if(our == string("return")) {
+		our = "enter";
+	}
+
 	std::replace(our.begin(), our.end(), ' ', '_');
 
 	return our;

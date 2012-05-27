@@ -64,6 +64,10 @@ int Application::run() {
 	auto surface = SDL_SetVideoMode(1200, 600, 32, SDL_DOUBLEBUF | SDL_OPENGL | SDL_HWSURFACE);
 	assert(surface);
 
+	auto init = IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
+	assert(init);
+
+
 	this->surface = surface;
 
 	float last = millisecondsNow() / 1000.0f;
@@ -208,6 +212,8 @@ void Application::initializeGraphics() {
 
 	glEnable (GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 }
 
 void Application::executeConfigFile(string configFile) {

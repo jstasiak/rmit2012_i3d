@@ -52,6 +52,18 @@ public: virtual void onCollide(std::shared_ptr< BaseGameObject > collider);
 
 public: virtual void draw(std::shared_ptr<FrameEventArgs> args) {}
 
+public: virtual void onGui() {
+		this->onGuiComponents();
+	}
+
+private: virtual void onGuiComponents() {
+		auto l = this->getComponents()->getList();
+
+		for(auto i = l.begin(); i != l.end(); ++i) {
+			auto component = *i;
+			component->onGui();
+		}
+	}
 
 
 public: std::shared_ptr<ComponentSet> getComponents();

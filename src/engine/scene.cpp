@@ -7,6 +7,7 @@
 #include "gameobject/camera.h"
 #include "gameobject/transform.h"
 #include "gameobject/rigidbody.h"
+#include "application.h"
 
 using namespace std;
 
@@ -159,6 +160,8 @@ void Scene::draw(std::shared_ptr<FrameEventArgs> args) {
 		this->setActiveCamera(std::shared_ptr< Camera >());
 	}
 
+	this->drawGui();
+
 	SDL_GL_SwapBuffers();
 }
 
@@ -224,6 +227,41 @@ void Scene::drawGameObjects(std::shared_ptr<FrameEventArgs> args) {
 		}
 	}
 }
+
+void Scene::drawGui() {
+	// Set right matrices so OpenGL coordinates will map directly
+	// to screen coordinates
+
+
+	auto ss = this->getApplication()->getScreenSize();
+	int w = ss.x;
+	int h = ss.y;
+	glViewport(0, 0, w, h);
+	glScissor(0, 0, w, h);
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, w, 0, h, -1, 1);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glPushAttrib(GL_DEPTH_TEST);
+	glDisable(GL_DEPTH_TEST);
+
+
+	auto objects = this->gameObjects->getList();
+	for(auto i = objects.begin(); i != objects.end(); ++i) {
+		auto o = *i;
+
+		if(o->isActive()) {
+			o->onGui();
+		}
+	}
+
+	glPopAttrib();
+}
+
 
 void Scene::add(std::shared_ptr<BaseGameObject> object) {
 	auto objects = this->getGameObjects();

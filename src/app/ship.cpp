@@ -80,6 +80,7 @@ void Ship::fire(std::string side) {
 	);
 
 	ballComponents->add(r->create< RigidBody >());
+	ballComponents->add(r->create< BaseComponent >("Projectile"));
 	ballComponents->getSingleByClass< RigidBody >()->setVelocity(direction * 50.0f);
 	scene->add(ball);
 }
@@ -193,11 +194,8 @@ void Ship::draw(std::shared_ptr<FrameEventArgs> args) {
 void Ship::onCollide(std::shared_ptr< BaseGameObject > collider) {
 	BaseGameObject::onCollide(collider);
 
-	printf("Collision!\n");
 	this->deactivate();
-	collider->deactivate();
 }
-
 
 
 Ship::~Ship() {

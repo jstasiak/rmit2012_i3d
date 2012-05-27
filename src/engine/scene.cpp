@@ -201,8 +201,9 @@ void Scene::enableLights() {
 	float white[] = {1.0f, 1.0f, 1.0f, 1.0f};
 	float black[] = {0.0f, 0.0f, 0.0f, 1.0f};
 	float position[] = {0.0f, 30.0f, -100.0f, 1.0f};
+	float ambient[] = {0.2f, 0.2f, 0.2f, 1.0f};
 
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, black);
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient);
 
 	float shininess[] = { 64.0f };
 

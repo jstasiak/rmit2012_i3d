@@ -132,6 +132,21 @@ void Water::draw(std::shared_ptr<FrameEventArgs> args) {
 		glTexCoord2f((position[0] - time * 6.1f) / 110.0f, (position[2] - time * 9.1f) / 140.0f);
 	};
 
+	glColor4f(0.5f, 0.5f, 1.0f, 1.0f);
+
+	float elevation = -10.0f;
+
+	float xsize = this->size.x * 2.0f;
+	float ysize = this->size.y * 2.0f;
+
+	glBegin(GL_QUADS);
+		glVertex3f(-xsize, elevation, ysize);
+		glVertex3f(xsize, elevation, ysize);
+		glVertex3f(xsize, elevation, -ysize);
+		glVertex3f(-xsize, elevation, -ysize);
+	glEnd();
+
+
 	glBegin(GL_TRIANGLES);
 	
 	glColor4f(1.0f, 1.0f, 1.0f, 0.5f);

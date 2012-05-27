@@ -37,6 +37,11 @@ void Skybox::drawForCamera(std::shared_ptr< Camera > camera) {
 	float basex = 0.0f;
 	float basey = 0.0f;
 
+	glMatrixMode(GL_TEXTURE);
+	glPushMatrix();
+	glScalef(1.0f, -1.0f, 1.0f);
+	
+
     // Just in case we set all vertices to white.
     glColor4f(1,1,1,1);
 
@@ -89,10 +94,13 @@ void Skybox::drawForCamera(std::shared_ptr< Camera > camera) {
 		basex = 1 * dx;
 		basey = 0 * dy;
         glTexCoord2f(basex + 0, basey + 0); glVertex3f( -0.5f, -0.5f, -0.5f );
-        glTexCoord2f(basex + 0, basey + 1); glVertex3f( -0.5f, -0.5f,  0.5f );
-        glTexCoord2f(basex + 1, basey + 1); glVertex3f(  0.5f, -0.5f,  0.5f );
-        glTexCoord2f(basex + 1, basey + 0); glVertex3f(  0.5f, -0.5f, -0.5f );
+        glTexCoord2f(basex + 0, basey + dy); glVertex3f( -0.5f, -0.5f,  0.5f );
+        glTexCoord2f(basex + dx, basey + dy); glVertex3f(  0.5f, -0.5f,  0.5f );
+        glTexCoord2f(basex + dx, basey + 0); glVertex3f(  0.5f, -0.5f, -0.5f );
     glEnd();
+
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
 
     // Restore enable bits and matrix
     glPopAttrib();

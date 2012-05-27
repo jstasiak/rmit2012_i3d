@@ -22,14 +22,16 @@ protected:
 	std::string gameDir;
 
 private:
-	int updateFps;
-	int drawFps;
+	int desiredFixedUpdateFps;
+	int desiredDrawFps;
 
 	float updateEverySeconds;
 	float drawEverySeconds;
 
-public: void setUpdateFps(int value);
-public: void setDrawFps(int value);
+private: float currentDrawFps;
+
+public: void setDesiredFixedUpdateFps(int value);
+public: void setDesiredDrawFps(int value);
 
 public: Application();
 public: ~Application();
@@ -57,6 +59,8 @@ public: std::shared_ptr<Application> getSharedPointer();
 public: std::string getDataDirectory() const;
 
 public: glm::ivec2 getScreenSize() const;
+
+public: float getCurrentDrawFps() const;
 
 };
 

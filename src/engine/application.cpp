@@ -19,10 +19,11 @@ Application::Application()
 	bindings(),
 	scene(),
 	gameDir("data"),
-	surface(0)
+	surface(0),
+	currentDrawFps(0)
 {
-	setUpdateFps(77);
-	setDrawFps(60);
+	setDesiredFixedUpdateFps(77);
+	setDesiredDrawFps(60);
 }
 
 Application::~Application() {
@@ -69,6 +70,9 @@ int Application::run() {
 	float lastUpdate = last;
 	float lastDraw = last;
 	float fixedUpdates = 0.0f;
+
+	float drawSecondsAccumulator = 0.0f;
+	float drawFramesAccumulator = 0;
 
 	bool running = true;
 
@@ -122,24 +126,34 @@ int Application::run() {
 				FrameEventArgs::createFromSecondsAndTotalSeconds(drawDt, now));
 			this->scene->draw(args);
 			lastDraw = now;
+
+			drawSecondsAccumulator += drawDt;
+			drawFramesAccumulator++;
+
+			const float avgPeriod = 0.2f;
+			if(drawSecondsAccumulator >= avgPeriod) {
+				this->currentDrawFps = drawFramesAccumulator * 1.0f / drawSecondsAccumulator;
+				drawSecondsAccumulator = 0.0f;
+				drawFramesAccumulator = 0;
+			}
 		}
 	}
 	this->surface = 0;
 	return 0;
 }
 
-void Application::setUpdateFps( int value )
+void Application::setDesiredFixedUpdateFps( int value )
 {
 	assert(value > 0);
-	this->updateFps = value;
-	this->updateEverySeconds = 1.0f / this->updateFps;
+	this->desiredFixedUpdateFps = value;
+	this->updateEverySeconds = 1.0f / this->desiredFixedUpdateFps;
 }
 
-void Application::setDrawFps( int value )
+void Application::setDesiredDrawFps( int value )
 {
 	assert(value > 0);
-	this->drawFps = value;
-	this->drawEverySeconds = 1.0f / this->drawFps;
+	this->desiredDrawFps = value;
+	this->drawEverySeconds = 1.0f / this->desiredDrawFps;
 }
 
 void Application::initialize() {
@@ -275,4 +289,8 @@ std::string Application::getDataDirectory() const {
 
 glm::ivec2 Application::getScreenSize() const {
 	return glm::ivec2(this->surface->w, this->surface->h);
+}
+
+float Application::getCurrentDrawFps() const {
+	return this->currentDrawFps;
 }

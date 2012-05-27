@@ -13,7 +13,8 @@ using namespace std;
 Scene::Scene()
 	: gameObjects(),
 	notStartedObjects(),
-	application()
+	application(),
+	activeCamera()
 {
 }
 
@@ -148,12 +149,14 @@ void Scene::checkForCollisions() {
 void Scene::draw(std::shared_ptr<FrameEventArgs> args) {
 	auto cameras = this->getSortedCameras();
 	BOOST_FOREACH(auto camera, cameras) {
+		this->setActiveCamera(camera);
 		camera->applyCamera();
 
 		// Enable lights in camera space only so light position is ok
 		this->enableLights();
 
 		this->drawGameObjects(args);
+		this->setActiveCamera(std::shared_ptr< Camera >());
 	}
 
 	SDL_GL_SwapBuffers();
@@ -226,4 +229,12 @@ void Scene::add(std::shared_ptr<BaseGameObject> object) {
 	auto objects = this->getGameObjects();
 	objects->add(object);
 	this->notStartedObjects.push_back(object);
+}
+
+std::shared_ptr< Camera > Scene::getActiveCamera() {
+	return this->activeCamera;
+}
+
+void Scene::setActiveCamera(std::shared_ptr< Camera > value) {
+	this->activeCamera = value;
 }

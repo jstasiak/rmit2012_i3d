@@ -18,6 +18,8 @@ private: std::weak_ptr<Application> application;
 private: std::shared_ptr<GameObjectSet> gameObjects;
 private: std::list< std::shared_ptr< BaseGameObject > > notStartedObjects;
 
+private: std::shared_ptr< Camera > activeCamera;
+
 public: Scene();
 public: void initialize();
 
@@ -38,6 +40,9 @@ private: void Scene::enableLights();
 private: void drawGameObjects(std::shared_ptr<FrameEventArgs> args);
 
 public: void add(std::shared_ptr<BaseGameObject> object);
+
+public: std::shared_ptr< Camera > getActiveCamera();
+private: void setActiveCamera(std::shared_ptr< Camera > value);
 };
 
 #endif

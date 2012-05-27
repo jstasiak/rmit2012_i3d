@@ -10,6 +10,7 @@ struct Vertex {
 	float normal[3];
 };
 
+class Texture;
 
 class Water : public BaseGameObject {
 	Q_OBJECT
@@ -17,6 +18,8 @@ class Water : public BaseGameObject {
 private: bool axesVisible;
 private: bool normalsVisible;
 private: glm::vec2 size;
+
+private: std::shared_ptr< Texture > waterTexture;
 
 public: static const int MIN_SEGMENTS = 1;
 public: static const int MAX_SEGMENTS = 128;

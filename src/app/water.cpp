@@ -3,11 +3,13 @@
 
 #include "../engine/application.h"
 #include "../engine/command.h"
-#include "../engine/utils.h"
 #include "../engine/scene.h"
+#include "../engine/texture.h"
+#include "../engine/utils.h"
 #include "../engine/gameobject/gameobjectset.h"
 #include "../engine/gameobject/camera.h"
 #include "../engine/gameobject/transform.h"
+
 
 REGISTER(Water);
 
@@ -19,7 +21,8 @@ Water::Water()
 	time(0),
 	vertices(0),
 	normalsVisible(false),
-	axesVisible(false)
+	axesVisible(false),
+	waterTexture()
 {
 	this->resetData();
 
@@ -84,7 +87,11 @@ void Water::recalculate() {
 }
 
 void Water::start() {
-	auto cs = this->getApplication()->getCommandSystem();
+	auto app = this->getApplication();
+	auto cs = app->getCommandSystem();
+
+	auto textureFile = app->getDataDirectory() + std::string("/textures/tiles/water.jpg");
+	this->waterTexture = std::shared_ptr< Texture >(new Texture(textureFile));
 	
 	cs->registerCommand("increase_water_tesselation", [this](command_parameters parameters) {
 		this->doubleTesselationSafe();
@@ -112,16 +119,23 @@ void Water::draw(std::shared_ptr<FrameEventArgs> args) {
 	this->time = args->getTotalSeconds();
 	this->recalculate();
 
-
-	glColor3f(0.0f, 0.2f, 1.0f);
-
 	Vertex* base = this->vertices.get();
 	Vertex* v1 = 0;
 	Vertex* v2 = 0;
 	Vertex* v3 = 0;
 	Vertex* v4 = 0;
 
+	this->waterTexture->activate();
+
+	float time = args->getTotalSeconds();
+	auto setTexcoordForPosition = [time](float* position) -> void {
+		glTexCoord2f((position[0] + time * 6.1f) / 110.0f, (position[2] + time * 9.1f) / 140.0f);
+	};
+
 	glBegin(GL_TRIANGLES);
+	
+	glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+
 
 	for(int xsegment = 0; xsegment < this->segments; ++xsegment) {
 		for(int zsegment = 0; zsegment < this->segments; ++zsegment) {
@@ -131,28 +145,37 @@ void Water::draw(std::shared_ptr<FrameEventArgs> args) {
 			v4 = base + this->vertexIndex(xsegment, zsegment + 1);
 
 			// These normals are here only to show lighting effect, they're not proper normals
+
+			setTexcoordForPosition(v1->position);
 			glNormal3fv(v1->normal);
 			glVertex3fv(v1->position);
 
+			setTexcoordForPosition(v2->position);
 			glNormal3fv(v2->normal);
 			glVertex3fv(v2->position);
 
+			setTexcoordForPosition(v4->position);
 			glNormal3fv(v4->normal);
 			glVertex3fv(v4->position);
 
 
+			setTexcoordForPosition(v2->position);
 			glNormal3fv(v2->normal);
 			glVertex3fv(v2->position);
 
+			setTexcoordForPosition(v3->position);
 			glNormal3fv(v3->normal);
 			glVertex3fv(v3->position);
 
+			setTexcoordForPosition(v4->position);
 			glNormal3fv(v4->normal);
 			glVertex3fv(v4->position);
 		}
 	}
 		
 	glEnd();
+
+	this->waterTexture->deactivate();
 
 	if(this->normalsVisible) {
 		this->drawNormals();

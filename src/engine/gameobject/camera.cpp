@@ -22,6 +22,20 @@ Camera::Camera()
 
 }
 
+
+void Camera::update(std::shared_ptr< FrameEventArgs > args) {
+	BaseGameObject::update(args);
+
+	if(!this->ownerObject.expired()) {
+		auto oo = this->ownerObject.lock();
+		auto ootransform = oo->getComponents()->getSingleByClass<Transform>();
+		auto transform = this->getComponents()->getSingleByClass<Transform>();
+		transform->setPosition(ootransform->getPosition());
+	}
+}
+
+
+
 Rectf Camera::getNormalizedRect() {
 	return this->normalizedRect;
 }
@@ -29,6 +43,7 @@ Rectf Camera::getNormalizedRect() {
 void Camera::setNormalizedRect(Rectf value) {
 	this->normalizedRect = value;
 }
+
 
 Recti Camera::getRect() {
 	auto app = this->getApplication();
@@ -41,6 +56,7 @@ Recti Camera::getRect() {
 	return Recti(r.x * w, r.y * h, r.width * w, r.height * h);
 }
 
+
 glm::vec3 Camera::getBackgroundColor() const {
 	return this->backgroundColor;
 }
@@ -49,6 +65,7 @@ void Camera::setBackgroundColor(glm::vec3 value) {
 	this->backgroundColor = value;
 }
 
+
 float Camera::getDepth() const {
 	return this->depth;
 }
@@ -56,6 +73,7 @@ float Camera::getDepth() const {
 void Camera::setDepth(float value) {
 	this->depth = value;
 }
+
 
 void Camera::applyCamera() {
 	auto rect = this->getRect();
@@ -75,7 +93,7 @@ void Camera::applyCamera() {
 	float aspectRatio = rect.width * 1.0f / rect.height;
 	float fovX = 90.0f;
 
-	gluPerspective(fovX * aspectRatio, aspectRatio, 0.01f, 500.0f);
+	gluPerspective(fovX * aspectRatio, aspectRatio, 0.01f, 300.0f);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
@@ -102,6 +120,7 @@ void Camera::applyCamera() {
 	}
 }
 
+
 std::weak_ptr<BaseGameObject> Camera::getTrackedObject() {
 	return this->trackedObject;
 }
@@ -109,6 +128,7 @@ std::weak_ptr<BaseGameObject> Camera::getTrackedObject() {
 void Camera::setTrackedObject(std::shared_ptr<BaseGameObject> value) {
 	this->trackedObject = value;
 }
+
 
 std::weak_ptr<BaseGameObject> Camera::getOwnerObject() {
 	return this->ownerObject;

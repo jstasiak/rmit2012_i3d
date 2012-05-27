@@ -20,6 +20,10 @@ private: std::weak_ptr<BaseGameObject> ownerObject;
 
 
 public: Q_INVOKABLE Camera();
+
+public: virtual void update(std::shared_ptr< FrameEventArgs > args);
+
+
 public: Rectf getNormalizedRect();
 public: void setNormalizedRect(Rectf value);
 

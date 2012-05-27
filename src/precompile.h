@@ -19,6 +19,7 @@
 #include <boost/smart_ptr.hpp>
 #include <boost/tokenizer.hpp>
 
+#include <boost/random.hpp>
 
 #include <SDL.h>
 #include <SDL_ttf.h>

@@ -6,11 +6,13 @@
 #include "plane.h"
 
 class Texture;
+class PerlinNoise;
 
 class Water : public Plane {
 	Q_OBJECT
 
 private: std::shared_ptr< Texture > waterTexture;
+private: std::shared_ptr< PerlinNoise > noise;
 
 
 private: boost::scoped_ptr<Wave> waveX;

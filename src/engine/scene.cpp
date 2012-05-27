@@ -11,6 +11,8 @@
 #include "gameobject/rigidbody.h"
 #include "skybox.h"
 
+#include "../app/terrain.h"
+
 using namespace std;
 
 Scene::Scene()
@@ -29,8 +31,9 @@ void Scene::initialize() {
 	auto skyboxFile = app->getDataDirectory() + std::string("/textures/skybox/miramar_large.jpg");
 	this->skybox = std::shared_ptr< Skybox >(new Skybox(skyboxFile));
 
+	this->add(std::make_shared<Terrain>());
 	this->add(r->create<BaseGameObject>("Water"));
-
+	
 		
 	auto bo = r->create<BaseGameObject>();
 	bo->getComponents()->add(r->create<BaseComponent>("Manager"));

@@ -29,3 +29,7 @@ void drawAxes(float length) {
 	glEnd();
 	glEnable(GL_LIGHTING);
 }
+
+bool isPowerOf2(int n) {
+    return (n) && !(n & (n - 1));
+}

@@ -42,6 +42,7 @@ HEADERS += src/precompile.h \
            src/engine/scene.h \
            src/engine/font.h \
            src/engine/texture.h \
+           src/engine/skybox.h \
            libs/include/glm/ext.hpp \
            libs/include/glm/glm.hpp \
            src/engine/gameobject/basecomponent.h \
@@ -276,6 +277,7 @@ SOURCES += src/main.cpp \
            src/engine/scene.cpp \
            src/engine/font.cpp \
            src/engine/texture.cpp \
+           src/engine/skybox.cpp \
            src/engine/gameobject/componentset.cpp \
            src/engine/gameobject/gameobjectset.cpp \
            src/engine/gameobject/objectset.cpp \

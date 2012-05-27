@@ -1,13 +1,15 @@
 #include "precompile.h"
 #include "scene.h"
 
+#include "application.h"
+
 #include "utils.h"
 #include "gameobject/basegameobject.h"
 #include "gameobject/gameobjectset.h"
 #include "gameobject/camera.h"
 #include "gameobject/transform.h"
 #include "gameobject/rigidbody.h"
-#include "application.h"
+#include "skybox.h"
 
 using namespace std;
 
@@ -15,13 +17,18 @@ Scene::Scene()
 	: gameObjects(),
 	notStartedObjects(),
 	application(),
-	activeCamera()
+	activeCamera(),
+	skybox()
 {
 }
 
 void Scene::initialize() {
 	//TODO: load scene definition from file on demand
 	auto r = Registry::getSharedInstance();
+
+	auto app = this->getApplication();
+	auto skyboxFile = app->getDataDirectory() + std::string("/textures/skybox/miramar_large.jpg");
+	this->skybox = std::shared_ptr< Skybox >(new Skybox(skyboxFile));
 
 	auto createShip = [r](std::string name, glm::vec3 position) -> std::shared_ptr< BaseGameObject > {
 		auto ship = r->create< BaseGameObject >("Ship");
@@ -153,6 +160,8 @@ void Scene::draw(std::shared_ptr<FrameEventArgs> args) {
 		this->setActiveCamera(camera);
 		camera->applyCamera();
 
+		this->drawSkyboxForCamera(camera);
+
 		// Enable lights in camera space only so light position is ok
 		this->enableLights();
 
@@ -262,6 +271,11 @@ void Scene::drawGui() {
 	glPopAttrib();
 }
 
+void Scene::drawSkyboxForCamera(std::shared_ptr< Camera > camera) {
+	if(this->skybox) {
+		this->skybox->drawForCamera(camera);
+	}
+}
 
 void Scene::add(std::shared_ptr<BaseGameObject> object) {
 	auto objects = this->getGameObjects();

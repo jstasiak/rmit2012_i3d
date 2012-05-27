@@ -12,12 +12,14 @@
 #include "water.h"
 #include "../engine/gameobject/ball.h"
 #include "../engine/gameobject/rigidbody.h"
+#include "../engine/font.h"
 
 REGISTER(Manager);
 
 Manager::Manager()
 	:wireframe(false),
-	axes(Manager::WorldOrigin)
+	axes(Manager::WorldOrigin),
+	font()
 {
 
 }
@@ -25,6 +27,9 @@ Manager::Manager()
 void Manager::start() {
 	auto app = this->gameObject->getApplication();
 	auto cs = app->getCommandSystem();
+
+	auto fontFile = app->getDataDirectory() + std::string("/fonts/Comfortaa_Regular.ttf");
+	this->font = std::shared_ptr< Font >(new Font(fontFile));
 
 	cs->registerCommand("toggle_wireframe", [this](command_parameters parameters) {
 		this->toggleWireframe();
@@ -96,6 +101,18 @@ void Manager::start() {
 void Manager::update(std::shared_ptr<FrameEventArgs> args) {
 	glPolygonMode(GL_FRONT, this->wireframe ? GL_LINE : GL_FILL);
 }
+
+void Manager::onGui() {
+	BaseComponent::onGui();
+
+	auto app = this->gameObject->getApplication();
+	auto ss = app->getScreenSize();
+
+	float fps = app->getCurrentDrawFps();
+	auto text = (boost::format("Draw FPS: %.1f") % fps).str();
+	this->font->drawText(glm::vec2(0, ss.y), 15, text);
+}
+
 
 
 void Manager::toggleWireframe() {

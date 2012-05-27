@@ -13,6 +13,7 @@
 #include <boost/bind.hpp>
 #include <boost/date_time/posix_time/posix_time_types.hpp>
 #include <boost/foreach.hpp>
+#include <boost/format.hpp>
 #include <boost/program_options.hpp>
 #include <boost/signal.hpp>
 #include <boost/smart_ptr.hpp>

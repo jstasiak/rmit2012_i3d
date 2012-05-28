@@ -1,7 +1,7 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include <gl/GL.h>
+#include <GL/gl.h>
 
 class Texture {
 private: GLuint textureId;

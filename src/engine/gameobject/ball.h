@@ -1,6 +1,6 @@
 #include "basegameobject.h"
 
-#include <gl/GLU.h>
+#include <GL/glu.h>
 
 class Ball : public BaseGameObject {
 private: float radius;

@@ -149,9 +149,9 @@ void Ship::fixedUpdate(std::shared_ptr<FrameEventArgs> args) {
 		auto water = this->gameObjectSet.lock()->getSingleByClass<Water>();
 
 		// Modify ship y coordinate to match water height
-		float height = water->heightAtPositionAndTime(&transform->getPosition(), args->getTotalSeconds());
-
 		auto pos = transform->getPosition();
+		float height = water->heightAtPositionAndTime(&pos, args->getTotalSeconds());
+
 		pos.y = height;
 		transform->setPosition(pos);
 	}

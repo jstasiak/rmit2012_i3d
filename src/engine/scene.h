@@ -38,7 +38,7 @@ public: void deleteDestroyedGameObjects();
 
 public: void draw(std::shared_ptr<FrameEventArgs> args);
 private: std::list < std::shared_ptr< Camera > > getSortedCameras() const;
-private: void Scene::enableLights();
+private: void enableLights();
 
 private: void drawGameObjects(std::shared_ptr<FrameEventArgs> args);
 private: void drawGui();

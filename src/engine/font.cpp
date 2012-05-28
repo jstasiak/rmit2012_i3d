@@ -92,7 +92,7 @@ TTF_Font* Font::getFontForSize(int size) {
 		auto font = TTF_OpenFont(this->fileName.c_str(), size);
 
 		if(!font) {
-			throw new std::exception("Font not found");
+			throw new std::exception();
 		}
 
 		this->fontSizes[size] = (int) font;

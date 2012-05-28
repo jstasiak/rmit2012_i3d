@@ -7,7 +7,7 @@
 
 
 class NotImplemented : public std::exception {
-public: virtual const char* what() const {
+public: virtual const char* what() const noexcept (true) {
 		return "NotImplemented";
 	}
 };

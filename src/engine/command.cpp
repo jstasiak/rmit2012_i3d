@@ -57,7 +57,7 @@ void CommandSystem::executeCommandTokens(vector< string > tokens) {
 		auto function = this->getCommand(commandName);
 		function(tokens);
 	} else {
-		throw exception("Command does not exist");
+		throw exception();
 	}
 }
 

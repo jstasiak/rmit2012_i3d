@@ -32,7 +32,7 @@ void Texture::loadFromFile(std::string fileName) {
 
 	auto surface = IMG_Load(fileName.c_str());
 	if(!surface) {
-		throw std::exception("Cannot load texture from file");
+		throw std::exception();
 	}
 
 	assert(isPowerOf2(surface->w));

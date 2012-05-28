@@ -48,16 +48,16 @@ void Skybox::drawForCamera(std::shared_ptr< Camera > camera) {
 
     // Render the front quad
     glBegin(GL_QUADS);
-		basex = 1 * dx;
-		basey = 1 * dy;
+		basex = 1.0f * dx;
+		basey = 1.0f * dy;
         glTexCoord2f(basex + 0, basey + 0); glVertex3f(  0.5f, -0.5f, -0.5f );
         glTexCoord2f(basex + dx, basey + 0); glVertex3f( -0.5f, -0.5f, -0.5f );
         glTexCoord2f(basex + dx, basey + dy); glVertex3f( -0.5f,  0.5f, -0.5f );
         glTexCoord2f(basex + 0, basey + dy); glVertex3f(  0.5f,  0.5f, -0.5f );
 
     // Render the left quad
-		basex = 0 * dx;
-		basey = 1 * dy;
+		basex = 0.0f * dx;
+		basey = 1.0f * dy;
         glTexCoord2f(basex + 0, basey + 0); glVertex3f(  0.5f, -0.5f,  0.5f );
         glTexCoord2f(basex + dx, basey + 0); glVertex3f(  0.5f, -0.5f, -0.5f );
         glTexCoord2f(basex + dx, basey + dy); glVertex3f(  0.5f,  0.5f, -0.5f );
@@ -65,8 +65,8 @@ void Skybox::drawForCamera(std::shared_ptr< Camera > camera) {
 
 
     // Render the back quad
-		basex = 3 * dx;
-		basey = 1 * dy;
+		basex = 3.0f * dx;
+		basey = 1.0f * dy;
         glTexCoord2f(basex + 0, basey + 0); glVertex3f( -0.5f, -0.5f,  0.5f );
         glTexCoord2f(basex + dx, basey + 0); glVertex3f(  0.5f, -0.5f,  0.5f );
         glTexCoord2f(basex + dx, basey + dy); glVertex3f(  0.5f,  0.5f,  0.5f );
@@ -74,8 +74,8 @@ void Skybox::drawForCamera(std::shared_ptr< Camera > camera) {
 
 
     // Render the right quad
-		basex = 2 * dx;
-		basey = 1 * dy;
+		basex = 2.0f * dx;
+		basey = 1.0f * dy;
         glTexCoord2f(basex + 0, basey + 0); glVertex3f( -0.5f, -0.5f, -0.5f );
         glTexCoord2f(basex + dx, basey + 0); glVertex3f( -0.5f, -0.5f,  0.5f );
         glTexCoord2f(basex + dx, basey + dy); glVertex3f( -0.5f,  0.5f,  0.5f );
@@ -83,16 +83,16 @@ void Skybox::drawForCamera(std::shared_ptr< Camera > camera) {
 
 
     // Render the top quad
-		basex = 1 * dx;
-		basey = 2 * dy;
-        glTexCoord2f(basex + 0, basey + dy); glVertex3f( -0.5f,  0.5f, -0.5f );
-        glTexCoord2f(basex + 0, basey + 0); glVertex3f( -0.5f,  0.5f,  0.5f );
-        glTexCoord2f(basex + dx, basey + 0); glVertex3f(  0.5f,  0.5f,  0.5f );
-        glTexCoord2f(basex + dx, basey + dy); glVertex3f(  0.5f,  0.5f, -0.5f );
+		basex = 1.0f * dx;
+		basey = 2.0f * dy;
+        glTexCoord2f(basex + dx, basey + 0); glVertex3f( -0.5f,  0.5f, -0.5f );
+        glTexCoord2f(basex + dx, basey + dy); glVertex3f( -0.5f,  0.5f,  0.5f );
+        glTexCoord2f(basex + 0, basey + dy); glVertex3f(  0.5f,  0.5f,  0.5f );
+        glTexCoord2f(basex + 0, basey + 0); glVertex3f(  0.5f,  0.5f, -0.5f );
 
     // Render the bottom quad
-		basex = 1 * dx;
-		basey = 0 * dy;
+		basex = 1.0f * dx;
+		basey = 0.0f * dy;
         glTexCoord2f(basex + 0, basey + 0); glVertex3f( -0.5f, -0.5f, -0.5f );
         glTexCoord2f(basex + 0, basey + dy); glVertex3f( -0.5f, -0.5f,  0.5f );
         glTexCoord2f(basex + dx, basey + dy); glVertex3f(  0.5f, -0.5f,  0.5f );

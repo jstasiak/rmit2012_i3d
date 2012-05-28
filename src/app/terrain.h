@@ -6,6 +6,8 @@
 class PerlinNoise;
 
 class Terrain : public Plane {
+	Q_OBJECT
+
 private: std::shared_ptr< PerlinNoise > noise;
 
 public: Terrain();

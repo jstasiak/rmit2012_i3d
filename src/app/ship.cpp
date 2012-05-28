@@ -12,6 +12,7 @@
 #include "../engine/gameobject/ball.h"
 #include "../engine/gameobject/rigidbody.h"
 #include "../engine/scene.h"
+#include "terrain.h"
 
 using namespace std;
 
@@ -67,23 +68,25 @@ void Ship::stopTurningRight() {
 }
 
 void Ship::fire(std::string side) {
-	auto transform = this->getComponents()->getSingleByClass< Transform >();
+	if(this->isAlive()) {
+		auto transform = this->getComponents()->getSingleByClass< Transform >();
 
-	auto scene = this->getGameObjectSet().lock()->getOwner();
-	auto r = Registry::getSharedInstance();
-	auto ball = r->create<Ball>();
-	auto ballComponents = ball->getComponents();
+		auto scene = this->getGameObjectSet().lock()->getOwner();
+		auto r = Registry::getSharedInstance();
+		auto ball = r->create<Ball>();
+		auto ballComponents = ball->getComponents();
 
-	auto direction = (side == std::string("right") ? 1.0f : -1.0f) * transform->getRight();
+		auto direction = (side == std::string("right") ? 1.0f : -1.0f) * transform->getRight();
 
-	ballComponents->getSingleByClass< Transform >()->setPosition(
-		transform->getPosition() + glm::vec3(0, 10, 0) + direction * 5.0f
-	);
+		ballComponents->getSingleByClass< Transform >()->setPosition(
+			transform->getPosition() + glm::vec3(0, 10, 0) + direction * 5.0f
+		);
 
-	ballComponents->add(r->create< RigidBody >());
-	ballComponents->add(r->create< BaseComponent >("Projectile"));
-	ballComponents->getSingleByClass< RigidBody >()->setVelocity(direction * 50.0f);
-	scene->add(ball);
+		ballComponents->add(r->create< RigidBody >());
+		ballComponents->add(r->create< BaseComponent >("Projectile"));
+		ballComponents->getSingleByClass< RigidBody >()->setVelocity(direction * 50.0f);
+		scene->add(ball);
+	}
 }
 
 void Ship::start() {
@@ -96,6 +99,23 @@ void Ship::start() {
 
 void Ship::update(std::shared_ptr<FrameEventArgs> args) {
 	BaseGameObject::update(args);
+
+	auto gos = this->getGameObjectSet().lock();
+	auto water = gos->getSingleByClass<Water>();
+	auto terrain = gos->getSingleByClass<Terrain>();
+
+	auto transform = this->getComponents()->getSingleByClass<Transform>();
+
+	auto position = transform->getPosition();
+
+	auto time = args->getTotalSeconds();
+
+	auto heightThreshold = 3.0f;
+
+	if(terrain->heightAtPositionAndTime(&position, time) - heightThreshold
+		> water->heightAtPositionAndTime(&position, time)) {
+		this->instantDeath();
+	}
 }
 
 void Ship::fixedUpdate(std::shared_ptr<FrameEventArgs> args) {

@@ -134,17 +134,26 @@ void Water::draw(std::shared_ptr<FrameEventArgs> args) {
 
 	glColor4f(0.5f, 0.5f, 1.0f, 1.0f);
 
+	auto scene = this->getGameObjectSet().lock()->getOwner();
+	auto camera = scene->getActiveCamera();
+	auto cameraTransform = camera->getComponents()->getSingleByClass<Transform>();
+	auto center = cameraTransform->getPosition();
+
+
 	float elevation = -10.0f;
 
 	float xsize = this->size.x * 2.0f;
 	float ysize = this->size.y * 2.0f;
 
+	glPushMatrix();
+	glTranslatef(center.x, 0, center.z);
 	glBegin(GL_QUADS);
 		glVertex3f(-xsize, elevation, ysize);
 		glVertex3f(xsize, elevation, ysize);
 		glVertex3f(xsize, elevation, -ysize);
 		glVertex3f(-xsize, elevation, -ysize);
 	glEnd();
+	glPopMatrix();
 
 
 	glBegin(GL_TRIANGLES);

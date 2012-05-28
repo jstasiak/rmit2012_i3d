@@ -10,7 +10,10 @@
 class Water;
 
 class Ship : public BaseGameObject {
-	Q_OBJECT
+
+public: virtual const char* className() const {
+		return "Ship";
+	}
 
 public: enum ShipDrawAxes {
 	DontDraw,
@@ -37,7 +40,7 @@ private: float currentTurningSpeedDegreesPerSecond;
 
 private: int hp;
 
-public: Q_INVOKABLE Ship();
+public: Ship();
 
 public: virtual ~Ship();
 

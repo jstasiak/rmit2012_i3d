@@ -10,7 +10,9 @@
 class BaseGameObject;
 
 class Camera : public BaseGameObject {
-	Q_OBJECT
+public: virtual const char* className() const {
+		return "Camera";
+	}
 
 private: Rectf normalizedRect;
 private: glm::vec3 backgroundColor;
@@ -20,7 +22,7 @@ private: std::weak_ptr<BaseGameObject> ownerObject;
 
 private: glm::vec3 forward;
 
-public: Q_INVOKABLE Camera();
+public: Camera();
 
 public: virtual void update(std::shared_ptr< FrameEventArgs > args);
 

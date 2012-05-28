@@ -12,7 +12,9 @@ class Application;
 class Scene;
 
 class GameObjectSet : public ObjectSet<BaseGameObject, Scene> {
-	Q_OBJECT
+public: virtual const char* className() const {
+		return "GameObjectSet";
+	}
 
 protected: virtual void onAdd(std::shared_ptr<BaseGameObject> object);
 public: std::shared_ptr<Application> getApplication();

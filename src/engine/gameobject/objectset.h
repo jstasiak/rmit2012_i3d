@@ -62,12 +62,13 @@ public: template<class T> std::shared_ptr<T> getSingleByClass() {
 	}
 
 public: template<class T> std::list< std::shared_ptr< T > > getMultipleByClass() {
-		auto name = T::staticMetaObject.className();
+		T o;
+		auto name = o.className();
 		std::list< std::shared_ptr< T > > objects;
 
 		for(auto i = this->objects.begin(); i != this->objects.end(); ++i) {
 			auto o = *i;
-			if(strcmp(o->metaObject()->className(), name) == 0) {
+			if(strcmp(o->className(), name) == 0) {
 				objects.push_back(o->getSharedPointer<T>());
 			}
 		}

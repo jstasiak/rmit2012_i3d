@@ -3,8 +3,6 @@
 
 using namespace std;
 
-REGISTER(Transform);
-
 Transform::Transform()
 	:
 	matrix()

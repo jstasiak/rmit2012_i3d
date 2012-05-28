@@ -8,7 +8,9 @@ class Ship;
 class Font;
 
 class Manager : public BaseComponent {
-	Q_OBJECT
+public: virtual const char* className() const {
+		return "Manager";
+	}
 
 private: std::shared_ptr< Font> font;
 
@@ -29,7 +31,7 @@ public: enum GameState {
 private: bool wireframe;
 private: DrawAxes axes;
 
-public: Q_INVOKABLE Manager();
+public: Manager();
 
 public: virtual void start();
 

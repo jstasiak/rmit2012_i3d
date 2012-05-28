@@ -10,7 +10,6 @@
 #include "../engine/gameobject/camera.h"
 #include "../engine/gameobject/transform.h"
 
-REGISTER(Water);
 
 Water::Water()
 	: 

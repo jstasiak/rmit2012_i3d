@@ -17,8 +17,6 @@
 #include "water.h"
 
 
-REGISTER(Manager);
-
 Manager::Manager()
 	:wireframe(false),
 	axes(Manager::WorldOrigin),
@@ -118,15 +116,14 @@ void Manager::clearShips() {
 }
 
 void Manager::createShips() {
-	auto r = Registry::getSharedInstance();
-	auto createShip = [r](std::string name, glm::vec3 position) -> std::shared_ptr< BaseGameObject > {
-		auto ship = r->create< BaseGameObject >("Ship");
+	auto createShip = [](std::string name, glm::vec3 position) -> std::shared_ptr< BaseGameObject > {
+		auto ship = std::make_shared<Ship>();
 		ship->setName(name);
 		auto components = ship->getComponents();
 		auto transform = components->getSingleByClass< Transform >();
 		transform->setPosition(position);
 
-		auto body = r->create< RigidBody >();
+		auto body = std::make_shared< RigidBody >();
 		body->setRadius(10);
 		body->setGravityEnabled(false);
 		
@@ -145,8 +142,8 @@ void Manager::createShips() {
 	scene->add(ship2);
 
 
-	auto c1 = r->create<Camera>();
-	auto c2 = r->create<Camera>();
+	auto c1 = std::make_shared<Camera>();
+	auto c2 = std::make_shared<Camera>();
 	c1->setNormalizedRect(Rectf(0, 0, 0.5, 1));
 	c2->setNormalizedRect(Rectf(0.5, 0.0, 0.5, 1));
 	c2->setDepth(1);

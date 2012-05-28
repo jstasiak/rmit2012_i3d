@@ -2,8 +2,6 @@
 
 #include "ball.h"
 
-REGISTER(Ball);
-
 Ball::Ball()
 	: radius(1.0f),
 	quadric(0)

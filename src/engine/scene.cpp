@@ -12,6 +12,8 @@
 #include "skybox.h"
 
 #include "../app/terrain.h"
+#include "../app/manager.h"
+#include "../app/water.h"
 
 using namespace std;
 
@@ -25,18 +27,16 @@ Scene::Scene()
 }
 
 void Scene::initialize() {
-	auto r = Registry::getSharedInstance();
-
 	auto app = this->getApplication();
 	auto skyboxFile = app->getDataDirectory() + std::string("/textures/skybox/miramar_large.jpg");
 	this->skybox = std::shared_ptr< Skybox >(new Skybox(skyboxFile));
 
 	this->add(std::make_shared<Terrain>());
-	this->add(r->create<BaseGameObject>("Water"));
+	this->add(std::make_shared<Water>());
 	
 		
-	auto bo = r->create<BaseGameObject>();
-	bo->getComponents()->add(r->create<BaseComponent>("Manager"));
+	auto bo = std::make_shared<BaseGameObject>();
+	bo->getComponents()->add(std::make_shared<Manager>());
 	this->add(bo);
 }
 
@@ -115,10 +115,6 @@ void Scene::checkForCollisions() {
 			if(bodyA->collidesWith(bodyB)) {
 				auto gameObjectA = bodyA->getGameObject();
 				auto gameObjectB = bodyB->getGameObject();
-				
-				printf("collision %s vs %s\n", gameObjectA->metaObject()->className(),
-					gameObjectB->metaObject()->className());
-
 
 				gameObjectA->onCollide(gameObjectB);
 				gameObjectB->onCollide(gameObjectA);
@@ -152,7 +148,7 @@ std::list < std::shared_ptr< Camera > > Scene::getSortedCameras() const {
 	auto all = this->gameObjects->getList();
 
 	BOOST_FOREACH(auto go, all) {
-		if(strcmp(go->metaObject()->className(), "Camera") == 0
+		if(strcmp(go->className(), "Camera") == 0
 			&& go->isActive()) {
 			cameras.push_back(go->getSharedPointer<Camera>());
 		}

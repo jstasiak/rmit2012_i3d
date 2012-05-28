@@ -4,11 +4,13 @@
 #include "basecomponent.h"
 
 class Transform : public BaseComponent {
-	Q_OBJECT
+public: virtual const char* className() const {
+		return "Transform";
+	}
 
 private: glm::mat4x4 matrix;
 
-public: Q_INVOKABLE Transform();
+public: Transform();
 
 public: glm::vec3 getPosition() const;
 public: void setPosition(glm::vec3 value);

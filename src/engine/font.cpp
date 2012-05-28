@@ -43,7 +43,7 @@ void Font::drawText(const glm::vec2& position, int size, const std::string& text
 	SDL_BlitSurface(originalSurface, 0, textSurface, 0);
 
 
-	uint texture = 0;
+	unsigned int texture = 0;
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 

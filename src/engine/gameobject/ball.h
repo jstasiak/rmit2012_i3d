@@ -1,12 +1,12 @@
 #include "basegameobject.h"
 
-class Ball : public BaseGameObject {
-	Q_OBJECT
+#include <gl/GLU.h>
 
+class Ball : public BaseGameObject {
 private: float radius;
 private: GLUquadric* quadric;
 
-public: Q_INVOKABLE Ball();
+public: Ball();
 public: ~Ball();
 
 public: float getRadius() const;

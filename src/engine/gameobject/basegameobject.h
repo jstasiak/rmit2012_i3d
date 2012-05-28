@@ -10,7 +10,9 @@ class GameObjectSet;
 class Application;
 
 class BaseGameObject : public Object {
-	Q_OBJECT
+public: virtual const char* className() const {
+		return "BaseGameObject";
+	}
 
 protected: std::weak_ptr<GameObjectSet> gameObjectSet;
 
@@ -18,7 +20,7 @@ private: std::shared_ptr<ComponentSet> components;
 
 private: bool active;
 
-public: Q_INVOKABLE BaseGameObject();
+public: BaseGameObject();
 
 public: virtual void start();
 

@@ -9,7 +9,9 @@ class BaseGameObject;
 class FrameEventArgs;
 
 class BaseComponent : public Object {
-	Q_OBJECT
+public: virtual const char* className() const {
+		return "BaseComponent";
+	}
 
 protected: std::shared_ptr<BaseGameObject> gameObject;
 

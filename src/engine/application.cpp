@@ -219,21 +219,46 @@ void Application::initializeGraphics() {
 }
 
 void Application::executeConfigFile(string configFile) {
-	auto fileName = QString::fromUtf8(this->getDataDirectory().c_str());
-	fileName += "/";
-	fileName += configFile.c_str();
+	auto config = "\n\
+echo config file begin\n\
+\n\
+bind ESCAPE quit\n\
+bind Q quit\n\
+\n\
+bind A toggle_axes\n\
+bind PLUS increase_water_tesselation\n\
+bind MINUS decrease_water_tesselation\n\
+bind N toggle_water_normals\n\
+bind W toggle_wireframe\n\
+\n\
+\n\
+bind UP +accel 1\n\
+bind DOWN +deccel 1\n\
+bind LEFT +left 1\n\
+bind RIGHT +right 1\n\
+bind DELETE fire 1 left\n\
+bind PAGE_DOWN fire 1 right\n\
+\n\
+bind W +accel 2\n\
+bind S +deccel 2\n\
+bind A +left 2\n\
+bind D +right 2\n\
+bind Q fire 2 left\n\
+bind E fire 2 right\n\
+\n\
+bind ENTER reset\n\
+\n\
+# TODO: implement scene command\n\
+#scene start\n\
+\n\
+echo config file end\n\
+	";
 
-	QFile file(fileName);
-	if(file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-		QTextStream stream((QIODevice*) &file);
-		QString line = stream.readLine();
-		while(!line.isNull()) {
-			this->commandSystem->safeExecuteCommandLine(line.toStdString());
-			line = stream.readLine();
-		}
-	}
-	else {
-		printf("Error opening config file %s\n", fileName.toStdString().c_str());
+	std::vector< std::string > lines;
+	boost::split(lines, config, boost::is_any_of("\n"));
+
+	BOOST_FOREACH(auto line, lines) {
+		this->commandSystem->safeExecuteCommandLine(line);
 	}
 }
 

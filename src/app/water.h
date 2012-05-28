@@ -9,7 +9,9 @@ class Texture;
 class PerlinNoise;
 
 class Water : public Plane {
-	Q_OBJECT
+public: virtual const char* className() const {
+		return "Water";
+	}
 
 private: std::shared_ptr< Texture > waterTexture;
 private: std::shared_ptr< PerlinNoise > noise;
@@ -19,7 +21,7 @@ private: boost::scoped_ptr<Wave> waveX;
 private: boost::scoped_ptr<Wave> waveZ;
 
 
-public: Q_INVOKABLE Water();
+public: Water();
 
 
 public: virtual void start();

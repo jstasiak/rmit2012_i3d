@@ -18,7 +18,7 @@
 #include <boost/signal.hpp>
 #include <boost/smart_ptr.hpp>
 #include <boost/tokenizer.hpp>
-
+#include <boost/algorithm/string.hpp>
 #include <boost/random.hpp>
 
 #include <SDL.h>
@@ -37,11 +37,5 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_access.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
-#include <QMetaType>
-#include <QString>
-#include <QTextStream>
-#include <QIODevice>
-#include <QFile>
 
 #endif // PRECOMPILE_H

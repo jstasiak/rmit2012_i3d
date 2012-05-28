@@ -3,10 +3,10 @@
 #include "basegameobject.h"
 #include "gameobjectset.h"
 #include "basecomponent.h"
+#include "transform.h"
 
 using namespace std;
 
-REGISTER(BaseGameObject);
 
 BaseGameObject::BaseGameObject()
 	:
@@ -20,7 +20,7 @@ std::shared_ptr<ComponentSet> BaseGameObject::getComponents() {
 	if(!this->components) {
 		this->components = make_shared<ComponentSet>();
 		this->components->setOwner(this->getSharedPointer<BaseGameObject>());
-		this->components->add(Registry::getSharedInstance()->create<BaseComponent>("Transform"));
+		this->components->add(std::make_shared<Transform>());
 	}
 
 	return this->components;

@@ -3,7 +3,9 @@
 #include <glm/glm.hpp>
 
 class RigidBody : public BaseComponent {
-	Q_OBJECT
+public: virtual const char* className() const {
+		return "RigidBody";
+	}
 
 public: static const glm::vec3 EARTH_ACCELERATION;
 
@@ -13,7 +15,7 @@ private: float radius;
 private: glm::vec3 velocity;
 private: bool gravityEnabled;
 
-public: Q_INVOKABLE RigidBody();
+public: RigidBody();
 
 public: virtual void update(std::shared_ptr< FrameEventArgs > args);
 

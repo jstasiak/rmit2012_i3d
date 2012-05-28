@@ -12,7 +12,9 @@
 class BaseGameObject;
 
 class ComponentSet : public ObjectSet<BaseComponent, BaseGameObject> {
-	Q_OBJECT
+public: virtual const char* className() const {
+		return "ComponentSet";
+	}
 
 protected: virtual void onAdd(std::shared_ptr<BaseComponent> object);
 };

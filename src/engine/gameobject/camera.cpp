@@ -8,8 +8,6 @@
 #include "transform.h"
 #include "../scene.h"
 
-REGISTER(Camera);
-
 Camera::Camera()
 	:
 	BaseGameObject(),

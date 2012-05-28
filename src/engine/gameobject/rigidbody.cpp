@@ -4,8 +4,6 @@
 #include "basegameobject.h"
 #include "transform.h"
 
-REGISTER(RigidBody);
-
 const glm::vec3 RigidBody::EARTH_ACCELERATION(0, -9.81, 0);
 
 RigidBody::RigidBody()

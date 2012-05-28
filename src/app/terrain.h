@@ -6,7 +6,9 @@
 class PerlinNoise;
 
 class Terrain : public Plane {
-	Q_OBJECT
+public: virtual const char* className() const {
+		return "Terrain";
+	}
 
 private: std::shared_ptr< PerlinNoise > noise;
 

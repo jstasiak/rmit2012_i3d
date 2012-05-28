@@ -4,7 +4,7 @@
 #include "../engine/application.h"
 #include "../engine/command.h"
 #include "../engine/utils.h"
-#include "water.h"
+
 
 #include "../engine/gameobject/gameobjectset.h"
 #include "../engine/gameobject/transform.h"
@@ -12,11 +12,12 @@
 #include "../engine/gameobject/ball.h"
 #include "../engine/gameobject/rigidbody.h"
 #include "../engine/scene.h"
+
+#include "projectile.h"
 #include "terrain.h"
+#include "water.h"
 
 using namespace std;
-
-REGISTER(Ship);
 
 const float Ship::MIN_VELOCITY = 0.0f;
 const float Ship::MAX_VELOCITY = 45.0f;
@@ -72,8 +73,7 @@ void Ship::fire(std::string side) {
 		auto transform = this->getComponents()->getSingleByClass< Transform >();
 
 		auto scene = this->getGameObjectSet().lock()->getOwner();
-		auto r = Registry::getSharedInstance();
-		auto ball = r->create<Ball>();
+		auto ball = std::make_shared<Ball>();
 		auto ballComponents = ball->getComponents();
 
 		auto direction = (side == std::string("right") ? 1.0f : -1.0f) * transform->getRight();
@@ -82,8 +82,8 @@ void Ship::fire(std::string side) {
 			transform->getPosition() + glm::vec3(0, 10, 0) + direction * 5.0f
 		);
 
-		ballComponents->add(r->create< RigidBody >());
-		ballComponents->add(r->create< BaseComponent >("Projectile"));
+		ballComponents->add(std::make_shared< RigidBody >());
+		ballComponents->add(std::make_shared< Projectile >());
 		ballComponents->getSingleByClass< RigidBody >()->setVelocity(direction * 50.0f);
 		scene->add(ball);
 	}
@@ -217,7 +217,7 @@ void Ship::draw(std::shared_ptr<FrameEventArgs> args) {
 void Ship::onCollide(std::shared_ptr< BaseGameObject > collider) {
 	BaseGameObject::onCollide(collider);
 
-	if(strcmp(collider->metaObject()->className(), "Ship") == 0) {
+	if(strcmp(collider->className(), "Ship") == 0) {
 		this->instantDeath();
 	}
 }

@@ -1,5 +1,3 @@
-#include "precompile.h"
-
 #ifndef FRAMEEVENTARGS_H
 #define FRAMEEVENTARGS_H
 

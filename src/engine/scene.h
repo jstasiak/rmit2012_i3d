@@ -13,7 +13,6 @@ class FrameEventArgs;
 class Skybox;
 
 class Scene : public Object {
-	Q_OBJECT
 
 private: std::weak_ptr<Application> application;
 private: std::shared_ptr<GameObjectSet> gameObjects;

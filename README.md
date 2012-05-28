@@ -28,6 +28,13 @@ Linux/Mac OS X
 1. Go to subdirectory `build` and execute `cmake ../ && make`
 1. If previous step succeeded, enter `./main --gamedir ../data`
 
+Additional Features
+===================
+
+* skybox
+* infinite water and terrain
+* perlin-noise terrain
+
 Key bindings
 ============
 * `ESC` and `Q` - quit

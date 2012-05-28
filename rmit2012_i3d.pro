@@ -34,6 +34,8 @@ HEADERS += src/precompile.h \
            src/app/wave.h \
            src/app/manager.h \
            src/app/projectile.h \
+           src/app/plane.h \
+           src/app/terrain.h \
            src/engine/application.h \
            src/engine/command.h \
            src/engine/frameeventargs.h \
@@ -270,6 +272,8 @@ SOURCES += src/main.cpp \
            src/app/manager.cpp \
            src/app/obj.cpp \
            src/app/projectile.cpp \
+           src/app/plane.cpp \
+           src/app/terrain.cpp \
            src/engine/application.cpp \
            src/engine/command.cpp \
            src/engine/frameeventargs.cpp \
